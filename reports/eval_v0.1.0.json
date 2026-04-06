@@ -1,0 +1,6068 @@
+{
+  "total": 200,
+  "exact_match": 16,
+  "exact_match_rate": 0.08,
+  "per_field": {
+    "building_number": {
+      "precision": 0.974,
+      "recall": 0.857,
+      "f1": 0.912,
+      "tp": 114,
+      "fp": 3,
+      "fn": 19,
+      "tn": 65
+    },
+    "building_name": {
+      "precision": 0.129,
+      "recall": 0.414,
+      "f1": 0.197,
+      "tp": 12,
+      "fp": 81,
+      "fn": 17,
+      "tn": 94
+    },
+    "landmark": {
+      "precision": 1.0,
+      "recall": 0.848,
+      "f1": 0.918,
+      "tp": 28,
+      "fp": 0,
+      "fn": 5,
+      "tn": 167
+    },
+    "locality": {
+      "precision": 0.365,
+      "recall": 0.332,
+      "f1": 0.347,
+      "tp": 62,
+      "fp": 108,
+      "fn": 125,
+      "tn": 9
+    },
+    "sub_locality": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "tp": 0,
+      "fp": 2,
+      "fn": 60,
+      "tn": 140
+    },
+    "city": {
+      "precision": 0.763,
+      "recall": 0.763,
+      "f1": 0.763,
+      "tp": 148,
+      "fp": 46,
+      "fn": 46,
+      "tn": 3
+    },
+    "district": {
+      "precision": 0.79,
+      "recall": 0.691,
+      "f1": 0.737,
+      "tp": 132,
+      "fp": 35,
+      "fn": 59,
+      "tn": 9
+    },
+    "state": {
+      "precision": 0.934,
+      "recall": 0.8,
+      "f1": 0.862,
+      "tp": 156,
+      "fp": 11,
+      "fn": 39,
+      "tn": 5
+    },
+    "pincode": {
+      "precision": 1.0,
+      "recall": 0.989,
+      "f1": 0.995,
+      "tp": 184,
+      "fp": 0,
+      "fn": 2,
+      "tn": 14
+    }
+  },
+  "failures": [
+    {
+      "input": "Flat 1207, Hill Ridge Villas, ISB Road, Gachibowli, Hyderabad 500032",
+      "expected": {
+        "building_number": "1207",
+        "building_name": "Hill Ridge Villas",
+        "landmark": null,
+        "locality": "Gachibowli",
+        "sub_locality": "ISB Road",
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500032"
+      },
+      "actual": {
+        "raw": "Flat 1207, Hill Ridge Villas, ISB Road, Gachibowli, Hyderabad 500032",
+        "cleaned": "Flat 1207, Hill Ridge Villas, ISB Road, Gachibowli, Hyderabad 500032",
+        "building_number": "1207",
+        "building_name": "Hill Ridge Villas",
+        "landmark": null,
+        "locality": "Gachibowli",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Andhra Pradesh",
+        "pincode": "500032",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "state"
+      ]
+    },
+    {
+      "input": "E2017, Nandan Kanan Villa, ISB Road, Gachibowli, Hyderabad",
+      "expected": {
+        "building_number": "E2017",
+        "building_name": "Nandan Kanan Villa",
+        "landmark": null,
+        "locality": "Gachibowli",
+        "sub_locality": "ISB Road",
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "E2017, Nandan Kanan Villa, ISB Road, Gachibowli, Hyderabad",
+        "cleaned": "E2017, Nandan Kanan Villa, ISB Road, Gachibowli, Hyderabad",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Nandan Kanan Villa",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.2
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name",
+        "locality",
+        "sub_locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "B-302, Raheja Towers, MG Road, Bangalore 560001",
+      "expected": {
+        "building_number": "B-302",
+        "building_name": "Raheja Towers",
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001"
+      },
+      "actual": {
+        "raw": "B-302, Raheja Towers, MG Road, Bangalore 560001",
+        "cleaned": "B-302, Raheja Towers, MG Road, Bangalore 560001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Raheja Towers",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "42/3, 2nd Cross, JP Nagar 7th Phase, Bengaluru, Karnataka 560078",
+      "expected": {
+        "building_number": "42/3",
+        "building_name": null,
+        "landmark": null,
+        "locality": "JP Nagar 7th Phase",
+        "sub_locality": "2nd Cross",
+        "city": "Bengaluru",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560078"
+      },
+      "actual": {
+        "raw": "42/3, 2nd Cross, JP Nagar 7th Phase, Bengaluru, Karnataka 560078",
+        "cleaned": "42/3, 2nd Cross, JP Nagar 7th Phase, Bengaluru, Karnataka 560078",
+        "building_number": "42/3",
+        "building_name": "2nd Cross",
+        "landmark": null,
+        "locality": "JP Nagar 7th Phase",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560078",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "A-101, Lodha Altamount, Annie Besant Road, Worli, Mumbai 400018",
+      "expected": {
+        "building_number": "A-101",
+        "building_name": "Lodha Altamount",
+        "landmark": null,
+        "locality": "Worli",
+        "sub_locality": "Annie Besant Road",
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400018"
+      },
+      "actual": {
+        "raw": "A-101, Lodha Altamount, Annie Besant Road, Worli, Mumbai 400018",
+        "cleaned": "A-101, Lodha Altamount, Annie Besant Road, Worli, Mumbai 400018",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Annie Besant Road",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400018",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Flat 4B, DDA Flats, Munirka, New Delhi 110067",
+      "expected": {
+        "building_number": "4B",
+        "building_name": "DDA Flats",
+        "landmark": null,
+        "locality": "Munirka",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110067"
+      },
+      "actual": {
+        "raw": "Flat 4B, DDA Flats, Munirka, New Delhi 110067",
+        "cleaned": "Flat 4B, DDA Flats, Munirka, New Delhi 110067",
+        "building_number": "4B",
+        "building_name": "DDA Flats",
+        "landmark": null,
+        "locality": "New Delhi",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "West Delhi",
+        "state": "Delhi",
+        "pincode": "110067",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "H.No. 8-2-293/82/A, Road No. 36, Jubilee Hills, Hyderabad 500033",
+      "expected": {
+        "building_number": "8-2-293/82/A",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Jubilee Hills",
+        "sub_locality": "Road No. 36",
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500033"
+      },
+      "actual": {
+        "raw": "H.No. 8-2-293/82/A, Road No. 36, Jubilee Hills, Hyderabad 500033",
+        "cleaned": "house number 8-2-293/82/A, Road No. 36, Jubilee Hills, Hyderabad 500033",
+        "building_number": "8-2",
+        "building_name": "293/82/A",
+        "landmark": null,
+        "locality": "Jubilee Hills",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": null,
+        "state": null,
+        "pincode": "500033",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Shop No 5, Ground Floor, Lajpat Nagar 2, New Delhi 110024",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Lajpat Nagar 2",
+        "sub_locality": "Ground Floor",
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110024"
+      },
+      "actual": {
+        "raw": "Shop No 5, Ground Floor, Lajpat Nagar 2, New Delhi 110024",
+        "cleaned": "Shop No 5, Ground Floor, Lajpat Nagar 2, New Delhi 110024",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Lajpat Nagar 2",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110024",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "Flat 705 Tower 3 Oberoi Splendor JVLR Andheri East Mumbai 400060",
+      "expected": {
+        "building_number": "705",
+        "building_name": "Oberoi Splendor",
+        "landmark": null,
+        "locality": "Andheri East",
+        "sub_locality": "JVLR",
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400060"
+      },
+      "actual": {
+        "raw": "Flat 705 Tower 3 Oberoi Splendor JVLR Andheri East Mumbai 400060",
+        "cleaned": "Flat 705 Tower 3 Oberoi Splendor JVLR Andheri East Mumbai 400060",
+        "building_number": "705",
+        "building_name": "Tower 3 Oberoi Splendor JVLR Andheri East Mumbai",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400060",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "12, Bandra West, Mumbai - 400050",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Bandra West",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050"
+      },
+      "actual": {
+        "raw": "12, Bandra West, Mumbai - 400050",
+        "cleaned": "12, Bandra West, Mumbai - 400050",
+        "building_number": "12",
+        "building_name": "Bandra West",
+        "landmark": null,
+        "locality": "Mumbai",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "A-15 Defence Colony New Delhi 110024",
+      "expected": {
+        "building_number": "A-15",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Defence Colony",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110024"
+      },
+      "actual": {
+        "raw": "A-15 Defence Colony New Delhi 110024",
+        "cleaned": "A-15 Defence Colony New Delhi 110024",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "A-15 Defence Colony New Delhi",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110024",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "district"
+      ]
+    },
+    {
+      "input": "House No 56, Block C, Hauz Khas, New Delhi 110016",
+      "expected": {
+        "building_number": "56",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Hauz Khas",
+        "sub_locality": "Block C",
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110016"
+      },
+      "actual": {
+        "raw": "House No 56, Block C, Hauz Khas, New Delhi 110016",
+        "cleaned": "house number 56, Block C, Hauz Khas, New Delhi 110016",
+        "building_number": "56",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Block C",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110016",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "Flat 12B, Greater Kailash 1, New Delhi 110048",
+      "expected": {
+        "building_number": "12B",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Greater Kailash 1",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110048"
+      },
+      "actual": {
+        "raw": "Flat 12B, Greater Kailash 1, New Delhi 110048",
+        "cleaned": "Flat 12B, Greater Kailash 1, New Delhi 110048",
+        "building_number": "12B",
+        "building_name": "Greater Kailash 1",
+        "landmark": null,
+        "locality": "New Delhi",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110048",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "#404, Prestige Shantiniketan, Whitefield, Bangalore 560048",
+      "expected": {
+        "building_number": "404",
+        "building_name": "Prestige Shantiniketan",
+        "landmark": null,
+        "locality": "Whitefield",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560048"
+      },
+      "actual": {
+        "raw": "#404, Prestige Shantiniketan, Whitefield, Bangalore 560048",
+        "cleaned": "#404, Prestige Shantiniketan, Whitefield, Bangalore 560048",
+        "building_number": "404",
+        "building_name": "Prestige Shantiniketan",
+        "landmark": null,
+        "locality": "Whitefield",
+        "sub_locality": null,
+        "city": "Mahadevapura",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560048",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "city"
+      ]
+    },
+    {
+      "input": "Flat 12, 5th Block, Koramangala, Bangalore 560034",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Koramangala",
+        "sub_locality": "5th Block",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560034"
+      },
+      "actual": {
+        "raw": "Flat 12, 5th Block, Koramangala, Bangalore 560034",
+        "cleaned": "Flat 12, 5th Block, Koramangala, Bangalore 560034",
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "5th Block",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560034",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "23, 100 Feet Road, Indiranagar, Bangalore 560038",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Indiranagar",
+        "sub_locality": "100 Feet Road",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560038"
+      },
+      "actual": {
+        "raw": "23, 100 Feet Road, Indiranagar, Bangalore 560038",
+        "cleaned": "23, 100 Feet Road, Indiranagar, Bangalore 560038",
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "100 Feet Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560038",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Apt 8A, Brigade Gateway, Rajajinagar, Bangalore 560010",
+      "expected": {
+        "building_number": "8A",
+        "building_name": "Brigade Gateway",
+        "landmark": null,
+        "locality": "Rajajinagar",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560010"
+      },
+      "actual": {
+        "raw": "Apt 8A, Brigade Gateway, Rajajinagar, Bangalore 560010",
+        "cleaned": "apartment 8A, Brigade Gateway, Rajajinagar, Bangalore 560010",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Brigade Gateway",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560010",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Plot 142, HSR Layout Sector 3, Bangalore 560102",
+      "expected": {
+        "building_number": "142",
+        "building_name": null,
+        "landmark": null,
+        "locality": "HSR Layout Sector 3",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560102"
+      },
+      "actual": {
+        "raw": "Plot 142, HSR Layout Sector 3, Bangalore 560102",
+        "cleaned": "Plot 142, HSR Layout Sector 3, Bangalore 560102",
+        "building_number": "142",
+        "building_name": null,
+        "landmark": null,
+        "locality": "HSR Layout Sector 3",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": null,
+        "state": null,
+        "pincode": "560102",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Flat 3C, Lake View Apartments, Banjara Hills, Hyderabad 500034",
+      "expected": {
+        "building_number": "3C",
+        "building_name": "Lake View Apartments",
+        "landmark": null,
+        "locality": "Banjara Hills",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500034"
+      },
+      "actual": {
+        "raw": "Flat 3C, Lake View Apartments, Banjara Hills, Hyderabad 500034",
+        "cleaned": "Flat 3C, Lake View Apartments, Banjara Hills, Hyderabad 500034",
+        "building_number": "3C",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Lake View Apartments",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Andhra Pradesh",
+        "pincode": "500034",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "Flat 1102, My Home Bhooja, Hitech City, Hyderabad 500081",
+      "expected": {
+        "building_number": "1102",
+        "building_name": "My Home Bhooja",
+        "landmark": null,
+        "locality": "Hitech City",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500081"
+      },
+      "actual": {
+        "raw": "Flat 1102, My Home Bhooja, Hitech City, Hyderabad 500081",
+        "cleaned": "Flat 1102, My Home Bhooja, Hitech City, Hyderabad 500081",
+        "building_number": "1102",
+        "building_name": "My Home Bhooja",
+        "landmark": null,
+        "locality": "Hitech City",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": null,
+        "state": null,
+        "pincode": "500081",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "34, Anna Salai, Teynampet, Chennai 600018",
+      "expected": {
+        "building_number": "34",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Teynampet",
+        "sub_locality": "Anna Salai",
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600018"
+      },
+      "actual": {
+        "raw": "34, Anna Salai, Teynampet, Chennai 600018",
+        "cleaned": "34, Anna Salai, Teynampet, Chennai 600018",
+        "building_number": "34",
+        "building_name": "Anna Salai",
+        "landmark": null,
+        "locality": "Teynampet",
+        "sub_locality": null,
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600018",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Flat 5, 2nd Avenue, Anna Nagar, Chennai 600040",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Anna Nagar",
+        "sub_locality": "2nd Avenue",
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600040"
+      },
+      "actual": {
+        "raw": "Flat 5, 2nd Avenue, Anna Nagar, Chennai 600040",
+        "cleaned": "Flat 5, 2nd Avenue, Anna Nagar, Chennai 600040",
+        "building_number": "5",
+        "building_name": "2nd Avenue",
+        "landmark": null,
+        "locality": "Anna Nagar",
+        "sub_locality": null,
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600040",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "12/4, LB Road, Adyar, Chennai 600020",
+      "expected": {
+        "building_number": "12/4",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Adyar",
+        "sub_locality": "LB Road",
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600020"
+      },
+      "actual": {
+        "raw": "12/4, LB Road, Adyar, Chennai 600020",
+        "cleaned": "12/4, LB Road, Adyar, Chennai 600020",
+        "building_number": "12/4",
+        "building_name": "LB Road",
+        "landmark": null,
+        "locality": "Chennai",
+        "sub_locality": null,
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600020",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Old No 18 New No 27, Velachery Main Road, Chennai 600042",
+      "expected": {
+        "building_number": "27",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Velachery",
+        "sub_locality": "Velachery Main Road",
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600042"
+      },
+      "actual": {
+        "raw": "Old No 18 New No 27, Velachery Main Road, Chennai 600042",
+        "cleaned": "Old No 18 New No 27, Velachery Main Road, Chennai 600042",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Old No 18 New No 27",
+        "sub_locality": null,
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600042",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Flat 4, 12 Park Street, Kolkata 700016",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Park Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700016"
+      },
+      "actual": {
+        "raw": "Flat 4, 12 Park Street, Kolkata 700016",
+        "cleaned": "Flat 4, 12 Park Street, Kolkata 700016",
+        "building_number": "4",
+        "building_name": null,
+        "landmark": null,
+        "locality": "12 Park Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700016",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_number",
+        "district"
+      ]
+    },
+    {
+      "input": "34A, Ballygunge Circular Road, Kolkata 700019",
+      "expected": {
+        "building_number": "34A",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Ballygunge",
+        "sub_locality": "Ballygunge Circular Road",
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700019"
+      },
+      "actual": {
+        "raw": "34A, Ballygunge Circular Road, Kolkata 700019",
+        "cleaned": "34A, Ballygunge Circular Road, Kolkata 700019",
+        "building_number": "34A",
+        "building_name": "Ballygunge Circular Road",
+        "landmark": null,
+        "locality": "Kolkata",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700019",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "BD-12, Salt Lake Sector 1, Kolkata 700064",
+      "expected": {
+        "building_number": "BD-12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Salt Lake Sector 1",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700064"
+      },
+      "actual": {
+        "raw": "BD-12, Salt Lake Sector 1, Kolkata 700064",
+        "cleaned": "BD-12, Salt Lake Sector 1, Kolkata 700064",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Salt Lake Sector 1",
+        "sub_locality": null,
+        "city": "Bidhan Nagar",
+        "district": "South 24 Parganas",
+        "state": "West Bengal",
+        "pincode": "700064",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Flat 6, New Alipore Block J, Kolkata 700053",
+      "expected": {
+        "building_number": "6",
+        "building_name": null,
+        "landmark": null,
+        "locality": "New Alipore",
+        "sub_locality": "Block J",
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700053"
+      },
+      "actual": {
+        "raw": "Flat 6, New Alipore Block J, Kolkata 700053",
+        "cleaned": "Flat 6, New Alipore Block J, Kolkata 700053",
+        "building_number": "6",
+        "building_name": null,
+        "landmark": null,
+        "locality": "New Alipore Block J",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700053",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "H No 12 Sarat Bose Road Kolkata 700020",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sarat Bose Road",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700020"
+      },
+      "actual": {
+        "raw": "H No 12 Sarat Bose Road Kolkata 700020",
+        "cleaned": "house number 12 Sarat Bose Road Kolkata 700020",
+        "building_number": "12",
+        "building_name": "Sarat Bose Road Kolkata",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700020",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "302 Sai Krupa Mulund West Mumbai 400080",
+      "expected": {
+        "building_number": "302",
+        "building_name": "Sai Krupa",
+        "landmark": null,
+        "locality": "Mulund West",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400080"
+      },
+      "actual": {
+        "raw": "302 Sai Krupa Mulund West Mumbai 400080",
+        "cleaned": "302 Sai Krupa Mulund West Mumbai 400080",
+        "building_number": "302",
+        "building_name": "Sai Krupa Mulund West Mumbai",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400080",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 7, Vasant Kunj, New Delhi 110070",
+      "expected": {
+        "building_number": "7",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vasant Kunj",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110070"
+      },
+      "actual": {
+        "raw": "Flat 7, Vasant Kunj, New Delhi 110070",
+        "cleaned": "Flat 7, Vasant kunj, New Delhi 110070",
+        "building_number": "7",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vasant kunj",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": null,
+        "state": null,
+        "pincode": "110070",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "203 Tower B Sobha City Thanisandra Bangalore 560077",
+      "expected": {
+        "building_number": "203",
+        "building_name": "Sobha City",
+        "landmark": null,
+        "locality": "Thanisandra",
+        "sub_locality": "Tower B",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560077"
+      },
+      "actual": {
+        "raw": "203 Tower B Sobha City Thanisandra Bangalore 560077",
+        "cleaned": "203 Tower B Sobha City Thanisandra Bangalore 560077",
+        "building_number": "203",
+        "building_name": "Tower B Sobha City Thanisandra Bangalore",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560077",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Flat 9, Powai, Mumbai",
+      "expected": {
+        "building_number": "9",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Powai",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": null,
+        "state": "Maharashtra",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Flat 9, Powai, Mumbai",
+        "cleaned": "Flat 9, Powai, Mumbai",
+        "building_number": "9",
+        "building_name": "Powai",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "15, Linking Road, Khar West, Mumbai 400052",
+      "expected": {
+        "building_number": "15",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Khar West",
+        "sub_locality": "Linking Road",
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400052"
+      },
+      "actual": {
+        "raw": "15, Linking Road, Khar West, Mumbai 400052",
+        "cleaned": "15, Linking Road, Khar West, Mumbai 400052",
+        "building_number": "15",
+        "building_name": "Linking Road",
+        "landmark": null,
+        "locality": "Khar West",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400052",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Flat 12, Cunningham Road, Bangalore",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Cunningham Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": null,
+        "state": "Karnataka",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Flat 12, Cunningham Road, Bangalore",
+        "cleaned": "Flat 12, Cunningham Road, Bangalore",
+        "building_number": "12",
+        "building_name": "Cunningham Road",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "302, RWA Towers, Sector 14, Dwarka, New Delhi 110078",
+      "expected": {
+        "building_number": "302",
+        "building_name": "RWA Towers",
+        "landmark": null,
+        "locality": "Dwarka",
+        "sub_locality": "Sector 14",
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110078"
+      },
+      "actual": {
+        "raw": "302, RWA Towers, Sector 14, Dwarka, New Delhi 110078",
+        "cleaned": "302, RWA Towers, Sector 14, Dwarka, New Delhi 110078",
+        "building_number": "302",
+        "building_name": "RWA Towers",
+        "landmark": null,
+        "locality": "Sector 14",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": null,
+        "state": null,
+        "pincode": "110078",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Flat No 8, Block A, Vasant Vihar, New Delhi 110057",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vasant Vihar",
+        "sub_locality": "Block A",
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110057"
+      },
+      "actual": {
+        "raw": "Flat No 8, Block A, Vasant Vihar, New Delhi 110057",
+        "cleaned": "flat 8, Block A, Vasant vihar, New Delhi 110057",
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Block A",
+        "sub_locality": "Vasant vihar",
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110057",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "401, Brigade Metropolis, Whitefield, Bangalore 560048",
+      "expected": {
+        "building_number": "401",
+        "building_name": "Brigade Metropolis",
+        "landmark": null,
+        "locality": "Whitefield",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560048"
+      },
+      "actual": {
+        "raw": "401, Brigade Metropolis, Whitefield, Bangalore 560048",
+        "cleaned": "401, Brigade Metropolis, Whitefield, Bangalore 560048",
+        "building_number": "401",
+        "building_name": "Brigade Metropolis",
+        "landmark": null,
+        "locality": "Whitefield",
+        "sub_locality": null,
+        "city": "Mahadevapura",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560048",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "city"
+      ]
+    },
+    {
+      "input": "15A, Camac Street, Kolkata 700017",
+      "expected": {
+        "building_number": "15A",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Camac Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700017"
+      },
+      "actual": {
+        "raw": "15A, Camac Street, Kolkata 700017",
+        "cleaned": "15A, Camac Street, Kolkata 700017",
+        "building_number": "15A",
+        "building_name": "Camac Street",
+        "landmark": null,
+        "locality": "Kolkata",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700017",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "23, MG Road, Sivaji Nagar, Pune 411005",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sivaji Nagar",
+        "sub_locality": "MG Road",
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411005"
+      },
+      "actual": {
+        "raw": "23, MG Road, Sivaji Nagar, Pune 411005",
+        "cleaned": "23, MG Road, Sivaji Nagar, Pune 411005",
+        "building_number": "23",
+        "building_name": "MG Road",
+        "landmark": null,
+        "locality": "Sivaji Nagar",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411005",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Plot No 45, Sector 17, Chandigarh 160017",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sector 17",
+        "sub_locality": null,
+        "city": "Chandigarh",
+        "district": "Chandigarh",
+        "state": "Chandigarh",
+        "pincode": "160017"
+      },
+      "actual": {
+        "raw": "Plot No 45, Sector 17, Chandigarh 160017",
+        "cleaned": "Plot No 45, Sector 17, Chandigarh 160017",
+        "building_number": null,
+        "building_name": "Plot No 45",
+        "landmark": null,
+        "locality": "Sector 17",
+        "sub_locality": null,
+        "city": "Chandigarh",
+        "district": "Chandigarh",
+        "state": "Chandigarh",
+        "pincode": "160017",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name"
+      ]
+    },
+    {
+      "input": "12/3 Gandhi Nagar, Lucknow, Uttar Pradesh 226001",
+      "expected": {
+        "building_number": "12/3",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gandhi Nagar",
+        "sub_locality": null,
+        "city": "Lucknow",
+        "district": "Lucknow",
+        "state": "Uttar Pradesh",
+        "pincode": "226001"
+      },
+      "actual": {
+        "raw": "12/3 Gandhi Nagar, Lucknow, Uttar Pradesh 226001",
+        "cleaned": "12/3 Gandhi Nagar, Lucknow, Uttar Pradesh 226001",
+        "building_number": "12/3",
+        "building_name": "Gandhi Nagar",
+        "landmark": null,
+        "locality": "Uttar Pradesh",
+        "sub_locality": null,
+        "city": "Lucknow",
+        "district": "Lucknow",
+        "state": "Uttar Pradesh",
+        "pincode": "226001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Door No 4-5-6, Nethaji Road, Vijayawada, Andhra Pradesh 520001",
+      "expected": {
+        "building_number": "4-5-6",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Nethaji Road",
+        "sub_locality": null,
+        "city": "Vijayawada",
+        "district": "Krishna",
+        "state": "Andhra Pradesh",
+        "pincode": "520001"
+      },
+      "actual": {
+        "raw": "Door No 4-5-6, Nethaji Road, Vijayawada, Andhra Pradesh 520001",
+        "cleaned": "Door No 4-5-6, Nethaji Road, Vijayawada, Andhra Pradesh 520001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Andhra Pradesh",
+        "sub_locality": null,
+        "city": "Krishna",
+        "district": "Krishna",
+        "state": "Andhra Pradesh",
+        "pincode": "520001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Flat 5, Satellite, Ahmedabad 380015",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Satellite",
+        "sub_locality": null,
+        "city": "Ahmedabad",
+        "district": "Ahmedabad",
+        "state": "Gujarat",
+        "pincode": "380015"
+      },
+      "actual": {
+        "raw": "Flat 5, Satellite, Ahmedabad 380015",
+        "cleaned": "Flat 5, Satellite, Ahmedabad 380015",
+        "building_number": "5",
+        "building_name": "Satellite",
+        "landmark": null,
+        "locality": "Ahmedabad",
+        "sub_locality": null,
+        "city": "Ahmedabad",
+        "district": "Ahmedabad",
+        "state": "Gujarat",
+        "pincode": "380015",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23, Navrangpura, Ahmedabad 380009",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Navrangpura",
+        "sub_locality": null,
+        "city": "Ahmedabad",
+        "district": "Ahmedabad",
+        "state": "Gujarat",
+        "pincode": "380009"
+      },
+      "actual": {
+        "raw": "23, Navrangpura, Ahmedabad 380009",
+        "cleaned": "23, Navrangpura, Ahmedabad 380009",
+        "building_number": "23",
+        "building_name": "Navrangpura",
+        "landmark": null,
+        "locality": "Ahmedabad",
+        "sub_locality": null,
+        "city": "Ahmedabad",
+        "district": "Ahmedabad",
+        "state": "Gujarat",
+        "pincode": "380009",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "B-15, C Scheme, Jaipur 302001",
+      "expected": {
+        "building_number": "B-15",
+        "building_name": null,
+        "landmark": null,
+        "locality": "C Scheme",
+        "sub_locality": null,
+        "city": "Jaipur",
+        "district": "Jaipur",
+        "state": "Rajasthan",
+        "pincode": "302001"
+      },
+      "actual": {
+        "raw": "B-15, C Scheme, Jaipur 302001",
+        "cleaned": "B-15, C Scheme, Jaipur 302001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "C Scheme",
+        "sub_locality": null,
+        "city": "Jaipur",
+        "district": "Jaipur",
+        "state": "Rajasthan",
+        "pincode": "302001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number"
+      ]
+    },
+    {
+      "input": "Flat 12, Race Course Road, Coimbatore 641018",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Race Course Road",
+        "sub_locality": null,
+        "city": "Coimbatore",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "pincode": "641018"
+      },
+      "actual": {
+        "raw": "Flat 12, Race Course Road, Coimbatore 641018",
+        "cleaned": "Flat 12, Race Course Road, Coimbatore 641018",
+        "building_number": "12",
+        "building_name": "Race Course Road",
+        "landmark": null,
+        "locality": "Coimbatore",
+        "sub_locality": null,
+        "city": "Coimbatore",
+        "district": "Coimbatore",
+        "state": "Tamil Nadu",
+        "pincode": "641018",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Door 24/567, MG Road, Ernakulam, Kochi 682016",
+      "expected": {
+        "building_number": "24/567",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Ernakulam",
+        "sub_locality": "MG Road",
+        "city": "Kochi",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682016"
+      },
+      "actual": {
+        "raw": "Door 24/567, MG Road, Ernakulam, Kochi 682016",
+        "cleaned": "Door 24/567, MG Road, Ernakulam, Kochi 682016",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Door 24/567",
+        "sub_locality": null,
+        "city": "Ernakulam",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682016",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "23, Panampilly Nagar, Kochi 682036",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Panampilly Nagar",
+        "sub_locality": null,
+        "city": "Kochi",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682036"
+      },
+      "actual": {
+        "raw": "23, Panampilly Nagar, Kochi 682036",
+        "cleaned": "23, Panampilly Nagar, Kochi 682036",
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Panampilly Nagar",
+        "sub_locality": null,
+        "city": "Ernakulam",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682036",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "city"
+      ]
+    },
+    {
+      "input": "201, Vijay Nagar, Indore 452010",
+      "expected": {
+        "building_number": "201",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vijay Nagar",
+        "sub_locality": null,
+        "city": "Indore",
+        "district": "Indore",
+        "state": "Madhya Pradesh",
+        "pincode": "452010"
+      },
+      "actual": {
+        "raw": "201, Vijay Nagar, Indore 452010",
+        "cleaned": "201, Vijay Nagar, Indore 452010",
+        "building_number": "201",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vijay Nagar",
+        "sub_locality": null,
+        "city": "Indore",
+        "district": null,
+        "state": null,
+        "pincode": "452010",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Flat 8, Palasia, Indore 452001",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Palasia",
+        "sub_locality": null,
+        "city": "Indore",
+        "district": "Indore",
+        "state": "Madhya Pradesh",
+        "pincode": "452001"
+      },
+      "actual": {
+        "raw": "Flat 8, Palasia, Indore 452001",
+        "cleaned": "Flat 8, Palasia, Indore 452001",
+        "building_number": "8",
+        "building_name": "Palasia",
+        "landmark": null,
+        "locality": "Indore",
+        "sub_locality": null,
+        "city": "Indore",
+        "district": "Indore",
+        "state": "Madhya Pradesh",
+        "pincode": "452001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Plot 34, Civil Lines, Nagpur 440001",
+      "expected": {
+        "building_number": "34",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Civil Lines",
+        "sub_locality": null,
+        "city": "Nagpur",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "440001"
+      },
+      "actual": {
+        "raw": "Plot 34, Civil Lines, Nagpur 440001",
+        "cleaned": "Plot 34, Civil Lines, Nagpur 440001",
+        "building_number": "34",
+        "building_name": "Civil Lines",
+        "landmark": null,
+        "locality": "Nagpur",
+        "sub_locality": null,
+        "city": "Nagpur",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "440001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "15, Dharampeth, Nagpur 440010",
+      "expected": {
+        "building_number": "15",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Dharampeth",
+        "sub_locality": null,
+        "city": "Nagpur",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "440010"
+      },
+      "actual": {
+        "raw": "15, Dharampeth, Nagpur 440010",
+        "cleaned": "15, Dharampeth, Nagpur 440010",
+        "building_number": "15",
+        "building_name": "Dharampeth",
+        "landmark": null,
+        "locality": "Nagpur",
+        "sub_locality": null,
+        "city": "Nagpur",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "440010",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "E-7/204, Arera Colony, Bhopal 462016",
+      "expected": {
+        "building_number": "E-7/204",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Arera Colony",
+        "sub_locality": null,
+        "city": "Bhopal",
+        "district": "Bhopal",
+        "state": "Madhya Pradesh",
+        "pincode": "462016"
+      },
+      "actual": {
+        "raw": "E-7/204, Arera Colony, Bhopal 462016",
+        "cleaned": "E-7/204, Arera Colony, Bhopal 462016",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Arera Colony",
+        "sub_locality": null,
+        "city": "Bhopal",
+        "district": "Bhopal",
+        "state": "Madhya Pradesh",
+        "pincode": "462016",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number"
+      ]
+    },
+    {
+      "input": "Flat 5, Aundh, Pune 411007",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Aundh",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411007"
+      },
+      "actual": {
+        "raw": "Flat 5, Aundh, Pune 411007",
+        "cleaned": "Flat 5, Aundh, Pune 411007",
+        "building_number": "5",
+        "building_name": "Aundh",
+        "landmark": null,
+        "locality": "Pune",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411007",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "302, Baner Road, Pune 411045",
+      "expected": {
+        "building_number": "302",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Baner",
+        "sub_locality": "Baner Road",
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411045"
+      },
+      "actual": {
+        "raw": "302, Baner Road, Pune 411045",
+        "cleaned": "302, Baner Road, Pune 411045",
+        "building_number": "302",
+        "building_name": "Baner Road",
+        "landmark": null,
+        "locality": "Pune",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411045",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "45, Vesu, Surat 395007",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vesu",
+        "sub_locality": null,
+        "city": "Surat",
+        "district": "Surat",
+        "state": "Gujarat",
+        "pincode": "395007"
+      },
+      "actual": {
+        "raw": "45, Vesu, Surat 395007",
+        "cleaned": "45, Vesu, Surat 395007",
+        "building_number": "45",
+        "building_name": "Vesu",
+        "landmark": null,
+        "locality": "Surat",
+        "sub_locality": null,
+        "city": "Surat",
+        "district": "Surat",
+        "state": "Gujarat",
+        "pincode": "395007",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "B-12, Adajan, Surat 395009",
+      "expected": {
+        "building_number": "B-12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Adajan",
+        "sub_locality": null,
+        "city": "Surat",
+        "district": "Surat",
+        "state": "Gujarat",
+        "pincode": "395009"
+      },
+      "actual": {
+        "raw": "B-12, Adajan, Surat 395009",
+        "cleaned": "B-12, Adajan, Surat 395009",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Adajan",
+        "sub_locality": null,
+        "city": "Surat",
+        "district": "Surat",
+        "state": "Gujarat",
+        "pincode": "395009",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number"
+      ]
+    },
+    {
+      "input": "Flat 3B, Boring Road, Patna 800001",
+      "expected": {
+        "building_number": "3B",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Boring Road",
+        "sub_locality": null,
+        "city": "Patna",
+        "district": "Patna",
+        "state": "Bihar",
+        "pincode": "800001"
+      },
+      "actual": {
+        "raw": "Flat 3B, Boring Road, Patna 800001",
+        "cleaned": "Flat 3B, Boring Road, Patna 800001",
+        "building_number": "3B",
+        "building_name": "Boring Road",
+        "landmark": null,
+        "locality": "Patna",
+        "sub_locality": null,
+        "city": "Patna",
+        "district": "Patna",
+        "state": "Bihar",
+        "pincode": "800001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H No 56, Kankarbagh, Patna 800020",
+      "expected": {
+        "building_number": "56",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Kankarbagh",
+        "sub_locality": null,
+        "city": "Patna",
+        "district": "Patna",
+        "state": "Bihar",
+        "pincode": "800020"
+      },
+      "actual": {
+        "raw": "H No 56, Kankarbagh, Patna 800020",
+        "cleaned": "house number 56, Kankarbagh, Patna 800020",
+        "building_number": "56",
+        "building_name": "Kankarbagh",
+        "landmark": null,
+        "locality": "Patna",
+        "sub_locality": null,
+        "city": "Patna",
+        "district": "Patna",
+        "state": "Bihar",
+        "pincode": "800020",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 102, Kanke Road, Ranchi 834008",
+      "expected": {
+        "building_number": "102",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Kanke Road",
+        "sub_locality": null,
+        "city": "Ranchi",
+        "district": "Ranchi",
+        "state": "Jharkhand",
+        "pincode": "834008"
+      },
+      "actual": {
+        "raw": "Flat 102, Kanke Road, Ranchi 834008",
+        "cleaned": "Flat 102, Kanke Road, Ranchi 834008",
+        "building_number": "102",
+        "building_name": "Kanke Road",
+        "landmark": null,
+        "locality": "Ranchi",
+        "sub_locality": null,
+        "city": "Ranchi",
+        "district": "Ranchi",
+        "state": "Jharkhand",
+        "pincode": "834008",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Plot 23, Saheed Nagar, Bhubaneswar 751007",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Saheed Nagar",
+        "sub_locality": null,
+        "city": "Bhubaneswar",
+        "district": "Khordha",
+        "state": "Odisha",
+        "pincode": "751007"
+      },
+      "actual": {
+        "raw": "Plot 23, Saheed Nagar, Bhubaneswar 751007",
+        "cleaned": "Plot 23, Saheed Nagar, Bhubaneswar 751007",
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Saheed Nagar",
+        "sub_locality": null,
+        "city": "Puri",
+        "district": "Puri",
+        "state": "Orissa",
+        "pincode": "751007",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "45, Pal Road, Jodhpur 342008",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Pal Road",
+        "sub_locality": null,
+        "city": "Jodhpur",
+        "district": "Jodhpur",
+        "state": "Rajasthan",
+        "pincode": "342008"
+      },
+      "actual": {
+        "raw": "45, Pal Road, Jodhpur 342008",
+        "cleaned": "45, Pal Road, Jodhpur 342008",
+        "building_number": "45",
+        "building_name": "Pal Road",
+        "landmark": null,
+        "locality": "Jodhpur",
+        "sub_locality": null,
+        "city": "Jodhpur",
+        "district": "Jodhpur",
+        "state": "Rajasthan",
+        "pincode": "342008",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 8, Sahastradhara Road, Dehradun 248001",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sahastradhara Road",
+        "sub_locality": null,
+        "city": "Dehradun",
+        "district": "Dehradun",
+        "state": "Uttarakhand",
+        "pincode": "248001"
+      },
+      "actual": {
+        "raw": "Flat 8, Sahastradhara Road, Dehradun 248001",
+        "cleaned": "Flat 8, Sahastradhara Road, Dehradun 248001",
+        "building_number": "8",
+        "building_name": "Sahastradhara Road",
+        "landmark": null,
+        "locality": "Dehradun",
+        "sub_locality": null,
+        "city": "Dehradun",
+        "district": "Dehradun",
+        "state": "Uttaranchal",
+        "pincode": "248001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "23, Civil Lines, Allahabad 211001",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Civil Lines",
+        "sub_locality": null,
+        "city": "Allahabad",
+        "district": "Allahabad",
+        "state": "Uttar Pradesh",
+        "pincode": "211001"
+      },
+      "actual": {
+        "raw": "23, Civil Lines, Allahabad 211001",
+        "cleaned": "23, Civil Lines, Allahabad 211001",
+        "building_number": "23",
+        "building_name": "Civil Lines",
+        "landmark": null,
+        "locality": "Allahabad",
+        "sub_locality": null,
+        "city": "Allahabad",
+        "district": "Allahabad",
+        "state": "Uttar Pradesh",
+        "pincode": "211001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 12, Cantonment, Varanasi 221002",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Cantonment",
+        "sub_locality": null,
+        "city": "Varanasi",
+        "district": "Varanasi",
+        "state": "Uttar Pradesh",
+        "pincode": "221002"
+      },
+      "actual": {
+        "raw": "Flat 12, Cantonment, Varanasi 221002",
+        "cleaned": "Flat 12, Cantonment, Varanasi 221002",
+        "building_number": "12",
+        "building_name": "Cantonment",
+        "landmark": null,
+        "locality": "Varanasi",
+        "sub_locality": null,
+        "city": "Varanasi",
+        "district": "Varanasi",
+        "state": "Uttar Pradesh",
+        "pincode": "221002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Near Bus Stand, Main Road, Almora, Uttarakhand 263601",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Bus Stand",
+        "locality": "Main Road",
+        "sub_locality": null,
+        "city": "Almora",
+        "district": "Almora",
+        "state": "Uttarakhand",
+        "pincode": "263601"
+      },
+      "actual": {
+        "raw": "Near Bus Stand, Main Road, Almora, Uttarakhand 263601",
+        "cleaned": "Near Bus Stand, Main Road, Almora, Uttarakhand 263601",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Bus Stand",
+        "locality": "Uttarakhand",
+        "sub_locality": null,
+        "city": "Almora",
+        "district": "Almora",
+        "state": "Uttaranchal",
+        "pincode": "263601",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "Opp. SBI Branch, Station Road, Kadiri, Anantapur Dist, AP 515541",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "SBI Branch",
+        "locality": "Station Road",
+        "sub_locality": null,
+        "city": "Kadiri",
+        "district": "Anantapur",
+        "state": "Andhra Pradesh",
+        "pincode": "515541"
+      },
+      "actual": {
+        "raw": "Opp. SBI Branch, Station Road, Kadiri, Anantapur Dist, AP 515541",
+        "cleaned": "opposite SBI Branch, Station Road, Kadiri, Anantapur district, AP 515541",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "SBI Branch",
+        "locality": "Anantapur district",
+        "sub_locality": null,
+        "city": "Anantapur",
+        "district": "Anantapur",
+        "state": "Andhra Pradesh",
+        "pincode": "515541",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Vidya Nagar, Kutagulla, Kadiri, ANANTAPUR(Dist), Andhra Pradesh, Pincode - 515541",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vidya Nagar",
+        "sub_locality": "Kutagulla",
+        "city": "Kadiri",
+        "district": "Anantapur",
+        "state": "Andhra Pradesh",
+        "pincode": "515541"
+      },
+      "actual": {
+        "raw": "Vidya Nagar, Kutagulla, Kadiri, ANANTAPUR(Dist), Andhra Pradesh, Pincode - 515541",
+        "cleaned": "Vidya Nagar, Kutagulla, Kadiri, ANANTAPUR(district), Andhra Pradesh, Pincode - 515541",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vidya Nagar",
+        "sub_locality": null,
+        "city": "Anantapur",
+        "district": "Anantapur",
+        "state": "Andhra Pradesh",
+        "pincode": "515541",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "H.No 234, Ward No 12, Dharamshala, Kangra, HP 176215",
+      "expected": {
+        "building_number": "234",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Ward No 12",
+        "sub_locality": null,
+        "city": "Dharamshala",
+        "district": "Kangra",
+        "state": "Himachal Pradesh",
+        "pincode": "176215"
+      },
+      "actual": {
+        "raw": "H.No 234, Ward No 12, Dharamshala, Kangra, HP 176215",
+        "cleaned": "house number 234, Ward No 12, Dharamshala, Kangra, HP 176215",
+        "building_number": "234",
+        "building_name": "Ward No 12",
+        "landmark": null,
+        "locality": "Dharamshala",
+        "sub_locality": null,
+        "city": "Dharamasala",
+        "district": "Kangra",
+        "state": "Himachal Pradesh",
+        "pincode": "176215",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city"
+      ]
+    },
+    {
+      "input": "H No 45, Mall Road, Shimla 171001",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Mall Road",
+        "sub_locality": null,
+        "city": "Shimla",
+        "district": "Shimla",
+        "state": "Himachal Pradesh",
+        "pincode": "171001"
+      },
+      "actual": {
+        "raw": "H No 45, Mall Road, Shimla 171001",
+        "cleaned": "house number 45, Mall Road, Shimla 171001",
+        "building_number": "45",
+        "building_name": "Mall Road",
+        "landmark": null,
+        "locality": "Shimla",
+        "sub_locality": null,
+        "city": "Shimla",
+        "district": "Shimla",
+        "state": "Himachal Pradesh",
+        "pincode": "171001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23, Gandhi Chowk, Hisar, Haryana 125001",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gandhi Chowk",
+        "sub_locality": null,
+        "city": "Hisar",
+        "district": "Hisar",
+        "state": "Haryana",
+        "pincode": "125001"
+      },
+      "actual": {
+        "raw": "23, Gandhi Chowk, Hisar, Haryana 125001",
+        "cleaned": "23, Gandhi chowk, Hisar, Haryana 125001",
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gandhi chowk",
+        "sub_locality": null,
+        "city": "Hissar",
+        "district": "Hissar",
+        "state": "Haryana",
+        "pincode": "125001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Plot 8, Model Town, Karnal, Haryana 132001",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Model Town",
+        "sub_locality": null,
+        "city": "Karnal",
+        "district": "Karnal",
+        "state": "Haryana",
+        "pincode": "132001"
+      },
+      "actual": {
+        "raw": "Plot 8, Model Town, Karnal, Haryana 132001",
+        "cleaned": "Plot 8, Model Town, Karnal, Haryana 132001",
+        "building_number": "8",
+        "building_name": "Model Town",
+        "landmark": null,
+        "locality": "Haryana",
+        "sub_locality": null,
+        "city": "Karnal",
+        "district": "Karnal",
+        "state": "Haryana",
+        "pincode": "132001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H No 56, Old City, Bikaner 334001",
+      "expected": {
+        "building_number": "56",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Old City",
+        "sub_locality": null,
+        "city": "Bikaner",
+        "district": "Bikaner",
+        "state": "Rajasthan",
+        "pincode": "334001"
+      },
+      "actual": {
+        "raw": "H No 56, Old City, Bikaner 334001",
+        "cleaned": "house number 56, Old City, Bikaner 334001",
+        "building_number": "56",
+        "building_name": "Old City",
+        "landmark": null,
+        "locality": "Bikaner",
+        "sub_locality": null,
+        "city": "Bikaner",
+        "district": "Bikaner",
+        "state": "Rajasthan",
+        "pincode": "334001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23, Sardar Patel Road, Ajmer 305001",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sardar Patel Road",
+        "sub_locality": null,
+        "city": "Ajmer",
+        "district": "Ajmer",
+        "state": "Rajasthan",
+        "pincode": "305001"
+      },
+      "actual": {
+        "raw": "23, Sardar Patel Road, Ajmer 305001",
+        "cleaned": "23, Sardar Patel Road, Ajmer 305001",
+        "building_number": "23",
+        "building_name": "Sardar Patel Road",
+        "landmark": null,
+        "locality": "Ajmer",
+        "sub_locality": null,
+        "city": "Ajmer",
+        "district": "Ajmer",
+        "state": "Rajasthan",
+        "pincode": "305001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Plot 5, Tilak Road, Udaipur 313001",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Tilak Road",
+        "sub_locality": null,
+        "city": "Udaipur",
+        "district": "Udaipur",
+        "state": "Rajasthan",
+        "pincode": "313001"
+      },
+      "actual": {
+        "raw": "Plot 5, Tilak Road, Udaipur 313001",
+        "cleaned": "Plot 5, Tilak Road, Udaipur 313001",
+        "building_number": "5",
+        "building_name": "Tilak Road",
+        "landmark": null,
+        "locality": "Udaipur",
+        "sub_locality": null,
+        "city": "Udaipur",
+        "district": "Udaipur",
+        "state": "Rajasthan",
+        "pincode": "313001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 3, Hospital Road, Tirupati 517501",
+      "expected": {
+        "building_number": "3",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Hospital Road",
+        "sub_locality": null,
+        "city": "Tirupati",
+        "district": "Chittoor",
+        "state": "Andhra Pradesh",
+        "pincode": "517501"
+      },
+      "actual": {
+        "raw": "Flat 3, Hospital Road, Tirupati 517501",
+        "cleaned": "Flat 3, Hospital Road, Tirupati 517501",
+        "building_number": "3",
+        "building_name": "Hospital Road",
+        "landmark": null,
+        "locality": "Tirupati",
+        "sub_locality": null,
+        "city": "Chittoor",
+        "district": "Chittoor",
+        "state": "Andhra Pradesh",
+        "pincode": "517501",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city"
+      ]
+    },
+    {
+      "input": "H No 12, Ramnagar, Warangal 506002",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Ramnagar",
+        "sub_locality": null,
+        "city": "Warangal",
+        "district": "Warangal",
+        "state": "Telangana",
+        "pincode": "506002"
+      },
+      "actual": {
+        "raw": "H No 12, Ramnagar, Warangal 506002",
+        "cleaned": "house number 12, Ramnagar, Warangal 506002",
+        "building_number": "12",
+        "building_name": "Ramnagar",
+        "landmark": null,
+        "locality": "Warangal",
+        "sub_locality": null,
+        "city": "Warangal",
+        "district": "Warangal",
+        "state": "Andhra Pradesh",
+        "pincode": "506002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "23, College Road, Salem 636007",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "College Road",
+        "sub_locality": null,
+        "city": "Salem",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "pincode": "636007"
+      },
+      "actual": {
+        "raw": "23, College Road, Salem 636007",
+        "cleaned": "23, College Road, Salem 636007",
+        "building_number": "23",
+        "building_name": "College Road",
+        "landmark": null,
+        "locality": "Salem",
+        "sub_locality": null,
+        "city": "Salem",
+        "district": "Salem",
+        "state": "Tamil Nadu",
+        "pincode": "636007",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H No 12, Big Bazaar Street, Madurai 625001",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Big Bazaar Street",
+        "sub_locality": null,
+        "city": "Madurai",
+        "district": "Madurai",
+        "state": "Tamil Nadu",
+        "pincode": "625001"
+      },
+      "actual": {
+        "raw": "H No 12, Big Bazaar Street, Madurai 625001",
+        "cleaned": "house number 12, Big bazaar Street, Madurai 625001",
+        "building_number": "12",
+        "building_name": "Big bazaar Street",
+        "landmark": null,
+        "locality": "Madurai",
+        "sub_locality": null,
+        "city": "Madurai",
+        "district": "Madurai",
+        "state": "Tamil Nadu",
+        "pincode": "625001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "45, Beach Road, Kanyakumari 629702",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Beach Road",
+        "sub_locality": null,
+        "city": "Kanyakumari",
+        "district": "Kanyakumari",
+        "state": "Tamil Nadu",
+        "pincode": "629702"
+      },
+      "actual": {
+        "raw": "45, Beach Road, Kanyakumari 629702",
+        "cleaned": "45, Beach Road, Kanyakumari 629702",
+        "building_number": "45",
+        "building_name": "Beach Road",
+        "landmark": null,
+        "locality": "Kanyakumari",
+        "sub_locality": null,
+        "city": "Kanyakumari",
+        "district": "Kanyakumari",
+        "state": "Tamil Nadu",
+        "pincode": "629702",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Plot 23, MG Road, Mangalore 575001",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Mangalore",
+        "district": "Dakshina Kannada",
+        "state": "Karnataka",
+        "pincode": "575001"
+      },
+      "actual": {
+        "raw": "Plot 23, MG Road, Mangalore 575001",
+        "cleaned": "Plot 23, MG Road, Mangalore 575001",
+        "building_number": "23",
+        "building_name": "MG Road",
+        "landmark": null,
+        "locality": "Mangalore",
+        "sub_locality": null,
+        "city": "Mangalore",
+        "district": "Dak. Kannada",
+        "state": "Karnataka",
+        "pincode": "575001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "H No 8, Kuvempu Nagar, Mysore 570023",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Kuvempu Nagar",
+        "sub_locality": null,
+        "city": "Mysore",
+        "district": "Mysore",
+        "state": "Karnataka",
+        "pincode": "570023"
+      },
+      "actual": {
+        "raw": "H No 8, Kuvempu Nagar, Mysore 570023",
+        "cleaned": "house number 8, Kuvempu Nagar, Mysore 570023",
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Kuvempu Nagar",
+        "sub_locality": null,
+        "city": "Mysore",
+        "district": null,
+        "state": null,
+        "pincode": "570023",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "23, Race Course Road, Hubli 580020",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Race Course Road",
+        "sub_locality": null,
+        "city": "Hubli",
+        "district": "Dharwad",
+        "state": "Karnataka",
+        "pincode": "580020"
+      },
+      "actual": {
+        "raw": "23, Race Course Road, Hubli 580020",
+        "cleaned": "23, Race Course Road, Hubli 580020",
+        "building_number": "23",
+        "building_name": "Race Course Road",
+        "landmark": null,
+        "locality": "Hubli",
+        "sub_locality": null,
+        "city": "Dharwar",
+        "district": "Dharwar",
+        "state": "Karnataka",
+        "pincode": "580020",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Flat 5, Sitabuldi, Nagpur 440012",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sitabuldi",
+        "sub_locality": null,
+        "city": "Nagpur",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "440012"
+      },
+      "actual": {
+        "raw": "Flat 5, Sitabuldi, Nagpur 440012",
+        "cleaned": "Flat 5, Sitabuldi, Nagpur 440012",
+        "building_number": "5",
+        "building_name": "Sitabuldi",
+        "landmark": null,
+        "locality": "Nagpur",
+        "sub_locality": null,
+        "city": "Nagpur",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "440012",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H No 23, Old Town, Bhubaneswar 751002",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Old Town",
+        "sub_locality": null,
+        "city": "Bhubaneswar",
+        "district": "Khordha",
+        "state": "Odisha",
+        "pincode": "751002"
+      },
+      "actual": {
+        "raw": "H No 23, Old Town, Bhubaneswar 751002",
+        "cleaned": "house number 23, Old Town, Bhubaneswar 751002",
+        "building_number": "23",
+        "building_name": "Old Town",
+        "landmark": null,
+        "locality": "Bhubaneswar",
+        "sub_locality": null,
+        "city": "Puri",
+        "district": "Puri",
+        "state": "Orissa",
+        "pincode": "751002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Plot 12, Buxi Bazaar, Cuttack 753001",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Buxi Bazaar",
+        "sub_locality": null,
+        "city": "Cuttack",
+        "district": "Cuttack",
+        "state": "Odisha",
+        "pincode": "753001"
+      },
+      "actual": {
+        "raw": "Plot 12, Buxi Bazaar, Cuttack 753001",
+        "cleaned": "Plot 12, Buxi bazaar, Cuttack 753001",
+        "building_number": "12",
+        "building_name": "Buxi bazaar",
+        "landmark": null,
+        "locality": "Cuttack",
+        "sub_locality": null,
+        "city": "Cuttack",
+        "district": "Cuttack",
+        "state": "Orissa",
+        "pincode": "753001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "H No 5, Boring Road, Muzaffarpur 842001",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Boring Road",
+        "sub_locality": null,
+        "city": "Muzaffarpur",
+        "district": "Muzaffarpur",
+        "state": "Bihar",
+        "pincode": "842001"
+      },
+      "actual": {
+        "raw": "H No 5, Boring Road, Muzaffarpur 842001",
+        "cleaned": "house number 5, Boring Road, Muzaffarpur 842001",
+        "building_number": "5",
+        "building_name": "Boring Road",
+        "landmark": null,
+        "locality": "Muzaffarpur",
+        "sub_locality": null,
+        "city": "Muzaffarpur",
+        "district": "Muzaffarpur",
+        "state": "Bihar",
+        "pincode": "842001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23, Hospital Road, Gangtok 737101",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Hospital Road",
+        "sub_locality": null,
+        "city": "Gangtok",
+        "district": "East Sikkim",
+        "state": "Sikkim",
+        "pincode": "737101"
+      },
+      "actual": {
+        "raw": "23, Hospital Road, Gangtok 737101",
+        "cleaned": "23, Hospital Road, Gangtok 737101",
+        "building_number": "23",
+        "building_name": "Hospital Road",
+        "landmark": null,
+        "locality": "Gangtok",
+        "sub_locality": null,
+        "city": "Gangtok",
+        "district": "East Sikkim",
+        "state": "Sikkim",
+        "pincode": "737101",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H No 8, Tinsukia Town, Tinsukia, Assam 786125",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Tinsukia Town",
+        "sub_locality": null,
+        "city": "Tinsukia",
+        "district": "Tinsukia",
+        "state": "Assam",
+        "pincode": "786125"
+      },
+      "actual": {
+        "raw": "H No 8, Tinsukia Town, Tinsukia, Assam 786125",
+        "cleaned": "house number 8, Tinsukia Town, Tinsukia, Assam 786125",
+        "building_number": "8",
+        "building_name": "Tinsukia Town",
+        "landmark": null,
+        "locality": "Tinsukia",
+        "sub_locality": null,
+        "city": "Dibrugarh",
+        "district": "Dibrugarh",
+        "state": "Assam",
+        "pincode": "786125",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Village Ramnagar, PO Sitapur, Via Hardoi, Lucknow, UP 261001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Ramnagar",
+        "sub_locality": "PO Sitapur",
+        "city": "Sitapur",
+        "district": "Sitapur",
+        "state": "Uttar Pradesh",
+        "pincode": "261001"
+      },
+      "actual": {
+        "raw": "Village Ramnagar, PO Sitapur, Via Hardoi, Lucknow, UP 261001",
+        "cleaned": "Village Ramnagar, post office Sitapur, Via Hardoi, Lucknow, UP 261001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Sitapur",
+        "sub_locality": null,
+        "city": "Sitapur",
+        "district": "Sitapur",
+        "state": "Uttar Pradesh",
+        "pincode": "261001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "S/O Ramesh Kumar, Village Bhogpur, Tehsil Nakodar, Jalandhar, Punjab 144040",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Bhogpur",
+        "sub_locality": "Tehsil Nakodar",
+        "city": "Jalandhar",
+        "district": "Jalandhar",
+        "state": "Punjab",
+        "pincode": "144040"
+      },
+      "actual": {
+        "raw": "S/O Ramesh Kumar, Village Bhogpur, Tehsil Nakodar, Jalandhar, Punjab 144040",
+        "cleaned": "son of Ramesh Kumar, Village Bhogpur, Tehsil Nakodar, Jalandhar, Punjab 144040",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "son of Ramesh Kumar",
+        "sub_locality": null,
+        "city": "Punjab",
+        "district": null,
+        "state": null,
+        "pincode": "144040",
+        "confidence": 0.2
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Gram Panchayat Khandala, Taluka Maval, District Pune, Maharashtra 410301",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gram Panchayat Khandala",
+        "sub_locality": "Taluka Maval",
+        "city": "Khandala",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "410301"
+      },
+      "actual": {
+        "raw": "Gram Panchayat Khandala, Taluka Maval, District Pune, Maharashtra 410301",
+        "cleaned": "Gram Panchayat Khandala, Taluka Maval, District Pune, Maharashtra 410301",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gram Panchayat Khandala",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "410301",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Near Shiv Mandir, Mohalla Rajput, Village Kheri, Bulandshahr, UP",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Shiv Mandir",
+        "locality": "Village Kheri",
+        "sub_locality": "Mohalla Rajput",
+        "city": "Bulandshahr",
+        "district": "Bulandshahr",
+        "state": "Uttar Pradesh",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Near Shiv Mandir, Mohalla Rajput, Village Kheri, Bulandshahr, UP",
+        "cleaned": "Near Shiv mandir, mohalla Rajput, Village kheri, Bulandshahr, UP",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Shiv mandir",
+        "locality": "mohalla Rajput",
+        "sub_locality": null,
+        "city": "UP",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Village Khairapur, PO Khairapur, Tehsil Sadar, Aligarh, Uttar Pradesh 202001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Khairapur",
+        "sub_locality": "PO Khairapur",
+        "city": "Aligarh",
+        "district": "Aligarh",
+        "state": "Uttar Pradesh",
+        "pincode": "202001"
+      },
+      "actual": {
+        "raw": "Village Khairapur, PO Khairapur, Tehsil Sadar, Aligarh, Uttar Pradesh 202001",
+        "cleaned": "Village Khairapur, post office Khairapur, Tehsil Sadar, Aligarh, Uttar Pradesh 202001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Khairapur",
+        "sub_locality": null,
+        "city": "Aligarh",
+        "district": "Aligarh",
+        "state": "Uttar Pradesh",
+        "pincode": "202001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Village Ramapur, PO Jhanjharpur, Madhubani, Bihar 847404",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Ramapur",
+        "sub_locality": "PO Jhanjharpur",
+        "city": "Madhubani",
+        "district": "Madhubani",
+        "state": "Bihar",
+        "pincode": "847404"
+      },
+      "actual": {
+        "raw": "Village Ramapur, PO Jhanjharpur, Madhubani, Bihar 847404",
+        "cleaned": "Village Ramapur, post office Jhanjharpur, Madhubani, Bihar 847404",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Jhanjharpur",
+        "sub_locality": null,
+        "city": "Jhanjharpur",
+        "district": "Madhubani",
+        "state": "Bihar",
+        "pincode": "847404",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "S/O Mahesh Singh, Village Kishangarh, Post Bawal, Rewari, Haryana 123501",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Kishangarh",
+        "sub_locality": "Post Bawal",
+        "city": "Rewari",
+        "district": "Rewari",
+        "state": "Haryana",
+        "pincode": "123501"
+      },
+      "actual": {
+        "raw": "S/O Mahesh Singh, Village Kishangarh, Post Bawal, Rewari, Haryana 123501",
+        "cleaned": "son of Mahesh Singh, Village Kishangarh, Post Bawal, Rewari, Haryana 123501",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "son of Mahesh Singh",
+        "sub_locality": null,
+        "city": "Bawal",
+        "district": "Mohindergarh",
+        "state": "Haryana",
+        "pincode": "123501",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Village Sohna Khurd, PO Sohna, Tehsil Sohna, Gurgaon, Haryana 122103",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Sohna Khurd",
+        "sub_locality": "PO Sohna",
+        "city": "Sohna",
+        "district": "Gurgaon",
+        "state": "Haryana",
+        "pincode": "122103"
+      },
+      "actual": {
+        "raw": "Village Sohna Khurd, PO Sohna, Tehsil Sohna, Gurgaon, Haryana 122103",
+        "cleaned": "Village Sohna khurd, post office Sohna, Tehsil Sohna, Gurgaon, Haryana 122103",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Sohna khurd",
+        "sub_locality": null,
+        "city": "Sohna",
+        "district": "Gurgaon",
+        "state": "Haryana",
+        "pincode": "122103",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Village Bandhwari, PO Gwalpahari, Tehsil Sohna, Gurgaon 122003",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Bandhwari",
+        "sub_locality": "PO Gwalpahari",
+        "city": "Gurgaon",
+        "district": "Gurgaon",
+        "state": "Haryana",
+        "pincode": "122003"
+      },
+      "actual": {
+        "raw": "Village Bandhwari, PO Gwalpahari, Tehsil Sohna, Gurgaon 122003",
+        "cleaned": "Village Bandhwari, post office Gwalpahari, Tehsil Sohna, Gurgaon 122003",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Gwalpahari",
+        "sub_locality": null,
+        "city": "Gurgaon",
+        "district": null,
+        "state": null,
+        "pincode": "122003",
+        "confidence": 0.2
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Village Pipariya, PO Babai, Hoshangabad, Madhya Pradesh 461661",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Pipariya",
+        "sub_locality": "PO Babai",
+        "city": "Hoshangabad",
+        "district": "Hoshangabad",
+        "state": "Madhya Pradesh",
+        "pincode": "461661"
+      },
+      "actual": {
+        "raw": "Village Pipariya, PO Babai, Hoshangabad, Madhya Pradesh 461661",
+        "cleaned": "Village Pipariya, post office Babai, Hoshangabad, Madhya Pradesh 461661",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Babai",
+        "sub_locality": null,
+        "city": "Madhya Pradesh",
+        "district": null,
+        "state": null,
+        "pincode": "461661",
+        "confidence": 0.2
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Gram Sabha Karauli, Block Hindaun, District Karauli, Rajasthan 322230",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gram Sabha Karauli",
+        "sub_locality": "Block Hindaun",
+        "city": "Karauli",
+        "district": "Karauli",
+        "state": "Rajasthan",
+        "pincode": "322230"
+      },
+      "actual": {
+        "raw": "Gram Sabha Karauli, Block Hindaun, District Karauli, Rajasthan 322230",
+        "cleaned": "Gram Sabha Karauli, Block Hindaun, District Karauli, Rajasthan 322230",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Block Hindaun",
+        "sub_locality": null,
+        "city": "Hindaun",
+        "district": "Karauli",
+        "state": "Rajasthan",
+        "pincode": "322230",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "H No 12, Village Bichpuri, PO Bichpuri, Agra, UP 283105",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Bichpuri",
+        "sub_locality": "PO Bichpuri",
+        "city": "Agra",
+        "district": "Agra",
+        "state": "Uttar Pradesh",
+        "pincode": "283105"
+      },
+      "actual": {
+        "raw": "H No 12, Village Bichpuri, PO Bichpuri, Agra, UP 283105",
+        "cleaned": "house number 12, Village Bichpuri, post office Bichpuri, Agra, UP 283105",
+        "building_number": "12",
+        "building_name": "Village Bichpuri",
+        "landmark": null,
+        "locality": "post office Bichpuri",
+        "sub_locality": null,
+        "city": "Agra",
+        "district": "Agra",
+        "state": "Uttar Pradesh",
+        "pincode": "283105",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "D/O Ram Lal, Village Madanpur, Tehsil Sadar, Etah, UP 207001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Madanpur",
+        "sub_locality": "Tehsil Sadar",
+        "city": "Etah",
+        "district": "Etah",
+        "state": "Uttar Pradesh",
+        "pincode": "207001"
+      },
+      "actual": {
+        "raw": "D/O Ram Lal, Village Madanpur, Tehsil Sadar, Etah, UP 207001",
+        "cleaned": "daughter of Ram Lal, Village Madanpur, Tehsil Sadar, Etah, UP 207001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "daughter of Ram Lal",
+        "sub_locality": null,
+        "city": "Etwah",
+        "district": "Etwah",
+        "state": "Uttar Pradesh",
+        "pincode": "207001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Village Pochampally, Mandal Choutuppal, Yadadri Bhuvanagiri, Telangana 508284",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Pochampally",
+        "sub_locality": "Mandal Choutuppal",
+        "city": "Pochampally",
+        "district": "Yadadri Bhuvanagiri",
+        "state": "Telangana",
+        "pincode": "508284"
+      },
+      "actual": {
+        "raw": "Village Pochampally, Mandal Choutuppal, Yadadri Bhuvanagiri, Telangana 508284",
+        "cleaned": "Village Pochampally, Mandal Choutuppal, Yadadri Bhuvanagiri, Telangana 508284",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Pochampally",
+        "sub_locality": null,
+        "city": "Nalgonda",
+        "district": "Nalgonda",
+        "state": "Andhra Pradesh",
+        "pincode": "508284",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "At Post Vadgaon, Tal Maval, Dist Pune, Maharashtra 410507",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "At Post Vadgaon",
+        "sub_locality": "Tal Maval",
+        "city": "Vadgaon",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "410507"
+      },
+      "actual": {
+        "raw": "At Post Vadgaon, Tal Maval, Dist Pune, Maharashtra 410507",
+        "cleaned": "At Post Vadgaon, Tal Maval, district Pune, Maharashtra 410507",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "At Post Vadgaon",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "410507",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Village Saoner, Taluka Saoner, Nagpur, Maharashtra 441107",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Saoner",
+        "sub_locality": "Taluka Saoner",
+        "city": "Saoner",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "441107"
+      },
+      "actual": {
+        "raw": "Village Saoner, Taluka Saoner, Nagpur, Maharashtra 441107",
+        "cleaned": "Village Saoner, Taluka Saoner, Nagpur, Maharashtra 441107",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Saoner",
+        "sub_locality": null,
+        "city": "Savner",
+        "district": "Nagpur",
+        "state": "Maharashtra",
+        "pincode": "441107",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Mouza Singur, PO Singur, Hooghly, West Bengal 712409",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Mouza Singur",
+        "sub_locality": "PO Singur",
+        "city": "Singur",
+        "district": "Hooghly",
+        "state": "West Bengal",
+        "pincode": "712409"
+      },
+      "actual": {
+        "raw": "Mouza Singur, PO Singur, Hooghly, West Bengal 712409",
+        "cleaned": "Mouza Singur, post office Singur, Hooghly, West Bengal 712409",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Singur",
+        "sub_locality": null,
+        "city": "Singur",
+        "district": "Hooghly",
+        "state": "West Bengal",
+        "pincode": "712409",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Village Champua, Block Champua, Keonjhar, Odisha 758041",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Champua",
+        "sub_locality": "Block Champua",
+        "city": "Champua",
+        "district": "Keonjhar",
+        "state": "Odisha",
+        "pincode": "758041"
+      },
+      "actual": {
+        "raw": "Village Champua, Block Champua, Keonjhar, Odisha 758041",
+        "cleaned": "Village Champua, Block Champua, Keonjhar, Odisha 758041",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Block Champua",
+        "sub_locality": null,
+        "city": "Champua",
+        "district": "Kendujhar",
+        "state": "Orissa",
+        "pincode": "758041",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "S/O Late Bhola Singh, Vill Manjhauli, PO Hajipur, Vaishali, Bihar 844101",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vill Manjhauli",
+        "sub_locality": "PO Hajipur",
+        "city": "Hajipur",
+        "district": "Vaishali",
+        "state": "Bihar",
+        "pincode": "844101"
+      },
+      "actual": {
+        "raw": "S/O Late Bhola Singh, Vill Manjhauli, PO Hajipur, Vaishali, Bihar 844101",
+        "cleaned": "son of Late Bhola Singh, village Manjhauli, post office Hajipur, Vaishali, Bihar 844101",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "son of Late Bhola Singh",
+        "sub_locality": null,
+        "city": "Hazipur",
+        "district": "Vaishali",
+        "state": "Bihar",
+        "pincode": "844101",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Vill+Po Mednipur, Dist Paschim Medinipur, WB 721102",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vill+Po Mednipur",
+        "sub_locality": null,
+        "city": "Mednipur",
+        "district": "Paschim Medinipur",
+        "state": "West Bengal",
+        "pincode": "721102"
+      },
+      "actual": {
+        "raw": "Vill+Po Mednipur, Dist Paschim Medinipur, WB 721102",
+        "cleaned": "village+post office Mednipur, district Paschim Medinipur, WB 721102",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "village+post office Mednipur",
+        "sub_locality": null,
+        "city": "Medinipur",
+        "district": "Midnapur",
+        "state": "West Bengal",
+        "pincode": "721102",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Village Wayanad, PO Sulthan Bathery, Wayanad, Kerala 673592",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Wayanad",
+        "sub_locality": "PO Sulthan Bathery",
+        "city": "Sulthan Bathery",
+        "district": "Wayanad",
+        "state": "Kerala",
+        "pincode": "673592"
+      },
+      "actual": {
+        "raw": "Village Wayanad, PO Sulthan Bathery, Wayanad, Kerala 673592",
+        "cleaned": "Village Wayanad, post office Sulthan Bathery, Wayanad, Kerala 673592",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "post office Sulthan Bathery",
+        "sub_locality": null,
+        "city": "Wayanad",
+        "district": "Wayanad",
+        "state": "Kerala",
+        "pincode": "673592",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Gaon Khairi Kalan, Tehsil Bahadurgarh, Jhajjar, Haryana 124507",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Gaon Khairi Kalan",
+        "sub_locality": "Tehsil Bahadurgarh",
+        "city": "Bahadurgarh",
+        "district": "Jhajjar",
+        "state": "Haryana",
+        "pincode": "124507"
+      },
+      "actual": {
+        "raw": "Gaon Khairi Kalan, Tehsil Bahadurgarh, Jhajjar, Haryana 124507",
+        "cleaned": "Gaon Khairi kalan, Tehsil Bahadurgarh, Jhajjar, Haryana 124507",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Tehsil Bahadurgarh",
+        "sub_locality": null,
+        "city": "Rohtak",
+        "district": "Rohtak",
+        "state": "Haryana",
+        "pincode": "124507",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "W/O Ramesh, Vill Khera Buzurg, Block Sahaspur, Bijnor, UP 246726",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vill Khera Buzurg",
+        "sub_locality": "Block Sahaspur",
+        "city": "Bijnor",
+        "district": "Bijnor",
+        "state": "Uttar Pradesh",
+        "pincode": "246726"
+      },
+      "actual": {
+        "raw": "W/O Ramesh, Vill Khera Buzurg, Block Sahaspur, Bijnor, UP 246726",
+        "cleaned": "wife of Ramesh, village khera buzurg, Block Sahaspur, Bijnor, UP 246726",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Block Sahaspur",
+        "sub_locality": null,
+        "city": "Haldaur",
+        "district": "Bijnore",
+        "state": "Uttar Pradesh",
+        "pincode": "246726",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Village Nathukheri, Post Sambhal, Moradabad, UP 244302",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Nathukheri",
+        "sub_locality": "Post Sambhal",
+        "city": "Sambhal",
+        "district": "Moradabad",
+        "state": "Uttar Pradesh",
+        "pincode": "244302"
+      },
+      "actual": {
+        "raw": "Village Nathukheri, Post Sambhal, Moradabad, UP 244302",
+        "cleaned": "Village Nathukheri, Post Sambhal, Moradabad, UP 244302",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Village Nathukheri",
+        "sub_locality": null,
+        "city": "Moradabad",
+        "district": "Moradabad",
+        "state": "Uttar Pradesh",
+        "pincode": "244302",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Behind Reliance Fresh, Above HDFC Bank, Aundh, Pune 411007",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Reliance Fresh; HDFC Bank",
+        "locality": "Aundh",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411007"
+      },
+      "actual": {
+        "raw": "Behind Reliance Fresh, Above HDFC Bank, Aundh, Pune 411007",
+        "cleaned": "Behind Reliance Fresh, Above HDFC Bank, Aundh, Pune 411007",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Reliance Fresh",
+        "locality": "Above HDFC Bank",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411007",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Opp. City Hospital, Next to Petrol Pump, GT Road, Amritsar 143001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "City Hospital; Petrol Pump",
+        "locality": "GT Road",
+        "sub_locality": null,
+        "city": "Amritsar",
+        "district": "Amritsar",
+        "state": "Punjab",
+        "pincode": "143001"
+      },
+      "actual": {
+        "raw": "Opp. City Hospital, Next to Petrol Pump, GT Road, Amritsar 143001",
+        "cleaned": "opposite City Hospital, Next to Petrol Pump, GT Road, Amritsar 143001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "City Hospital; Petrol Pump",
+        "locality": "Amritsar",
+        "sub_locality": null,
+        "city": "Amritsar",
+        "district": "Amritsar",
+        "state": "Punjab",
+        "pincode": "143001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Near Railway Crossing, Behind Old Bus Stand, Moga, Punjab 142001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Railway Crossing; Old Bus Stand",
+        "locality": null,
+        "sub_locality": null,
+        "city": "Moga",
+        "district": "Moga",
+        "state": "Punjab",
+        "pincode": "142001"
+      },
+      "actual": {
+        "raw": "Near Railway Crossing, Behind Old Bus Stand, Moga, Punjab 142001",
+        "cleaned": "Near Railway Crossing, Behind Old Bus Stand, Moga, Punjab 142001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Railway Crossing; Old Bus Stand",
+        "locality": "Punjab",
+        "sub_locality": null,
+        "city": "Ferozepur",
+        "district": "Ferozepur",
+        "state": "Punjab",
+        "pincode": "142001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "Behind Forum Mall, Hosur Road, Koramangala, Bangalore 560029",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Forum Mall",
+        "locality": "Koramangala",
+        "sub_locality": "Hosur Road",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560029"
+      },
+      "actual": {
+        "raw": "Behind Forum Mall, Hosur Road, Koramangala, Bangalore 560029",
+        "cleaned": "Behind Forum Mall, Hosur Road, Koramangala, Bangalore 560029",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Forum Mall",
+        "locality": "Koramangala",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560029",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Next to Shoppers Stop, Linking Road, Bandra West, Mumbai 400050",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Shoppers Stop",
+        "locality": "Bandra West",
+        "sub_locality": "Linking Road",
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050"
+      },
+      "actual": {
+        "raw": "Next to Shoppers Stop, Linking Road, Bandra West, Mumbai 400050",
+        "cleaned": "Next to Shoppers Stop, Linking Road, Bandra West, Mumbai 400050",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Shoppers Stop",
+        "locality": "Linking Road",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400050",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "In front of Inox Cinema, Wakad, Pune 411057",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Inox Cinema",
+        "locality": "Wakad",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411057"
+      },
+      "actual": {
+        "raw": "In front of Inox Cinema, Wakad, Pune 411057",
+        "cleaned": "In front of Inox Cinema, Wakad, Pune 411057",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Inox Cinema",
+        "locality": "Wakad",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": null,
+        "state": null,
+        "pincode": "411057",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Near Iskcon Temple, Juhu, Mumbai 400049",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Iskcon Temple",
+        "locality": "Juhu",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400049"
+      },
+      "actual": {
+        "raw": "Near Iskcon Temple, Juhu, Mumbai 400049",
+        "cleaned": "Near Iskcon Temple, Juhu, Mumbai 400049",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Iskcon Temple",
+        "locality": "Mumbai",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400049",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Opposite Lulu Mall, Edappally, Kochi 682024",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Lulu Mall",
+        "locality": "Edappally",
+        "sub_locality": null,
+        "city": "Kochi",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682024"
+      },
+      "actual": {
+        "raw": "Opposite Lulu Mall, Edappally, Kochi 682024",
+        "cleaned": "Opposite Lulu Mall, Edappally, Kochi 682024",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Lulu Mall",
+        "locality": "Edappally",
+        "sub_locality": null,
+        "city": "Ernakulam",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682024",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "city"
+      ]
+    },
+    {
+      "input": "Behind Inox Multiplex, Vijay Nagar, Indore 452010",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Inox Multiplex",
+        "locality": "Vijay Nagar",
+        "sub_locality": null,
+        "city": "Indore",
+        "district": "Indore",
+        "state": "Madhya Pradesh",
+        "pincode": "452010"
+      },
+      "actual": {
+        "raw": "Behind Inox Multiplex, Vijay Nagar, Indore 452010",
+        "cleaned": "Behind Inox Multiplex, Vijay Nagar, Indore 452010",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Inox Multiplex",
+        "locality": "Vijay Nagar",
+        "sub_locality": null,
+        "city": "Indore",
+        "district": null,
+        "state": null,
+        "pincode": "452010",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Near AIIMS Gate 2, Ansari Nagar, New Delhi 110029",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "AIIMS Gate 2",
+        "locality": "Ansari Nagar",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110029"
+      },
+      "actual": {
+        "raw": "Near AIIMS Gate 2, Ansari Nagar, New Delhi 110029",
+        "cleaned": "Near AIIMS Gate 2, Ansari Nagar, New Delhi 110029",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "AIIMS Gate 2",
+        "locality": "Ansari Nagar",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110029",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "district"
+      ]
+    },
+    {
+      "input": "Opp Cyber Towers, Madhapur, Hyderabad 500081",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Cyber Towers",
+        "locality": "Madhapur",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500081"
+      },
+      "actual": {
+        "raw": "Opp Cyber Towers, Madhapur, Hyderabad 500081",
+        "cleaned": "opposite Cyber Towers, Madhapur, Hyderabad 500081",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Cyber Towers",
+        "locality": "Madhapur",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": null,
+        "state": null,
+        "pincode": "500081",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Near IIT Main Gate, Powai, Mumbai 400076",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "IIT Main Gate",
+        "locality": "Powai",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400076"
+      },
+      "actual": {
+        "raw": "Near IIT Main Gate, Powai, Mumbai 400076",
+        "cleaned": "Near IIT Main Gate, Powai, Mumbai 400076",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "IIT Main Gate",
+        "locality": "Mumbai",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400076",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Behind Decathlon, Sarjapur Outer Ring Road, Bangalore 560103",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Decathlon",
+        "locality": "Sarjapur Outer Ring Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560103"
+      },
+      "actual": {
+        "raw": "Behind Decathlon, Sarjapur Outer Ring Road, Bangalore 560103",
+        "cleaned": "Behind Decathlon, Sarjapur Outer Ring Road, Bangalore 560103",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Decathlon",
+        "locality": "Sarjapur Outer Ring Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": null,
+        "state": null,
+        "pincode": "560103",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Near Charminar, Old City, Hyderabad 500002",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Charminar",
+        "locality": "Old City",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500002"
+      },
+      "actual": {
+        "raw": "Near Charminar, Old City, Hyderabad 500002",
+        "cleaned": "Near Charminar, Old City, Hyderabad 500002",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Charminar",
+        "locality": "Hyderabad",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Andhra Pradesh",
+        "pincode": "500002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality",
+        "state"
+      ]
+    },
+    {
+      "input": "Beside Pantaloons, Park Street, Kolkata 700016",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Pantaloons",
+        "locality": "Park Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700016"
+      },
+      "actual": {
+        "raw": "Beside Pantaloons, Park Street, Kolkata 700016",
+        "cleaned": "Beside Pantaloons, Park Street, Kolkata 700016",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Pantaloons",
+        "locality": "Park Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700016",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "district"
+      ]
+    },
+    {
+      "input": "26 Mahatma Gandhi Road (on weekdays), Raheja Towers (on weekends), Dhule, Maharashtra",
+      "expected": {
+        "building_number": "26",
+        "building_name": "Raheja Towers",
+        "landmark": null,
+        "locality": "Mahatma Gandhi Road",
+        "sub_locality": null,
+        "city": "Dhule",
+        "district": "Dhule",
+        "state": "Maharashtra",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "26 Mahatma Gandhi Road (on weekdays), Raheja Towers (on weekends), Dhule, Maharashtra",
+        "cleaned": "26 Mahatma Gandhi Road (on weekdays), Raheja Towers (on weekends), Dhule, Maharashtra",
+        "building_number": "26",
+        "building_name": "Mahatma Gandhi Road (on weekdays)",
+        "landmark": null,
+        "locality": "Raheja Towers (on weekends)",
+        "sub_locality": null,
+        "city": "Maharashtra",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Sarjapur road, Bangalore (come to the tea shop and ask for XYZ and they will guide you)",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "tea shop",
+        "locality": "Sarjapur road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Sarjapur road, Bangalore (come to the tea shop and ask for XYZ and they will guide you)",
+        "cleaned": "Sarjapur road, Bangalore (come to the tea shop and ask for XYZ and they will guide you)",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sarjapur road",
+        "sub_locality": null,
+        "city": "Bangalore (come to the tea shop and ask for XYZ and they will guide you)",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.2
+      },
+      "mismatched_fields": [
+        "landmark",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "my home is the big green building near kochi metro station, ernakulam 682011",
+      "expected": {
+        "building_number": null,
+        "building_name": "big green building",
+        "landmark": "kochi metro station",
+        "locality": "ernakulam",
+        "sub_locality": null,
+        "city": "Kochi",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682011"
+      },
+      "actual": {
+        "raw": "my home is the big green building near kochi metro station, ernakulam 682011",
+        "cleaned": "my home is the big green building near kochi metro station, ernakulam 682011",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "my home is the big green building near kochi metro station",
+        "sub_locality": null,
+        "city": "Ernakulam",
+        "district": "Ernakulam",
+        "state": "Kerala",
+        "pincode": "682011",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_name",
+        "landmark",
+        "locality",
+        "city"
+      ]
+    },
+    {
+      "input": "flat no 3 2nd floor above mediplus medical opp hdfc bank mg road pune 411001",
+      "expected": {
+        "building_number": "3",
+        "building_name": null,
+        "landmark": "mediplus medical; hdfc bank",
+        "locality": "mg road",
+        "sub_locality": "2nd floor",
+        "city": "pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411001"
+      },
+      "actual": {
+        "raw": "flat no 3 2nd floor above mediplus medical opp hdfc bank mg road pune 411001",
+        "cleaned": "flat 3 2nd floor above mediplus medical opposite hdfc bank mg road pune 411001",
+        "building_number": "3",
+        "building_name": "2nd floor above mediplus medical opposite hdfc bank mg road pune",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411001",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "landmark",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "C/O Ramesh Provision Store, Main Bazaar, Mandla, MP 481661",
+      "expected": {
+        "building_number": null,
+        "building_name": "Ramesh Provision Store",
+        "landmark": null,
+        "locality": "Main Bazaar",
+        "sub_locality": null,
+        "city": "Mandla",
+        "district": "Mandla",
+        "state": "Madhya Pradesh",
+        "pincode": "481661"
+      },
+      "actual": {
+        "raw": "C/O Ramesh Provision Store, Main Bazaar, Mandla, MP 481661",
+        "cleaned": "care of Ramesh Provision Store, Main bazaar, Mandla, MP 481661",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "care of Ramesh Provision Store",
+        "sub_locality": null,
+        "city": "Mandla",
+        "district": "Mandla",
+        "state": "Madhya Pradesh",
+        "pincode": "481661",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "15 mg road bangalroe 560001",
+      "expected": {
+        "building_number": "15",
+        "building_name": null,
+        "landmark": null,
+        "locality": "mg road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001"
+      },
+      "actual": {
+        "raw": "15 mg road bangalroe 560001",
+        "cleaned": "15 mg road bangalroe 560001",
+        "building_number": "15",
+        "building_name": "mg road bangalroe",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "flat 3, marine drive, mumabi 400002",
+      "expected": {
+        "building_number": "3",
+        "building_name": null,
+        "landmark": null,
+        "locality": "marine drive",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400002"
+      },
+      "actual": {
+        "raw": "flat 3, marine drive, mumabi 400002",
+        "cleaned": "flat 3, marine drive, mumabi 400002",
+        "building_number": "3",
+        "building_name": "marine drive",
+        "landmark": null,
+        "locality": "mumabi",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23 jubilee hills hydrabad 500033",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "jubilee hills",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500033"
+      },
+      "actual": {
+        "raw": "23 jubilee hills hydrabad 500033",
+        "cleaned": "23 jubilee hills hydrabad 500033",
+        "building_number": "23",
+        "building_name": "jubilee hills hydrabad",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": "500033",
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "flat 7 park street kolkatta 700016",
+      "expected": {
+        "building_number": "7",
+        "building_name": null,
+        "landmark": null,
+        "locality": "park street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700016"
+      },
+      "actual": {
+        "raw": "flat 7 park street kolkatta 700016",
+        "cleaned": "flat 7 park street kolkatta 700016",
+        "building_number": "7",
+        "building_name": "park street kolkatta",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700016",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "12 anna salai chenai 600002",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "anna salai",
+        "sub_locality": null,
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600002"
+      },
+      "actual": {
+        "raw": "12 anna salai chenai 600002",
+        "cleaned": "12 anna salai chenai 600002",
+        "building_number": "12",
+        "building_name": "anna salai chenai",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Chennai",
+        "district": "Chennai",
+        "state": "Tamil Nadu",
+        "pincode": "600002",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "FLAT 401 GREEN HEIGHTS WAKAD PUNE 411057",
+      "expected": {
+        "building_number": "401",
+        "building_name": "GREEN HEIGHTS",
+        "landmark": null,
+        "locality": "WAKAD",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411057"
+      },
+      "actual": {
+        "raw": "FLAT 401 GREEN HEIGHTS WAKAD PUNE 411057",
+        "cleaned": "FLAT 401 GREEN HEIGHTS WAKAD PUNE 411057",
+        "building_number": "401",
+        "building_name": "GREEN HEIGHTS WAKAD PUNE",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": "411057",
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "locality",
+        "city",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "flat 12   marine    drive   mumbai    400002",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "marine drive",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400002"
+      },
+      "actual": {
+        "raw": "flat 12   marine    drive   mumbai    400002",
+        "cleaned": "flat 12 marine drive mumbai 400002",
+        "building_number": "12",
+        "building_name": "marine drive mumbai",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400002",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23 mg road bangalore Pin - 560001",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "mg road",
+        "sub_locality": null,
+        "city": "bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001"
+      },
+      "actual": {
+        "raw": "23 mg road bangalore Pin - 560001",
+        "cleaned": "23 mg road bangalore Pin - 560001",
+        "building_number": "23",
+        "building_name": "mg road bangalore Pin",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "45 brigade road bangalore PIN: 560025",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": null,
+        "locality": "brigade road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560025"
+      },
+      "actual": {
+        "raw": "45 brigade road bangalore PIN: 560025",
+        "cleaned": "45 brigade road bangalore PIN: 560025",
+        "building_number": "45",
+        "building_name": "brigade road bangalore PIN:",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560025",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 8, MG Road, Pune, Pincode - 411001",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411001"
+      },
+      "actual": {
+        "raw": "Flat 8, MG Road, Pune, Pincode - 411001",
+        "cleaned": "Flat 8, MG Road, Pune, Pincode - 411001",
+        "building_number": "8",
+        "building_name": "MG Road",
+        "landmark": null,
+        "locality": "Pincode",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H No 23, Park Street, Kolkata, Pin Code: 700016",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Park Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Kolkata",
+        "state": "West Bengal",
+        "pincode": "700016"
+      },
+      "actual": {
+        "raw": "H No 23, Park Street, Kolkata, Pin Code: 700016",
+        "cleaned": "house number 23, Park Street, Kolkata, Pin Code: 700016",
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Park Street",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "Calcutta",
+        "state": "West Bengal",
+        "pincode": "700016",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "district"
+      ]
+    },
+    {
+      "input": "Flat-203, Tower-A, Sobha Dream Acres, Panathur Main Road, Bangalore-560087",
+      "expected": {
+        "building_number": "203",
+        "building_name": "Sobha Dream Acres",
+        "landmark": null,
+        "locality": "Panathur Main Road",
+        "sub_locality": "Tower-A",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560087"
+      },
+      "actual": {
+        "raw": "Flat-203, Tower-A, Sobha Dream Acres, Panathur Main Road, Bangalore-560087",
+        "cleaned": "Flat-203, Tower-A, Sobha Dream Acres, Panathur Main Road, Bangalore-560087",
+        "building_number": "203",
+        "building_name": "Tower-A",
+        "landmark": null,
+        "locality": "Panathur Main Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560087",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "#23 / 4th Cross / Indiranagar / Bangalore / 560038",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Indiranagar",
+        "sub_locality": "4th Cross",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560038"
+      },
+      "actual": {
+        "raw": "#23 / 4th Cross / Indiranagar / Bangalore / 560038",
+        "cleaned": "#23 / 4th Cross / Indiranagar / Bangalore / 560038",
+        "building_number": "23",
+        "building_name": "/ 4th Cross / Indiranagar / Bangalore /",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560038",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "flat3,greenpark,saketnewdelhi110017",
+      "expected": {
+        "building_number": "3",
+        "building_name": "greenpark",
+        "landmark": null,
+        "locality": "saket",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110017"
+      },
+      "actual": {
+        "raw": "flat3,greenpark,saketnewdelhi110017",
+        "cleaned": "flat3, greenpark, saketnewdelhi110017",
+        "building_number": "3",
+        "building_name": "greenpark",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "saketnewdelhi110017",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "locality",
+        "city",
+        "district",
+        "state",
+        "pincode"
+      ]
+    },
+    {
+      "input": "plot 12 .. saket .. new delhi .. 110017",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "saket",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110017"
+      },
+      "actual": {
+        "raw": "plot 12 .. saket .. new delhi .. 110017",
+        "cleaned": "plot 12 .. saket .. new delhi .. 110017",
+        "building_number": "12",
+        "building_name": "saket .. new delhi",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110017",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district"
+      ]
+    },
+    {
+      "input": "Above Domino's Pizza, Beside Axis Bank, FC Road, Pune 411004",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Domino's Pizza; Axis Bank",
+        "locality": "FC Road",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411004"
+      },
+      "actual": {
+        "raw": "Above Domino's Pizza, Beside Axis Bank, FC Road, Pune 411004",
+        "cleaned": "Above Domino's Pizza, Beside Axis Bank, FC Road, Pune 411004",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Axis Bank",
+        "locality": "Above Domino's Pizza",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411004",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "3rd floor, Krishna Complex, Above Bata Showroom, MG Road, Vadodara 390001",
+      "expected": {
+        "building_number": null,
+        "building_name": "Krishna Complex",
+        "landmark": "Bata Showroom",
+        "locality": "MG Road",
+        "sub_locality": "3rd floor",
+        "city": "Vadodara",
+        "district": "Vadodara",
+        "state": "Gujarat",
+        "pincode": "390001"
+      },
+      "actual": {
+        "raw": "3rd floor, Krishna Complex, Above Bata Showroom, MG Road, Vadodara 390001",
+        "cleaned": "3road floor, Krishna Complex, Above Bata Showroom, MG Road, Vadodara 390001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Krishna Complex",
+        "sub_locality": null,
+        "city": "Vadodara",
+        "district": "Vadodara",
+        "state": "Gujarat",
+        "pincode": "390001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_name",
+        "landmark",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Plot No 23, Sector 22, Gandhinagar, Gujarat (Pin 382022)",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Sector 22",
+        "sub_locality": null,
+        "city": "Gandhinagar",
+        "district": "Gandhinagar",
+        "state": "Gujarat",
+        "pincode": "382022"
+      },
+      "actual": {
+        "raw": "Plot No 23, Sector 22, Gandhinagar, Gujarat (Pin 382022)",
+        "cleaned": "Plot No 23, Sector 22, Gandhinagar, Gujarat (Pin 382022)",
+        "building_number": null,
+        "building_name": "Plot No 23",
+        "landmark": null,
+        "locality": "Sector 22",
+        "sub_locality": null,
+        "city": "Gandhinagar",
+        "district": "Gandhi Nagar",
+        "state": "Gujarat",
+        "pincode": "382022",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name",
+        "district"
+      ]
+    },
+    {
+      "input": "45 - second floor - above sbi atm - jayanagar 4th block - bangalore - 560011",
+      "expected": {
+        "building_number": "45",
+        "building_name": null,
+        "landmark": "sbi atm",
+        "locality": "jayanagar 4th block",
+        "sub_locality": "second floor",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560011"
+      },
+      "actual": {
+        "raw": "45 - second floor - above sbi atm - jayanagar 4th block - bangalore - 560011",
+        "cleaned": "45 - second floor - above sbi atm - jayanagar 4th block - bangalore - 560011",
+        "building_number": "45",
+        "building_name": "second floor - above sbi atm - jayanagar 4th block - bangalore",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560011",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "landmark",
+        "locality",
+        "sub_locality"
+      ]
+    },
+    {
+      "input": "Flat 5, sai apartments, near gokul hotel, opp pmc bank, kothrud, pune 411038",
+      "expected": {
+        "building_number": "5",
+        "building_name": "sai apartments",
+        "landmark": "gokul hotel; pmc bank",
+        "locality": "kothrud",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411038"
+      },
+      "actual": {
+        "raw": "Flat 5, sai apartments, near gokul hotel, opp pmc bank, kothrud, pune 411038",
+        "cleaned": "Flat 5, sai apartments, near gokul hotel, opposite pmc bank, kothrud, pune 411038",
+        "building_number": "5",
+        "building_name": null,
+        "landmark": "gokul hotel; pmc bank",
+        "locality": "sai apartments",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411038",
+        "confidence": 1.0
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "H. No. 12, Street No. 5, Krishna Nagar, Delhi 110051",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Krishna Nagar",
+        "sub_locality": "Street No. 5",
+        "city": "Delhi",
+        "district": "East Delhi",
+        "state": "Delhi",
+        "pincode": "110051"
+      },
+      "actual": {
+        "raw": "H. No. 12, Street No. 5, Krishna Nagar, Delhi 110051",
+        "cleaned": "H. No. 12, Street No. 5, Krishna Nagar, Delhi 110051",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Krishna Nagar",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110051",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "Flat No-203, Block-B, Royal Residency, Sector-50, Noida, UP, 201301",
+      "expected": {
+        "building_number": "203",
+        "building_name": "Royal Residency",
+        "landmark": null,
+        "locality": "Sector-50",
+        "sub_locality": "Block-B",
+        "city": "Noida",
+        "district": "Gautam Buddha Nagar",
+        "state": "Uttar Pradesh",
+        "pincode": "201301"
+      },
+      "actual": {
+        "raw": "Flat No-203, Block-B, Royal Residency, Sector-50, Noida, UP, 201301",
+        "cleaned": "flat-203, Block-B, Royal Residency, Sector-50, Noida, UP, 201301",
+        "building_number": "203",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Block-B",
+        "sub_locality": "Royal Residency",
+        "city": "Gautam Buddha Nagar",
+        "district": "Gautam Buddha Nagar",
+        "state": "Uttar Pradesh",
+        "pincode": "201301",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "flat No.5,2nd Floor,Sai Krupa Apt,Plot No.34,Sector 7,Vashi,Navi Mumbai-400703",
+      "expected": {
+        "building_number": "5",
+        "building_name": "Sai Krupa Apt",
+        "landmark": null,
+        "locality": "Vashi",
+        "sub_locality": "Sector 7",
+        "city": "Navi Mumbai",
+        "district": "Thane",
+        "state": "Maharashtra",
+        "pincode": "400703"
+      },
+      "actual": {
+        "raw": "flat No.5,2nd Floor,Sai Krupa Apt,Plot No.34,Sector 7,Vashi,Navi Mumbai-400703",
+        "cleaned": "flat5, 2nd Floor, Sai Krupa apartment, Plot No.34, Sector 7, Vashi, Navi Mumbai-400703",
+        "building_number": "5",
+        "building_name": "2nd Floor",
+        "landmark": null,
+        "locality": "Sector 7",
+        "sub_locality": null,
+        "city": "Thane",
+        "district": "Thane",
+        "state": "Maharashtra",
+        "pincode": "400703",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Door No 4-7-12/A/3, Beside Lakshmi Theatre, Dilsukhnagar, Hyderabad 500060",
+      "expected": {
+        "building_number": "4-7-12/A/3",
+        "building_name": null,
+        "landmark": "Lakshmi Theatre",
+        "locality": "Dilsukhnagar",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": "Hyderabad",
+        "state": "Telangana",
+        "pincode": "500060"
+      },
+      "actual": {
+        "raw": "Door No 4-7-12/A/3, Beside Lakshmi Theatre, Dilsukhnagar, Hyderabad 500060",
+        "cleaned": "Door No 4-7-12/A/3, Beside Lakshmi Theatre, Dilsukhnagar, Hyderabad 500060",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Lakshmi Theatre",
+        "locality": "Door No 4-7-12/A/3",
+        "sub_locality": null,
+        "city": "Hyderabad",
+        "district": null,
+        "state": null,
+        "pincode": "500060",
+        "confidence": 0.3
+      },
+      "mismatched_fields": [
+        "building_number",
+        "locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Quarter No 12-B, Type-3, Railway Colony, Kharagpur, West Bengal 721301",
+      "expected": {
+        "building_number": "12-B",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Railway Colony",
+        "sub_locality": "Type-3",
+        "city": "Kharagpur",
+        "district": "Paschim Medinipur",
+        "state": "West Bengal",
+        "pincode": "721301"
+      },
+      "actual": {
+        "raw": "Quarter No 12-B, Type-3, Railway Colony, Kharagpur, West Bengal 721301",
+        "cleaned": "Quarter No 12-B, Type-3, Railway Colony, Kharagpur, West Bengal 721301",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Railway Colony",
+        "sub_locality": null,
+        "city": "Kharagpur",
+        "district": "Midnapur",
+        "state": "West Bengal",
+        "pincode": "721301",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_number",
+        "sub_locality",
+        "district"
+      ]
+    },
+    {
+      "input": "D/O Suresh Sharma, Near Hanuman Mandir, Alwar, Rajasthan 301001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Hanuman Mandir",
+        "locality": null,
+        "sub_locality": null,
+        "city": "Alwar",
+        "district": "Alwar",
+        "state": "Rajasthan",
+        "pincode": "301001"
+      },
+      "actual": {
+        "raw": "D/O Suresh Sharma, Near Hanuman Mandir, Alwar, Rajasthan 301001",
+        "cleaned": "daughter of Suresh Sharma, Near Hanuman mandir, Alwar, Rajasthan 301001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": "Hanuman mandir",
+        "locality": "daughter of Suresh Sharma",
+        "sub_locality": null,
+        "city": "Alwar",
+        "district": "Alwar",
+        "state": "Rajasthan",
+        "pincode": "301001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "W/O Late Shri Mohan Das, 23 Civil Lines, Bareilly, UP 243001",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Civil Lines",
+        "sub_locality": null,
+        "city": "Bareilly",
+        "district": "Bareilly",
+        "state": "Uttar Pradesh",
+        "pincode": "243001"
+      },
+      "actual": {
+        "raw": "W/O Late Shri Mohan Das, 23 Civil Lines, Bareilly, UP 243001",
+        "cleaned": "wife of Late Shri Mohan Das, 23 Civil Lines, Bareilly, UP 243001",
+        "building_number": "23",
+        "building_name": "Civil Lines",
+        "landmark": null,
+        "locality": "wife of Late Shri Mohan Das",
+        "sub_locality": null,
+        "city": "Bareilly",
+        "district": "Bareilly",
+        "state": "Uttar Pradesh",
+        "pincode": "243001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "C/O Dr. Patel Clinic, MG Road, Surat, Gujarat 395001",
+      "expected": {
+        "building_number": null,
+        "building_name": "Dr. Patel Clinic",
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Surat",
+        "district": "Surat",
+        "state": "Gujarat",
+        "pincode": "395001"
+      },
+      "actual": {
+        "raw": "C/O Dr. Patel Clinic, MG Road, Surat, Gujarat 395001",
+        "cleaned": "care of Dr. Patel Clinic, MG Road, Surat, Gujarat 395001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "care of Dr. Patel Clinic",
+        "sub_locality": null,
+        "city": "Surat",
+        "district": "Surat",
+        "state": "Gujarat",
+        "pincode": "395001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "S/O Ashok Verma, Flat 12, Green Park, New Delhi 110016",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Green Park",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110016"
+      },
+      "actual": {
+        "raw": "S/O Ashok Verma, Flat 12, Green Park, New Delhi 110016",
+        "cleaned": "son of Ashok Verma, Flat 12, Green Park, New Delhi 110016",
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Green Park",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "South Delhi",
+        "state": "Delhi",
+        "pincode": "110016",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "district"
+      ]
+    },
+    {
+      "input": "W/O Vikas Singh, House 23, Lake Town, Kolkata 700089",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Lake Town",
+        "sub_locality": null,
+        "city": "Kolkata",
+        "district": "North 24 Parganas",
+        "state": "West Bengal",
+        "pincode": "700089"
+      },
+      "actual": {
+        "raw": "W/O Vikas Singh, House 23, Lake Town, Kolkata 700089",
+        "cleaned": "wife of Vikas Singh, House 23, Lake Town, Kolkata 700089",
+        "building_number": "23",
+        "building_name": "Lake Town",
+        "landmark": null,
+        "locality": "wife of Vikas Singh",
+        "sub_locality": null,
+        "city": "24 Parganas",
+        "district": "South 24 Parganas",
+        "state": "West Bengal",
+        "pincode": "700089",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "city",
+        "district"
+      ]
+    },
+    {
+      "input": "C/O Sharma General Store, Main Market, Kasauli, HP 173204",
+      "expected": {
+        "building_number": null,
+        "building_name": "Sharma General Store",
+        "landmark": null,
+        "locality": "Main Market",
+        "sub_locality": null,
+        "city": "Kasauli",
+        "district": "Solan",
+        "state": "Himachal Pradesh",
+        "pincode": "173204"
+      },
+      "actual": {
+        "raw": "C/O Sharma General Store, Main Market, Kasauli, HP 173204",
+        "cleaned": "care of Sharma General Store, Main Market, Kasauli, HP 173204",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "care of Sharma General Store",
+        "sub_locality": null,
+        "city": "Kasauli",
+        "district": "Solan",
+        "state": "Himachal Pradesh",
+        "pincode": "173204",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "S/O Late Shri Ram Prasad, Vill Bhojpur, PO Bhojpur, Bhojpur, Bihar 802301",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Vill Bhojpur",
+        "sub_locality": "PO Bhojpur",
+        "city": "Bhojpur",
+        "district": "Bhojpur",
+        "state": "Bihar",
+        "pincode": "802301"
+      },
+      "actual": {
+        "raw": "S/O Late Shri Ram Prasad, Vill Bhojpur, PO Bhojpur, Bhojpur, Bihar 802301",
+        "cleaned": "son of Late Shri Ram Prasad, village Bhojpur, post office Bhojpur, Bhojpur, Bihar 802301",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "son of Late Shri Ram Prasad",
+        "sub_locality": null,
+        "city": "Arrah",
+        "district": "Bhojpur",
+        "state": "Bihar",
+        "pincode": "802301",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "D/O Anil Kapoor, Flat 8, Model Town, Ludhiana 141002",
+      "expected": {
+        "building_number": "8",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Model Town",
+        "sub_locality": null,
+        "city": "Ludhiana",
+        "district": "Ludhiana",
+        "state": "Punjab",
+        "pincode": "141002"
+      },
+      "actual": {
+        "raw": "D/O Anil Kapoor, Flat 8, Model Town, Ludhiana 141002",
+        "cleaned": "daughter of Anil Kapoor, Flat 8, Model Town, Ludhiana 141002",
+        "building_number": "8",
+        "building_name": "Model Town",
+        "landmark": null,
+        "locality": "daughter of Anil Kapoor",
+        "sub_locality": null,
+        "city": "Ludhiana",
+        "district": "Ludhiana",
+        "state": "Punjab",
+        "pincode": "141002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Karnataka",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": "Karnataka",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Karnataka",
+        "cleaned": "Karnataka",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Karnataka",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0
+      },
+      "mismatched_fields": [
+        "city",
+        "state"
+      ]
+    },
+    {
+      "input": "Mumbai",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": null,
+        "state": "Maharashtra",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Mumbai",
+        "cleaned": "Mumbai",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0
+      },
+      "mismatched_fields": [
+        "state"
+      ]
+    },
+    {
+      "input": "560 029",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560029"
+      },
+      "actual": {
+        "raw": "560 029",
+        "cleaned": "560 029",
+        "building_number": "560",
+        "building_name": "029",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "building_number",
+        "building_name",
+        "city",
+        "district",
+        "state",
+        "pincode"
+      ]
+    },
+    {
+      "input": "Mumbai 110001",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110001"
+      },
+      "actual": {
+        "raw": "Mumbai 110001",
+        "cleaned": "Mumbai 110001",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Mumbai",
+        "sub_locality": null,
+        "city": "New Delhi",
+        "district": "New Delhi",
+        "state": "Delhi",
+        "pincode": "110001",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Delivered from 400001 to 560029",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560029"
+      },
+      "actual": {
+        "raw": "Delivered from 400001 to 560029",
+        "cleaned": "Delivered from 400001 to 560029",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": "Delivered from  to",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560029",
+        "confidence": 0.8
+      },
+      "mismatched_fields": [
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 3, MG Road, Bangalore 560001, Ph: 9876543210",
+      "expected": {
+        "building_number": "3",
+        "building_name": null,
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001"
+      },
+      "actual": {
+        "raw": "Flat 3, MG Road, Bangalore 560001, Ph: 9876543210",
+        "cleaned": "Flat 3, MG Road, Bangalore 560001, phase: 9876543210",
+        "building_number": "3",
+        "building_name": "MG Road",
+        "landmark": null,
+        "locality": "phase: 9876543210",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat No 1502, Tower 4 Wing B, Prestige Shantiniketan Phase 2, ITPL Main Road, Whitefield, Near Forum Value Mall, Behind Brigade Cosmopolis, Mahadevapura, Bangalore Urban District, Karnataka State, India - 560048",
+      "expected": {
+        "building_number": "1502",
+        "building_name": "Prestige Shantiniketan Phase 2",
+        "landmark": "Forum Value Mall; Brigade Cosmopolis",
+        "locality": "Whitefield",
+        "sub_locality": "ITPL Main Road",
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560048"
+      },
+      "actual": {
+        "raw": "Flat No 1502, Tower 4 Wing B, Prestige Shantiniketan Phase 2, ITPL Main Road, Whitefield, Near Forum Value Mall, Behind Brigade Cosmopolis, Mahadevapura, Bangalore Urban District, Karnataka State, India - 560048",
+        "cleaned": "flat 1502, Tower 4 Wing B, Prestige Shantiniketan Phase 2, ITPL Main Road, Whitefield, Near Forum Value Mall, Behind Brigade Cosmopolis, Mahadevapura, Bangalore Urban District, Karnataka State, India - 560048",
+        "building_number": "1502",
+        "building_name": "Tower 4 Wing B",
+        "landmark": "Forum Value Mall; Brigade Cosmopolis",
+        "locality": "Prestige Shantiniketan Phase 2",
+        "sub_locality": null,
+        "city": "Mahadevapura",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560048",
+        "confidence": 1.0
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "sub_locality",
+        "city"
+      ]
+    },
+    {
+      "input": "Flat 12, Café Heights, MG Road, Bangalore 560001",
+      "expected": {
+        "building_number": "12",
+        "building_name": "Café Heights",
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001"
+      },
+      "actual": {
+        "raw": "Flat 12, Café Heights, MG Road, Bangalore 560001",
+        "cleaned": "Flat 12, Café Heights, MG Road, Bangalore 560001",
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Café Heights",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "23, Brigade Road, Bangalore 560025, India",
+      "expected": {
+        "building_number": "23",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Brigade Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560025"
+      },
+      "actual": {
+        "raw": "23, Brigade Road, Bangalore 560025, India",
+        "cleaned": "23, Brigade Road, Bangalore 560025, India",
+        "building_number": "23",
+        "building_name": "Brigade Road",
+        "landmark": null,
+        "locality": "Bangalore",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560025",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "FLAT 5, MG ROAD, PUNE 411001",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "MG ROAD",
+        "sub_locality": null,
+        "city": "PUNE",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411001"
+      },
+      "actual": {
+        "raw": "FLAT 5, MG ROAD, PUNE 411001",
+        "cleaned": "FLAT 5, MG ROAD, PUNE 411001",
+        "building_number": "5",
+        "building_name": "MG ROAD",
+        "landmark": null,
+        "locality": "PUNE",
+        "sub_locality": null,
+        "city": "Pune",
+        "district": "Pune",
+        "state": "Maharashtra",
+        "pincode": "411001",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 7\nMarine Drive\nMumbai\n400002",
+      "expected": {
+        "building_number": "7",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Marine Drive",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400002"
+      },
+      "actual": {
+        "raw": "Flat 7\nMarine Drive\nMumbai\n400002",
+        "cleaned": "Flat 7, Marine Drive, Mumbai, 400002",
+        "building_number": "7",
+        "building_name": "Marine Drive",
+        "landmark": null,
+        "locality": "Mumbai",
+        "sub_locality": null,
+        "city": "Mumbai",
+        "district": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400002",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "asdfgh",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": null
+      },
+      "actual": {
+        "raw": "asdfgh",
+        "cleaned": "asdfgh",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "asdfgh",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0
+      },
+      "mismatched_fields": [
+        "city"
+      ]
+    },
+    {
+      "input": "12345",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": null
+      },
+      "actual": {
+        "raw": "12345",
+        "cleaned": "12345",
+        "building_number": "12345",
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "building_number"
+      ]
+    },
+    {
+      "input": "Flat 5, MG Road, Bangalore 960001",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Flat 5, MG Road, Bangalore 960001",
+        "cleaned": "Flat 5, MG Road, Bangalore 960001",
+        "building_number": "5",
+        "building_name": "MG Road",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore 960001",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0.1
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality",
+        "district",
+        "state"
+      ]
+    },
+    {
+      "input": "Building560001Road",
+      "expected": {
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": null,
+        "district": null,
+        "state": null,
+        "pincode": null
+      },
+      "actual": {
+        "raw": "Building560001Road",
+        "cleaned": "Building560001Road",
+        "building_number": null,
+        "building_name": null,
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Building560001Road",
+        "district": null,
+        "state": null,
+        "pincode": null,
+        "confidence": 0
+      },
+      "mismatched_fields": [
+        "city"
+      ]
+    },
+    {
+      "input": "Flat 5\tMG Road\tBangalore 560001",
+      "expected": {
+        "building_number": "5",
+        "building_name": null,
+        "landmark": null,
+        "locality": "MG Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001"
+      },
+      "actual": {
+        "raw": "Flat 5\tMG Road\tBangalore 560001",
+        "cleaned": "Flat 5 MG Road Bangalore 560001",
+        "building_number": "5",
+        "building_name": "MG Road Bangalore",
+        "landmark": null,
+        "locality": null,
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560001",
+        "confidence": 0.7
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    },
+    {
+      "input": "Flat 12, Brigade Road, Bangalore 560025...",
+      "expected": {
+        "building_number": "12",
+        "building_name": null,
+        "landmark": null,
+        "locality": "Brigade Road",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560025"
+      },
+      "actual": {
+        "raw": "Flat 12, Brigade Road, Bangalore 560025...",
+        "cleaned": "Flat 12, Brigade Road, Bangalore 560025...",
+        "building_number": "12",
+        "building_name": "Brigade Road",
+        "landmark": null,
+        "locality": "Bangalore",
+        "sub_locality": null,
+        "city": "Bangalore",
+        "district": "Bangalore",
+        "state": "Karnataka",
+        "pincode": "560025",
+        "confidence": 0.9
+      },
+      "mismatched_fields": [
+        "building_name",
+        "locality"
+      ]
+    }
+  ]
+}

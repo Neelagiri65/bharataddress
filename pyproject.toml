@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bharataddress"
+version = "0.1.0"
+description = "Deterministic, offline parser for messy Indian addresses. Zero config, zero API keys."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Neelagiri" }]
+keywords = ["india", "address", "parser", "pincode", "geocoding", "nlp"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Linguistic",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+bharataddress = "bharataddress.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Neelagiri65/bharataddress"
+Issues = "https://github.com/Neelagiri65/bharataddress/issues"
+
+[tool.setuptools]
+packages = ["bharataddress", "bharataddress.data"]
+
+[tool.setuptools.package-data]
+"bharataddress.data" = ["*.json"]

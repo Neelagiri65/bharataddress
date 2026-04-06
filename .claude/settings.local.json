@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//tmp/**)",
+      "Bash(.venv/bin/pip install:*)",
+      "Bash(.venv/bin/python -m pytest tests/ -x --tb=short)",
+      "Bash(.venv/bin/python -m pytest tests/ --tb=line)",
+      "Bash(.venv/bin/python -c ':*)",
+      "Bash(.venv/bin/bharataddress parse:*)",
+      "Bash(.venv/bin/bharataddress lookup:*)",
+      "Bash(.venv/bin/python -m pytest tests/ -q)"
+    ]
+  }
+}

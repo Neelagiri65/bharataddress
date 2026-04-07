@@ -95,6 +95,44 @@ def load_telangana_pincodes(path: Path) -> set[str]:
     return tg
 
 
+def fill_missing_from_indiapost(table: dict[str, dict], path: Path) -> int:
+    """Add pincodes present in the India Post CSV but missing from the base.
+
+    The kishorek base undercounts post-2014 pincodes (Hyderabad expansion,
+    Bangalore tech belt, Gurgaon sectors, Pune IT parks, etc.). India Post is
+    authoritative for these. Names are stored in title-case to match the
+    existing base style.
+    """
+    if not path.exists():
+        return 0
+    added: dict[str, dict] = {}
+    with path.open(encoding="utf-8", errors="replace", newline="") as f:
+        for row in csv.DictReader(f):
+            pin = (row.get("pincode") or "").strip()
+            if not pin or not pin.isdigit() or len(pin) != 6:
+                continue
+            if pin in table:
+                continue
+            district = (row.get("Districtname") or "").strip().title()
+            state_raw = (row.get("statename") or "").strip()
+            state = state_raw.title() if state_raw else ""
+            office = (row.get("officename") or "").strip()
+            entry = added.get(pin)
+            if entry is None:
+                added[pin] = {
+                    "pincode": pin,
+                    "district": district,
+                    "city": district,  # India Post CSV has no city column
+                    "state": state,
+                    "offices": [office] if office else [],
+                }
+            else:
+                if office and office not in entry["offices"]:
+                    entry["offices"].append(office)
+    table.update(added)
+    return len(added)
+
+
 def overlay(table: dict[str, dict], telangana: set[str]) -> tuple[int, int, int]:
     """Apply renames + Telangana split. Returns (n_state, n_district, n_tg)."""
     n_state = n_district = n_tg = 0
@@ -119,6 +157,8 @@ def main() -> None:
         text = fetch_kishorek()
     table = build_base(text)
     print(f"Base coverage: {len(table):,} pincodes", file=sys.stderr)
+    n_added = fill_missing_from_indiapost(table, INDIAPOST_CSV)
+    print(f"Pincodes added from India Post overlay: {n_added:,}", file=sys.stderr)
     tg = load_telangana_pincodes(INDIAPOST_CSV)
     print(f"Telangana pincodes from overlay: {len(tg):,}", file=sys.stderr)
     n_s, n_d, n_t = overlay(table, tg)

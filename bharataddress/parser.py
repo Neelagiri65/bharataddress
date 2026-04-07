@@ -101,9 +101,59 @@ class ParsedAddress:
         return d
 
 
+# Tokens after which a segment boundary should be inserted in no-comma inputs.
+# These are the closing words of a "named locality" or "named street" unit:
+# `Defence Colony`, `Indira Nagar`, `Sarat Bose Road`, `MG Marg`, etc. The
+# boundary lands AFTER the keyword so the keyword stays attached to its
+# preceding modifier.
+_NO_COMMA_POST_RE = re.compile(
+    r"\b(?:colony|nagar|layout|vihar|puram|puri|ganj|bagh|enclave|extension|"
+    r"township|park|gardens|estate|chowk|mohalla|wadi|halli|pally|pet|kunj|"
+    r"road|rd|street|st|lane|marg|salai|path|cross|main)\b",
+    re.IGNORECASE,
+)
+
+# Building leads at the start of a no-comma input. The match consumes the
+# lead phrase + the building number so it lands as its own segment.
+_NO_COMMA_LEAD_RE = re.compile(
+    r"^(?:(?:flat|flat\s*number|house|house\s*number|h\s*number|plot|plot\s*number|"
+    r"door\s*number|apartment|apt|shop|shop\s*number)\s*(?:no|number)?\s*[:.-]?\s*"
+    r"\d+[A-Za-z]?(?:[/-]\d+[A-Za-z]?)*)\s+",
+    re.IGNORECASE,
+)
+
+# Letter-prefixed building token at the very start (A-15, B/302, BD-12).
+_NO_COMMA_ALPHANUM_LEAD_RE = re.compile(
+    r"^([A-Za-z]{1,3}[-/]?\d+[A-Za-z]?(?:[/-]\d+[A-Za-z]?)*)\s+"
+)
+
+
+def _heuristic_resplit(text: str) -> str:
+    """For no-comma inputs, insert commas at obvious unit boundaries.
+
+    Triggers:
+        - After a leading building lead + number (`Flat 302 ...` -> `Flat 302, ...`)
+        - After a leading alphanumeric like `A-15`
+        - After locality / sub-locality closing keywords (Colony, Nagar, Road, ...)
+    """
+    text = _NO_COMMA_LEAD_RE.sub(lambda m: m.group(0).rstrip() + ", ", text, count=1)
+    text = _NO_COMMA_ALPHANUM_LEAD_RE.sub(r"\1, ", text, count=1)
+    text = _NO_COMMA_POST_RE.sub(lambda m: m.group(0) + ",", text)
+    return text
+
+
 def _split_segments(cleaned: str) -> list[str]:
     parts = [p.strip(" ,.-") for p in cleaned.split(",")]
-    return [p for p in parts if p]
+    parts = [p for p in parts if p]
+    if len(parts) == 1 and " " in parts[0]:
+        # No commas — try to recover structure heuristically.
+        rebuilt = _heuristic_resplit(parts[0])
+        if "," in rebuilt:
+            new_parts = [p.strip(" ,.-") for p in rebuilt.split(",")]
+            new_parts = [p for p in new_parts if p]
+            if len(new_parts) > 1:
+                return new_parts
+    return parts
 
 
 def _strip_pincode(segment: str) -> str:

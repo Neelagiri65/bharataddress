@@ -2,6 +2,39 @@
 
 _Last updated: 2026-04-07_
 
+## v0.2.1 — parser quality lift (49.0% -> 62.5% exact match)
+
+Three commits in one session, each addressing a NEXT item from the v0.2.0 handoff:
+
+**1. Pincode coverage (`feat(data)`)** — `scripts/build_pincode_data.py` gains a third overlay phase: any pincode in the India Post directory but missing from the kishorek base is added with district / state / officename. Pincode count 23,915 → 26,711. Fixes the 5 known false negatives (500033 Hyderabad, 560102 Bangalore, 122003 Gurgaon, 411057 Pune, 144040 Jalandhar) plus 2,791 others.
+
+**2. No-comma resplit (`feat(parser)`)** — `_split_segments` now runs a heuristic regex pass when comma-splitting yields exactly one segment. Inserts boundaries after a leading building lead + number, after a leading alphanumeric token (`A-15`), and after locality / sub-locality closing keywords (`Colony`, `Nagar`, `Road`, `Marg`, `Layout`, ...). Recovers structure from `A-15 Defence Colony New Delhi 110024` and `H No 12 Sarat Bose Road Kolkata 700020` which were previously losing locality + building entirely.
+
+**3. Admin annotations + city/state dedup + phone strip (`feat(parser)`)** — biggest lift, several changes bundled:
+- `ADMIN_PREFIX_RE` classifies `PO X` / `Post X` / `Village X` / `Tehsil X` / `Mouza X` / `Gram Sabha X` / `Mandal X` / `Via X` as sub_locality. PO/Post cues use a new `sub_locality_po` kind that outranks generic admin (matches gold preference for the post-office annotation when multiple are present).
+- Stopped expanding `PO` -> `post office` in `abbreviations.json` so the bare `po` form survives for the substring matcher.
+- `_is_dup` gains a curated `_KNOWN_CITIES` frozenset (~80 entries) so trailing city names that disagree with the pincode lookup (`Kochi` vs `Ernakulam`, `Bhubaneswar` vs `Puri`) no longer leak into sub_locality.
+- difflib-based fuzzy match against the lookup city catches typos (`kolkatta`, `bangalroe`, `chenai`). difflib is stdlib, no new dep.
+- `_STATE_ABBREVS` frozenset (AP/MP/HP/UP/WB/TN/...) suppresses two-letter state codes.
+- Preprocessor strips `Ph: 9876...` / `Phone: ...` phone-number annotations before tokenisation (the bare `Ph` was previously expanding to `phase` and leaking into sub_locality). Also strips leftover `Pin Code:` / `Pincode -` labels.
+
+**Public eval (`reports/eval_v0.2.1e.json`):**
+
+| metric | v0.2.0 | v0.2.1 | delta |
+|---|---|---|---|
+| exact match | 49.0% | **62.5%** | **+13.5pp** |
+| locality F1 | 0.768 | 0.796 | +0.028 |
+| building_name F1 | 0.635 | 0.679 | +0.044 |
+| district F1 | 0.933 | 0.965 | +0.032 |
+| state F1 | 0.923 | 0.971 | +0.048 |
+| sub_locality F1 | 0.469 | 0.455 | -0.014 |
+
+sub_locality is the only field that didn't move up. Gold is inconsistent on whether named streets like `MG Road` belong in locality or sub_locality, so the field swings either way. The 0.6 target from the prior NEXT list remains open.
+
+**Tests: 98 pass** (95 from v0.2.0 + 3 new no-comma regression tests).
+
+Tagged `v0.2.1` on `main` after the full test suite passed.
+
 ## v0.2.0 — feature release (formatter / validator / geocoder / similarity / batch / enrichment)
 
 Six new modules around the core parser, all offline, all zero-dependency, all importable from the top-level `bharataddress` package.

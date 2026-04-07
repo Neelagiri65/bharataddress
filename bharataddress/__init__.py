@@ -7,8 +7,14 @@ Quick start:
     '122001'
     >>> result.state
     'Haryana'
+
+DIGIPIN encode / decode:
+    >>> from bharataddress import digipin
+    >>> digipin.encode(28.6129, 77.2295)
+    '39J-429-L4TK'
 """
+from . import digipin
 from .parser import ParsedAddress, parse
 
-__all__ = ["parse", "ParsedAddress", "__version__"]
-__version__ = "0.1.0"
+__all__ = ["parse", "ParsedAddress", "digipin", "__version__"]
+__version__ = "0.1.5"

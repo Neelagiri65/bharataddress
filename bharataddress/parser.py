@@ -91,6 +91,7 @@ class ParsedAddress:
     district: str | None = None
     state: str | None = None
     pincode: str | None = None
+    digipin: str | None = None
     confidence: float = 0.0
     components_found: list[str] = field(default_factory=list)
 
@@ -165,7 +166,7 @@ def _confidence(found: list[str], city_matches_pincode: bool) -> float:
     return round(min(score, 1.0), 3)
 
 
-def parse(raw: str) -> ParsedAddress:
+def parse(raw: str, *, latlng: tuple[float, float] | None = None) -> ParsedAddress:
     """Parse a messy Indian address string into structured components."""
     if not isinstance(raw, str) or not raw.strip():
         return ParsedAddress(raw=raw or "", cleaned="")
@@ -335,6 +336,25 @@ def parse(raw: str) -> ParsedAddress:
     )
     if out.sub_locality:
         found.append("sub_locality")
+
+    # DIGIPIN: populated only when a lat/lng is supplied by the caller, or
+    # when the pincode record carries a centroid (pincodes.json may grow a
+    # `latitude`/`longitude` field in a later release; today it doesn't, so
+    # this branch is opt-in via the latlng= keyword).
+    if latlng is not None:
+        from . import digipin as _digipin
+
+        try:
+            out.digipin = _digipin.encode(latlng[0], latlng[1])
+        except ValueError:
+            out.digipin = None
+    elif rec and rec.get("latitude") is not None and rec.get("longitude") is not None:
+        from . import digipin as _digipin
+
+        try:
+            out.digipin = _digipin.encode(float(rec["latitude"]), float(rec["longitude"]))
+        except (ValueError, TypeError):
+            out.digipin = None
 
     city_matches = bool(rec and out.city and rec["city"] and out.city.lower() == rec["city"].lower())
     out.confidence = _confidence(found, city_matches_pincode=city_matches or bool(rec))

@@ -2,6 +2,24 @@
 
 _Last updated: 2026-04-07_
 
+## v0.1.5 — DIGIPIN module (encode / decode / validate)
+
+New module `bharataddress/digipin.py` — verbatim Python port of the official India Post Apache-2.0 algorithm at github.com/INDIAPOST-gov/digipin (`src/digipin.js`). Pure deterministic math, zero new dependencies.
+
+Public API:
+
+- `encode(lat, lng) -> str` — returns formatted DIGIPIN `XXX-XXX-XXXX`. Raises `ValueError` outside the India bounding box (lat 2.5–38.5, lng 63.5–99.5).
+- `decode(digipin) -> (lat, lng)` — centre of the level-10 (~3.8 m) cell. Accepts the code with or without dashes, case-insensitive.
+- `validate(digipin) -> bool` — non-raising syntactic validator.
+
+`parse()` now accepts an optional `latlng=` keyword and exposes a `digipin` field on `ParsedAddress`. When the caller passes a coordinate hint, the field is populated. Default behaviour stays unchanged (`digipin` is `None`) so existing v0.1.x callers see no diff. The current shipped `pincodes.json` does not carry centroids, so the pincode-centroid auto-fill branch is dormant — hooked in but won't fire until a future dataset refresh adds `latitude`/`longitude` per pincode.
+
+**Tests: 67 pass (37 parser + 30 DIGIPIN).** New `tests/test_digipin.py` covers reference vectors for Delhi / Mumbai / Bangalore / Chennai / Kolkata, 500-point random round-trip, dash + case insensitivity, out-of-bounds rejection, malformed-input rejection, parser integration via `latlng=`, and a `socket.socket` monkeypatch asserting zero network calls during any DIGIPIN op.
+
+**Public gold_200 unchanged: 49.0% exact match.** DIGIPIN is purely additive — no parser logic touched.
+
+README gets a DIGIPIN section with usage examples.
+
 ## v0.1.4 — known-locality lookup table
 
 New shipped data file `bharataddress/data/localities.json`: 26,668 pincodes → 179,410 normalised post-office / locality names (2.57 MB). Built from the existing `pincodes.json` `offices` field plus `private/raw/indiapost.csv` officenames, suffix-stripped (B.O / S.O / H.O / G.P.O. / P.O), lowercased, deduped.

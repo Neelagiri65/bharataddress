@@ -145,6 +145,50 @@ The embedded `pincodes.json` contains 23,915 Indian pincodes derived from the In
 
 ---
 
+## DIGIPIN
+
+`bharataddress` ships a verbatim Python port of the official India Post DIGIPIN
+algorithm (Apache-2.0, [github.com/INDIAPOST-gov/digipin](https://github.com/INDIAPOST-gov/digipin)).
+DIGIPIN is the 10-character geocode published by the Department of Posts in 2025
+that maps any point in India to a ~3.8 m grid cell. Pure math, no network, no
+dependencies.
+
+```python
+from bharataddress import digipin
+
+# Encode lat/lng -> DIGIPIN (XXX-XXX-XXXX)
+digipin.encode(28.6129, 77.2295)
+# '39J-429-L4TK'
+
+# Decode back to the centre lat/lng of the cell
+digipin.decode('39J-429-L4TK')
+# (28.612906..., 77.229494...)
+
+# Validate
+digipin.validate('39J-429-L4TK')   # True
+digipin.validate('AAA-BBB-CCCC')   # False
+```
+
+`parse()` accepts an optional `latlng=` hint and populates a `digipin` field
+on the result when a coordinate is supplied:
+
+```python
+from bharataddress import parse
+
+result = parse(
+    "Plot 88, Basheer Bagh, Hyderabad 500001",
+    latlng=(17.3850, 78.4867),
+)
+result.digipin
+# '422-594-J546'
+```
+
+The parser does not geocode addresses on its own — `digipin` stays `None`
+unless you pass a coordinate. The bounding box is hard-coded to India
+(lat 2.5–38.5, lng 63.5–99.5); points outside raise `ValueError`.
+
+---
+
 ## What's NOT in v0.1
 
 By design, kept out so the package stays small, fast, and dependency-free:
@@ -167,7 +211,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-37 tests covering metro, tier 2/3, rural village, S/O format, landmark-heavy, vernacular, missing-pincode, and irregular-punctuation cases. All passing on v0.1.2.
+67 tests (37 parser + 30 DIGIPIN encode/decode/validate/round-trip) covering metro, tier 2/3, rural village, S/O format, landmark-heavy, vernacular, missing-pincode, and irregular-punctuation cases. All passing on v0.1.5.
 
 There is also an architectural-constraint test that monkeypatches `socket.socket` and asserts `parse()` opens **zero** network connections. The "offline by default" promise is enforced in CI.
 

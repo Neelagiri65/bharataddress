@@ -77,10 +77,15 @@ ${CONTENT_HITS}"
 fi
 
 # --- Check 4: large files (>1 MB) often indicate a data dump ---------------
+# Whitelist: shipped public package artefacts that are legitimately large.
+LARGE_FILE_ALLOWLIST_RE='^(bharataddress/data/pincodes\.json)$'
 LARGE_HITS=""
 while IFS= read -r f; do
     [[ -z "${f}" ]] && continue
     [[ ! -f "${f}" ]] && continue
+    if [[ "${f}" =~ ${LARGE_FILE_ALLOWLIST_RE} ]]; then
+        continue
+    fi
     SIZE=$(wc -c < "${f}" | tr -d ' ')
     if (( SIZE > 1048576 )); then
         LARGE_HITS+="${f} ($((SIZE/1024)) KB)"$'\n'

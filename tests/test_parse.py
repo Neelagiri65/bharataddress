@@ -46,7 +46,7 @@ CASES: list[tuple[str, str, dict]] = [
     (
         "hyderabad_basheer",
         "Plot 88, Basheer Bagh, Hyderabad 500001",
-        {"pincode": "500001", "state": "Andhra Pradesh"},
+        {"pincode": "500001", "state": "Telangana"},
     ),
     (
         "lucknow_hazratganj",

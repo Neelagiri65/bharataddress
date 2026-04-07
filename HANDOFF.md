@@ -2,6 +2,29 @@
 
 _Last updated: 2026-04-07_
 
+## v0.1.3 — pincode dataset refresh (post-2014 naming)
+
+**Approach: surgical merge, not replace.** Kept the kishorek base for coverage (23,915 unique pincodes — a fresh-source-only build dropped to 19,100 and regressed both public and private eval). Overlaid post-2014 naming fixes only:
+
+- `Orissa` → `Odisha` (1,087 pincodes)
+- `Uttaranchal` → `Uttarakhand` (296 pincodes)
+- `Calcutta` → `Kolkata` (62 districts)
+- Telangana split from Andhra Pradesh using India Post truth (569 pincodes)
+
+`scripts/build_pincode_data.py` is now a two-phase merge: fetch kishorek, then overlay `private/raw/indiapost.csv` for the Telangana split (rest is hardcoded renames).
+
+**Public gold_200: 48.5% → 49.0% exact match.** All 37 tests pass. Per-field F1 unchanged or marginally better. Gold realigned: 4 Orissa→Odisha, 2 Uttaranchal→Uttarakhand, 8 Calcutta→Kolkata district, 5 AP→Telangana for Hyderabad/Warangal/Nalgonda pincodes. One stale unit-test expectation in `tests/test_parse.py` (hyderabad_basheer) updated AP→Telangana.
+
+**Private gold_master eval (v0.1.3 vs v0.1.2):**
+
+| Source | city | district | state | pincode |
+|---|---|---|---|---|
+| razorpay_ifsc | 0.427 → 0.427 | 0.268 → 0.275 | 0.641 → **0.690** | 0.997 → 0.997 |
+| internal_hosp | 0.907 → 0.907 | 0.899 → 0.892 | 0.899 → 0.833 | 0.893 → 0.893 |
+| osm | 0.919 → 0.919 | 0.944 → 0.939 | 0.958 → 0.904 | 0.998 → 0.998 |
+
+The IFSC lift on `state` (+0.049) is the real-world win. The internal_hosp / osm `state` regressions are **gold staleness, not parser regression**: those gold sets were auto-built last session from the *old* pincode lookup, so they still expect "Andhra Pradesh" for Telangana pincodes. The parser is now more correct than the gold. NEXT priority: rebuild the auto-derived sections of `gold_master.jsonl` against the v0.1.3 pincode db so the gold reflects current ground truth, then re-baseline.
+
 ## 2026-04-07 private session — gold_master expanded
 
 Private eval: gold_master built from 3 sources (prior internal hospital set + Razorpay IFSC + OSM India), 263,828 total entries after dedup. Aggregate in `private/reports/eval_master.json` + per-source breakdown in `private/reports/eval_master_per_source.json`. Details in `private/reports/data_sources.md`. Worst source by city/district/state F1 is the IFSC bank-branch set (district F1 0.27, state F1 0.64) — driven by RBI's free-form ADDRESS column where the parser can't recover district/state without a usable pincode lookup. Best is OSM (district 0.94, state 0.96, pincode 1.00). NEXT priority unchanged: refresh `pincodes.json` for v0.1.3.

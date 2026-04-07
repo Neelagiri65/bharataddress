@@ -1,5 +1,7 @@
 # bharataddress
 
+[![PyPI](https://img.shields.io/pypi/v/bharataddress)](https://pypi.org/project/bharataddress/)
+
 **The deterministic Indian address parser. Zero config. Zero API keys. Zero network calls.**
 
 `pip install bharataddress` → parse messy Indian addresses into structured JSON in one line. No model downloads, no Claude API key, no Nominatim instance, nothing to set up. The pincode directory ships embedded in the package.
@@ -300,7 +302,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-95 tests covering parser, DIGIPIN, formatter, validator, geocoder, similarity, batch, and enrichment modules. All passing on v0.2.0.
+95 tests covering parser, DIGIPIN, formatter, validator, geocoder, similarity, batch, and enrichment modules. All passing on v0.2.2.
 
 There is also an architectural-constraint test that monkeypatches `socket.socket` and asserts `parse()` opens **zero** network connections. The "offline by default" promise is enforced in CI.
 

@@ -2,6 +2,12 @@
 
 _Last updated: 2026-04-07_
 
+## v0.2.2 — published to PyPI
+
+`bharataddress 0.2.2` is live: https://pypi.org/project/bharataddress/0.2.2/. Built with `python -m build`, uploaded via `twine` using a token in `~/.pypirc` (since revoked + removed). Clean-venv smoke test (`/tmp/bha-verify-0.2.2`) passed end-to-end: `parse()` → pincode 122001 / Haryana / auto-populated digipin, `geocode()` → (28.47, 77.04), `reverse_geocode(28.6129, 77.2295)` → 110011 @ 1.24 km, `extract_state_from_gstin('29...')` → Karnataka.
+
+**NEXT:** mint a fresh PyPI token if future releases are planned (old one revoked); optionally announce release / refresh README install snippet.
+
 ## v0.2.2 — pincode centroids from OSM
 
 `scripts/build_pincode_centroids.py` walks `private/raw/india-latest.osm.pbf` (1.6 GB), pulls every node tagged `addr:postcode` matching the Indian pincode pattern, averages lat/lng per pincode, and writes `latitude` / `longitude` floats back into `bharataddress/data/pincodes.json`. **16,459 pincodes (61.6% of 26,711) now carry centroids.** File size 3.60 MB → 4.27 MB.

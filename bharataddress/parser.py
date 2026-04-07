@@ -17,6 +17,7 @@ No LLM. No network. Pure regex + the embedded pincode table.
 """
 from __future__ import annotations
 
+import difflib
 import re
 from dataclasses import asdict, dataclass, field
 from typing import Any
@@ -46,6 +47,46 @@ SUBLOCALITY_RE = re.compile(
     r"\b(?:block|sector|phase|tower|floor|cross|avenue|salai|marg|main\s+road|road\s*(?:no|number|num)?\b)|\d+(?:st|nd|rd|th)?\s*(?:cross|block|main|avenue)",
     re.IGNORECASE,
 )
+# Administrative annotations used in rural / semi-rural Indian addresses.
+# A segment beginning with one of these words is almost always a sub-locality
+# pointer (post-office name, village name, tehsil/taluka name, mouza, gram).
+ADMIN_PREFIX_RE = re.compile(
+    r"^(?:po|post|village|vill|tehsil|taluka|taluk|mouza|gram\s+sabha|gram|mandal|via)\b",
+    re.IGNORECASE,
+)
+
+# Known major Indian city names and common aliases. Used to suppress trailing
+# city tokens that the pincode lookup did not catch — e.g. when the user wrote
+# "Kochi" but the pincode resolves to its administrative name "Ernakulam".
+# Two-letter state abbreviations frequently written by Indian users at the
+# end of an address (`AP`, `MP`, `UP`, `WB`, `TN`, ...). The full state name
+# is recovered from the pincode lookup, so the abbreviation should be
+# discarded as a duplicate rather than leaking into a locality slot.
+_STATE_ABBREVS = frozenset({
+    "ap", "ar", "as", "br", "cg", "ct", "dl", "ga", "gj", "hp", "hr", "jh",
+    "jk", "ka", "kl", "ld", "mh", "ml", "mn", "mp", "mz", "nl", "od", "or",
+    "pb", "py", "rj", "sk", "tg", "ts", "tn", "tr", "uk", "ua", "up", "wb",
+})
+
+_KNOWN_CITIES = frozenset({
+    "mumbai", "bombay", "delhi", "new delhi", "bangalore", "bengaluru",
+    "chennai", "madras", "kolkata", "calcutta", "hyderabad", "pune", "poona",
+    "ahmedabad", "surat", "jaipur", "lucknow", "kanpur", "nagpur", "indore",
+    "thane", "bhopal", "visakhapatnam", "vizag", "patna", "vadodara", "baroda",
+    "ghaziabad", "ludhiana", "agra", "nashik", "faridabad", "meerut", "rajkot",
+    "kalyan", "vasai", "varanasi", "srinagar", "aurangabad", "dhanbad",
+    "amritsar", "navi mumbai", "allahabad", "prayagraj", "ranchi", "howrah",
+    "coimbatore", "jabalpur", "gwalior", "vijayawada", "jodhpur", "madurai",
+    "raipur", "kota", "guwahati", "chandigarh", "solapur", "hubli", "tiruchirappalli",
+    "trichy", "bareilly", "mysore", "mysuru", "tiruppur", "gurgaon", "gurugram",
+    "noida", "bhubaneswar", "salem", "warangal", "mangalore", "mangaluru",
+    "cuttack", "thiruvananthapuram", "trivandrum", "kochi", "cochin",
+    "ernakulam", "puducherry", "pondicherry", "dehradun", "shimla",
+    "tirupati", "tirunelveli", "ujjain", "jamshedpur", "siliguri",
+    "jammu", "panaji", "panjim", "shillong", "imphal", "aizawl", "kohima",
+    "itanagar", "gangtok", "agartala", "dispur", "port blair", "kavaratti",
+    "daman", "silvassa", "leh",
+})
 SUBLOC_END_RE = re.compile(r"\b(?:road|rd|street|st|lane|path)\s*$", re.IGNORECASE)
 
 # A "locality token" — a segment containing one of these strongly suggests a
@@ -176,6 +217,13 @@ def _classify(segment: str) -> str | None:
     # take precedence — they almost always denote a named property.
     if BUILDING_NAME_RE.search(segment):
         return "building_name"
+    # Administrative annotations classify as sub-locality. Post-office cues
+    # (`PO Hajipur`, `Post Bawal`) are the strongest of this group — gold sets
+    # consistently prefer them over `Village X` / `Tehsil X`.
+    if re.match(r"^(?:po|post)\b", segment, re.IGNORECASE):
+        return "sub_locality_po"
+    if ADMIN_PREFIX_RE.match(segment):
+        return "sub_locality"
     # Sub-locality cues take precedence over generic locality keywords because
     # tokens like "block" / "sector" appear in both lists.
     if SUBLOCALITY_RE.search(segment) or SUBLOC_END_RE.search(segment):
@@ -300,6 +348,19 @@ def parse(raw: str, *, latlng: tuple[float, float] | None = None) -> ParsedAddre
         for ref in (out.city, out.district, out.state):
             if ref and (t == ref.lower() or t in ref.lower() or ref.lower() in t):
                 return True
+        # Catch trailing well-known city names that the pincode lookup
+        # disagreed with (e.g. user wrote "Kochi" but pincode resolves to
+        # "Ernakulam"). These should not leak into the locality slot.
+        if t in _KNOWN_CITIES:
+            return True
+        if t in _STATE_ABBREVS:
+            return True
+        # Catch common typos / misspellings of the lookup city ("kolkatta",
+        # "bangalroe", "chenai"). difflib is stdlib, no new dep.
+        if out.city and len(t) >= 4:
+            ratio = difflib.SequenceMatcher(None, t, out.city.lower()).ratio()
+            if ratio >= 0.8:
+                return True
         return False
 
     tagged = [t for t in tagged if not _is_dup(t["text"])]
@@ -378,9 +439,11 @@ def parse(raw: str, *, latlng: tuple[float, float] | None = None) -> ParsedAddre
     if out.locality:
         found.append("locality")
 
-    # Sub-locality: prefer an explicit sub_locality cue, else fall through.
+    # Sub-locality: PO / Post cues outrank generic sub_locality (village /
+    # tehsil / mouza) which in turn outranks locality and plain.
     out.sub_locality = (
-        _take(lambda t: t["kind"] == "sub_locality")
+        _take(lambda t: t["kind"] == "sub_locality_po")
+        or _take(lambda t: t["kind"] == "sub_locality")
         or _take(lambda t: t["kind"] == "locality")
         or _take(lambda t: t["kind"] == "plain")
     )

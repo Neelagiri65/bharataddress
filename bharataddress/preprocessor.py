@@ -82,9 +82,23 @@ def extract_pincode(text: str) -> str | None:
     return matches[-1] if matches else None
 
 
+# Strip phone-number annotations ("Ph: 98765...", "Phone: 022-1234..."). These
+# are never address components and the bare "Ph" token previously expanded to
+# "phase", which then leaked into sub_locality.
+_PHONE_RE = re.compile(
+    r"\b(?:ph|phone|tel|telephone|mob|mobile|contact)\b[\s.:#-]*\+?\d[\d\s./-]*",
+    re.IGNORECASE,
+)
+# Strip leftover "Pincode -" / "Pin Code:" labels — the pincode itself is
+# already extracted by regex, the label only confuses the segmenter.
+_PIN_LABEL_RE = re.compile(r"\bpin\s*code\b\s*[:#-]*\s*", re.IGNORECASE)
+
+
 def preprocess(text: str) -> tuple[str, str | None]:
     """Return (cleaned_text, pincode_or_None)."""
     text = normalise_unicode(text)
+    text = _PHONE_RE.sub(" ", text)
+    text = _PIN_LABEL_RE.sub(" ", text)
     text = tidy_whitespace(text)
     text = expand_abbreviations(text)
     text = normalise_vernacular(text)

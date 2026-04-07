@@ -1,14 +1,19 @@
 """Evaluate bharataddress against tests/data/gold_200.jsonl.
 
 Reports per-field precision / recall / F1, overall exact-match rate, and a
-verbose dump of every failing case (input + expected + actual + which fields
-disagreed).
+dump of every failing case (row number + which fields disagreed). Pass
+``--verbose`` to also print the full input string and expected/actual values
+for each failure — off by default so private gold sets cannot leak addresses
+into terminal scrollback or CI logs.
 
 Usage:
     python scripts/evaluate.py
     python scripts/evaluate.py --fail-only
+    python scripts/evaluate.py --verbose                # show full addresses
     python scripts/evaluate.py --json reports/eval.json
     python scripts/evaluate.py --gold path/to/other.jsonl
+    python scripts/evaluate.py --gold private/processed/gold_500.jsonl \\
+        --private-report --json private/reports/eval_gold_500.json
 
 Notes
 -----
@@ -17,6 +22,19 @@ case-insensitive substring of the other. Substring matching tolerates minor
 differences like "Bangalore" vs "Bangalore Urban" or "Sector 31" vs "Sector
 31, Gurgaon", which is the same matcher the unit tests in tests/test_parse.py
 use. The evaluator never makes a network call.
+
+Privacy
+-------
+- Default failure output is row number + mismatched field names only. No
+  addresses, no expected/actual values. Use ``--verbose`` to override (only
+  for the public gold set).
+- ``--private-report`` requires the ``--json`` target path to live under
+  ``private/reports/``. It refuses to write report JSON anywhere else, so
+  results from a private gold set cannot land in the public ``reports/``
+  directory by accident.
+- The full report JSON contains failure details (input + expected + actual).
+  When evaluating private data, always pair ``--json`` with
+  ``--private-report`` so that JSON lands inside ``private/reports/``.
 """
 from __future__ import annotations
 
@@ -152,7 +170,7 @@ def evaluate(cases: list[dict]) -> dict:
     }
 
 
-def print_report(report: dict, fail_only: bool) -> None:
+def print_report(report: dict, fail_only: bool, verbose: bool = False) -> None:
     total = report["total"]
     em = report["exact_match"]
     rate = report["exact_match_rate"]
@@ -179,13 +197,19 @@ def print_report(report: dict, fail_only: bool) -> None:
         print()
         print(f"Failures ({len(failures)} of {total}):")
         print("-" * 60)
+        if not verbose:
+            print("(addresses suppressed; pass --verbose to show them)")
         for i, fail in enumerate(failures, 1):
-            print(f"\n[{i}] input: {fail['input']!r}")
-            print(f"    mismatched: {', '.join(fail['mismatched_fields']) or '(none)'}")
-            for f in fail["mismatched_fields"]:
-                e = fail["expected"].get(f)
-                a = fail["actual"].get(f)
-                print(f"      {f}: expected {e!r}, got {a!r}")
+            mismatched = ", ".join(fail["mismatched_fields"]) or "(none)"
+            if verbose:
+                print(f"\n[{i}] input: {fail['input']!r}")
+                print(f"    mismatched: {mismatched}")
+                for f in fail["mismatched_fields"]:
+                    e = fail["expected"].get(f)
+                    a = fail["actual"].get(f)
+                    print(f"      {f}: expected {e!r}, got {a!r}")
+            else:
+                print(f"  [{i}] mismatched: {mismatched}")
     elif not fail_only:
         print("\nNo failures.")
 
@@ -200,12 +224,49 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip the per-field summary and only print failing cases",
     )
+    p.add_argument(
+        "--verbose",
+        action="store_true",
+        help=(
+            "Print full input addresses and expected/actual values for "
+            "every failing case. OFF by default so private gold sets cannot "
+            "leak addresses into terminal scrollback or CI logs."
+        ),
+    )
     p.add_argument("--json", type=Path, help="Write the full report as JSON to this path")
+    p.add_argument(
+        "--private-report",
+        action="store_true",
+        help=(
+            "Require the --json target to live under private/reports/. "
+            "Use this whenever --gold points at a private gold set, so the "
+            "report cannot land in the public reports/ directory by accident."
+        ),
+    )
     args = p.parse_args(argv)
 
     if not args.gold.exists():
         print(f"ERROR: gold file not found: {args.gold}", file=sys.stderr)
         return 2
+
+    if args.private_report:
+        if args.json is None:
+            print(
+                "ERROR: --private-report requires --json to be set",
+                file=sys.stderr,
+            )
+            return 2
+        try:
+            json_resolved = args.json.resolve()
+            private_root = (Path(__file__).resolve().parents[1] / "private" / "reports").resolve()
+            json_resolved.relative_to(private_root)
+        except ValueError:
+            print(
+                f"ERROR: --private-report requires --json under private/reports/, "
+                f"got: {args.json}",
+                file=sys.stderr,
+            )
+            return 2
 
     cases = load_gold(args.gold)
     if not cases:
@@ -213,7 +274,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     report = evaluate(cases)
-    print_report(report, fail_only=args.fail_only)
+    print_report(report, fail_only=args.fail_only, verbose=args.verbose)
 
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)

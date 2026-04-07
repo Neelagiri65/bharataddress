@@ -7,3 +7,30 @@ __pycache__/
 build/
 dist/
 .DS_Store
+
+# === PRIVATE DATA — NEVER COMMIT ===
+# Belt: ignore everything inside the private directory...
+private/*
+private/**/*
+# ...except the governance README and a single .gitkeep so the directory
+# itself is visible in the tree. Nothing else from private/ may be tracked.
+!private/README.md
+!private/.gitkeep
+
+# Suspenders: also ignore by pattern in case files leak outside private/
+*.private.jsonl
+*.private.json
+*.private.csv
+_proprietary
+_cashlessnow
+_hospital_data
+
+# Any gold set beyond the public 200 is assumed private
+tests/data/gold_5*.jsonl
+tests/data/gold_1*.jsonl
+tests/data/gold_private*.jsonl
+tests/data/proprietary/
+
+# PII-adjacent patterns
+*pii*
+*sensitive*

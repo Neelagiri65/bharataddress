@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# bharataddress private-data safety hook.
+#
+# Purpose: prevent proprietary CashlessNow / hospital / PII data from ever
+# being committed to this repository. Runs on every `git commit` and blocks
+# the commit if any of the following are true:
+#
+#   1. A staged file path or content contains a known sensitive marker
+#      (cashlessnow, hospital_data, proprietary, _pii_, _sensitive_).
+#   2. A staged file is larger than 1 MB (likely a data dump — review by
+#      hand and either move it to private/ or stage with --no-verify if
+#      it is genuinely a public artefact, e.g. an eval report).
+#   3. Any file under private/ is staged (other than the README and the
+#      single .gitkeep, which are explicitly allowlisted in .gitignore).
+#
+# This hook is itself safe to commit — it contains no data, only rules.
+# Enable it by running:  git config core.hooksPath .githooks
+#
+# To override in a true emergency (NOT recommended): git commit --no-verify
+
+set -euo pipefail
+
+RED=$'\033[0;31m'
+YEL=$'\033[0;33m'
+NC=$'\033[0m'
+
+fail() {
+    echo "${RED}pre-commit BLOCKED:${NC} $1" >&2
+    echo "" >&2
+    echo "If this is a false positive, move the file out of the staged set" >&2
+    echo "or, only as a last resort, bypass with: git commit --no-verify" >&2
+    exit 1
+}
+
+warn() {
+    echo "${YEL}pre-commit warn:${NC} $1" >&2
+}
+
+# Collect staged files (added, copied, modified, renamed). Skip deletions.
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR || true)
+
+if [[ -z "${STAGED_FILES}" ]]; then
+    exit 0
+fi
+
+# --- Check 1: any file under private/ is staged ----------------------------
+PRIVATE_STAGED=$(echo "${STAGED_FILES}" | grep -E '^private/' || true)
+if [[ -n "${PRIVATE_STAGED}" ]]; then
+    # Allow only the explicit governance files.
+    DISALLOWED=$(echo "${PRIVATE_STAGED}" | grep -vE '^private/(README\.md|\.gitkeep)$' || true)
+    if [[ -n "${DISALLOWED}" ]]; then
+        fail "the following files under private/ are staged but only private/README.md and private/.gitkeep are allowed:
+${DISALLOWED}"
+    fi
+fi
+
+# --- Check 2: sensitive markers in staged file paths -----------------------
+SENSITIVE_PATTERNS='cashlessnow|hospital_data|proprietary|_pii_|_sensitive_'
+PATH_HITS=$(echo "${STAGED_FILES}" | grep -iE "${SENSITIVE_PATTERNS}" || true)
+if [[ -n "${PATH_HITS}" ]]; then
+    fail "staged file paths contain a sensitive marker:
+${PATH_HITS}"
+fi
+
+# --- Check 3: sensitive markers in staged file contents --------------------
+# Use git diff against the index so we only scan what is actually being
+# committed (not the full file on disk). The governance files (this hook,
+# CLAUDE.md, private/README.md) exist precisely to enumerate these markers,
+# so they are exempt from the content scan — but NOT from the path scan or
+# the private/ directory scan above.
+GOVERNANCE_FILES_RE='^(\.githooks/pre-commit|\.gitignore|CLAUDE\.md|private/README\.md)$'
+CONTENT_HITS=$(git diff --cached -G"${SENSITIVE_PATTERNS}" --name-only -i \
+    | grep -vE "${GOVERNANCE_FILES_RE}" || true)
+if [[ -n "${CONTENT_HITS}" ]]; then
+    fail "staged file contents contain a sensitive marker (${SENSITIVE_PATTERNS}):
+${CONTENT_HITS}"
+fi
+
+# --- Check 4: large files (>1 MB) often indicate a data dump ---------------
+LARGE_HITS=""
+while IFS= read -r f; do
+    [[ -z "${f}" ]] && continue
+    [[ ! -f "${f}" ]] && continue
+    SIZE=$(wc -c < "${f}" | tr -d ' ')
+    if (( SIZE > 1048576 )); then
+        LARGE_HITS+="${f} ($((SIZE/1024)) KB)"$'\n'
+    fi
+done <<< "${STAGED_FILES}"
+
+if [[ -n "${LARGE_HITS}" ]]; then
+    fail "the following staged files are larger than 1 MB and may be data dumps:
+${LARGE_HITS}
+If these are intentional public artefacts (e.g. eval reports), review them
+carefully, then bypass with: git commit --no-verify"
+fi
+
+exit 0

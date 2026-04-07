@@ -167,9 +167,53 @@ pip install -e ".[dev]"
 pytest
 ```
 
-37 tests covering metro, tier 2/3, rural village, S/O format, landmark-heavy, vernacular, missing-pincode, and irregular-punctuation cases. All passing on v0.1.0.
+37 tests covering metro, tier 2/3, rural village, S/O format, landmark-heavy, vernacular, missing-pincode, and irregular-punctuation cases. All passing on v0.1.2.
 
 There is also an architectural-constraint test that monkeypatches `socket.socket` and asserts `parse()` opens **zero** network connections. The "offline by default" promise is enforced in CI.
+
+---
+
+## Benchmarks
+
+`bharataddress` ships with a 200-row hand-labelled gold set (`tests/data/gold_200.jsonl`) covering metro / tier-2 / rural / landmark-heavy / vernacular / no-pincode / irregular-punctuation / S-O-format inputs. `scripts/evaluate.py` reports per-field precision / recall / F1 plus exact-match. The matcher is two-way substring (`a in b or b in a`), case-insensitive.
+
+### bharataddress v0.1.2 vs Shiprocket TinyBERT NER
+
+The only other open-source Indian address parser of comparable scope is [`shiprocket-ai/open-tinybert-indian-address-ner`](https://huggingface.co/shiprocket-ai/open-tinybert-indian-address-ner) — a fine-tuned TinyBERT (~760 MB, Apache-2.0). It claims Micro F1 0.94 on a private set; this is the first public head-to-head I'm aware of. Both models were run over the same `gold_200.jsonl`. Reproduce with `python scripts/eval_competitor.py`.
+
+| Field             | bharataddress v0.1.2 F1 | TinyBERT F1 | Winner             |
+| ----------------- | ----------------------: | ----------: | ------------------ |
+| `pincode`         |               **0.995** |       0.984 | bharataddress      |
+| `city`            |               **0.959** |       0.718 | bharataddress (+0.24) |
+| `building_number` |                   0.958 |   **0.973** | TinyBERT (+0.02)   |
+| `state`           |               **0.923** |       0.268 | bharataddress (+0.66) |
+| `landmark`        |               **0.918** |       0.580 | bharataddress (+0.34) |
+| `district`        |               **0.933** |        N/A* | bharataddress      |
+| `locality`        |               **0.723** |       0.634 | bharataddress (+0.09) |
+| `building_name`   |                   0.635 |   **0.643** | TinyBERT (+0.01)   |
+| `sub_locality`    |                   0.472 |       0.470 | tied               |
+
+\* TinyBERT has no `district` label; closest equivalent in its label set is `state`.
+
+**Exact-match (all 9 fields must match):** bharataddress **48.5%** (97/200) vs TinyBERT 1.0% (2/200). The exact-match gap is misleading because TinyBERT can never produce a `district` and can't reach `state` reliably without the pincode lookup, but the per-field F1 is the apples-to-apples view.
+
+**Where each model wins:**
+- `bharataddress` wins decisively on pincode-derived fields (`city`, `district`, `state`, `pincode`) because the embedded India Post directory turns these into a lookup, not a prediction. It also handles `landmark` better thanks to the `Near/Opp/Behind/Beside` cue list.
+- `TinyBERT` is essentially tied on `building_number`, `building_name`, and `sub_locality` — fields where context matters more than vocabulary.
+- Neither model is good at `sub_locality` yet (~0.47) — both struggle to disambiguate "MG Road" (sub_locality) from "Indiranagar" (locality) when the input is sparse.
+
+**Footprint comparison:**
+
+|                              | bharataddress v0.1.2 | TinyBERT NER |
+| ---------------------------- | -------------------- | ------------ |
+| Install size                 | ~5 MB (incl. 23k pincodes) | ~760 MB |
+| Runtime dependencies         | none                 | torch, transformers (~2 GB) |
+| First-call latency           | ~5 ms                | ~150 ms (CPU) |
+| Network calls during parse   | zero (enforced)      | zero (after download) |
+| GPU required                 | no                   | no, but recommended |
+| Pincode → district/state     | yes (lookup)         | no |
+
+For high-throughput pipelines, batch geocoding, or any environment where dropping a 760 MB model is a non-starter (serverless, mobile, edge), `bharataddress` is the better fit. For free-form addresses where you don't have a pincode at all, TinyBERT's text-only approach is competitive on the structural fields.
 
 ---
 

@@ -51,14 +51,26 @@ SUBLOC_END_RE = re.compile(r"\b(?:road|rd|street|st|lane|path)\s*$", re.IGNORECA
 # A "locality token" — a segment containing one of these strongly suggests a
 # named locality / sub-locality rather than a city or building.
 LOCALITY_KEYWORDS = (
-    "sector", "phase", "block", "nagar", "colony", "layout", "vihar",
+    "nagar", "colony", "layout", "vihar",
     "puram", "puri", "ganj", "bagh", "enclave", "extension", "township",
-    "marg", "chowk", "gali", "mohalla", "vihar", "wadi", "halli", "pally",
-    "pet", "kunj", "society", "apartments", "heights", "residency",
-    "park", "gardens", "estate", "complex",
+    "chowk", "gali", "mohalla", "wadi", "halli", "pally",
+    "pet", "kunj",
+    "park", "gardens", "estate",
 )
 LOCALITY_RE = re.compile(
     r"\b(?:" + "|".join(LOCALITY_KEYWORDS) + r")\b", re.IGNORECASE
+)
+
+# A "building name token" — a segment containing one of these strongly
+# suggests a named building / complex / society rather than a neighbourhood.
+BUILDING_NAME_KEYWORDS = (
+    "tower", "towers", "apartment", "apartments", "apts",
+    "heights", "residency", "residences", "society",
+    "complex", "court", "plaza", "palace", "mansion",
+    "villa", "villas", "flats",
+)
+BUILDING_NAME_RE = re.compile(
+    r"\b(?:" + "|".join(BUILDING_NAME_KEYWORDS) + r")\b", re.IGNORECASE
 )
 
 SECTOR_RE = re.compile(r"\bsector\s*[-#]?\s*\d+[A-Za-z]?\b", re.IGNORECASE)
@@ -109,6 +121,10 @@ def _classify(segment: str) -> str | None:
         return "building"
     if BUILDING_ALPHANUM_RE.match(segment):
         return "building"
+    # Building-name cues (towers / apartments / heights / villas / complex)
+    # take precedence — they almost always denote a named property.
+    if BUILDING_NAME_RE.search(segment):
+        return "building_name"
     # Sub-locality cues take precedence over generic locality keywords because
     # tokens like "block" / "sector" appear in both lists.
     if SUBLOCALITY_RE.search(segment) or SUBLOC_END_RE.search(segment):
@@ -197,11 +213,24 @@ def parse(raw: str) -> ParsedAddress:
         num, name = _extract_building(seg)
         if num:
             out.building_number = num
-        if name:
-            out.building_name = name
         if num or name:
             found.append("building")
         del tagged[building_idx]
+        # If extraction left behind a residue, reclassify it. A residue with
+        # locality / sub-locality cues should compete for those slots, not be
+        # silently planted in building_name. Only keep it as building_name if
+        # it actually looks like a building name.
+        if name:
+            residue_kind = _classify(name) or "plain"
+            if residue_kind == "building_name":
+                out.building_name = name
+            elif residue_kind in ("locality", "sub_locality"):
+                tagged.insert(building_idx, {"kind": residue_kind, "text": name})
+            elif residue_kind == "plain" and len(name.split()) <= 4:
+                # Short plain residue: tentatively a building_name. Long
+                # residues from no-comma inputs are usually a whole address
+                # tail and should not pollute building_name.
+                out.building_name = name
 
     # If pincode didn't give us a city, take the last "plain" segment as city.
     if not out.city:
@@ -223,6 +252,17 @@ def parse(raw: str) -> ParsedAddress:
         return False
 
     tagged = [t for t in tagged if not _is_dup(t["text"])]
+
+    # Strong building_name cue (towers / apartments / heights / villas /
+    # complex / society) — pull the first such segment regardless of position.
+    if not out.building_name:
+        for i, t in enumerate(tagged):
+            if t["kind"] == "building_name":
+                out.building_name = t["text"]
+                del tagged[i]
+                if "building" not in found:
+                    found.append("building")
+                break
 
     # Building name fallback: only when the next remaining segment is a plain
     # named token (e.g. "Lodha Altamount") AND there's still something left
@@ -250,6 +290,7 @@ def parse(raw: str) -> ParsedAddress:
         _take(lambda t: t["kind"] == "plain")
         or _take(lambda t: t["kind"] == "locality")
         or _take(lambda t: t["kind"] == "sub_locality")
+        or _take(lambda t: t["kind"] == "building_name")
     )
     if out.locality:
         found.append("locality")

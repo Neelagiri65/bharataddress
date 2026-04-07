@@ -130,8 +130,16 @@ def test_parse_accepts_latlng_hint():
     assert 78.0 < rlng < 79.0
 
 
-def test_parse_default_digipin_is_none():
+def test_parse_default_digipin_auto_populated_from_centroid():
+    """Since v0.2.2 pincodes.json carries centroids, parse() auto-fills digipin
+    for any input whose pincode resolves to a record with latitude/longitude."""
     result = parse("Plot 88, Basheer Bagh, Hyderabad 500001")
+    assert result.digipin is not None
+    assert len(result.digipin.replace("-", "")) == 10
+
+
+def test_parse_digipin_none_for_unknown_pincode():
+    result = parse("some random text with no pincode")
     assert result.digipin is None
 
 

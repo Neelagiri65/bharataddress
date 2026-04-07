@@ -2,6 +2,26 @@
 
 _Last updated: 2026-04-07_
 
+## v0.2.2 — pincode centroids from OSM
+
+`scripts/build_pincode_centroids.py` walks `private/raw/india-latest.osm.pbf` (1.6 GB), pulls every node tagged `addr:postcode` matching the Indian pincode pattern, averages lat/lng per pincode, and writes `latitude` / `longitude` floats back into `bharataddress/data/pincodes.json`. **16,459 pincodes (61.6% of 26,711) now carry centroids.** File size 3.60 MB → 4.27 MB.
+
+Build-time only — `pyosmium` is required to *run* the script but is not a runtime dependency. The shipped `pincodes.json` is reproducible from the script + the OSM PBF.
+
+**Spec note:** the original instruction said "first try indiapost.csv lat/lng, fallback OSM". `private/raw/indiapost.csv` does **not** carry latitude / longitude columns (verified). OSM is therefore the sole source. If a future India Post dataset gains coordinates, add a first phase to the build script that prefers it.
+
+Three previously-dormant features activate automatically:
+
+- `geocoder.geocode(parsed)` returns real `(lat, lng)` for any pincode in the 61.6% that have a centroid (returns `None` for the long tail).
+- `geocoder.reverse_geocode(lat, lng)` walks the centroid table and returns the nearest pincode by haversine + the DIGIPIN for the input point.
+- `parser.parse()` auto-populates the `digipin` field whenever the resolved pincode has a centroid — no `latlng=` hint required. The dormant branch in `parse()` (gated on `rec.get("latitude")`) starts firing.
+
+**Tests: 100 pass.** Two existing tests (`test_parse_default_digipin_is_none` and `test_geocode_returns_none_when_dataset_lacks_centroids`) explicitly asserted the *dormant* behaviour and have been rewritten to assert the active behaviour: parse-default DIGIPIN is now populated for known pincodes, geocode returns a Gurgaon-area centroid for `122001`, reverse_geocode round-trips Gurgaon coordinates back to a `122xxx` pincode within 50 km. Net +2 tests vs v0.2.1.
+
+**Public eval: 125/200 exact match (62.5%) — identical to v0.2.1, zero regression on every field.** Centroids are purely additive to the parser; they don't touch any classification logic.
+
+Tagged `v0.2.2` on `main`.
+
 ## v0.2.1 — parser quality lift (49.0% -> 62.5% exact match)
 
 Three commits in one session, each addressing a NEXT item from the v0.2.0 handoff:

@@ -2,6 +2,20 @@
 
 _Last updated: 2026-04-07_
 
+## v0.1.4 — known-locality lookup table
+
+New shipped data file `bharataddress/data/localities.json`: 26,668 pincodes → 179,410 normalised post-office / locality names (2.57 MB). Built from the existing `pincodes.json` `offices` field plus `private/raw/indiapost.csv` officenames, suffix-stripped (B.O / S.O / H.O / G.P.O. / P.O), lowercased, deduped.
+
+LGD villages dataset was the original target but is not anonymously consumable (data.gov.in 500s on every endpoint, the only GitHub mirror is a 7,465-row Haryana sample, and the NAPIX / apisetu LGD endpoints require a registered developer key). Pivoted to building from the data already on disk — gives ~7 names per pincode on average.
+
+**Parser change.** New `pincode.known_localities()` accessor + a guarded promotion step in `parse()`: when a tagged segment matches a known locality name for the pincode, it's promoted to a `locality_known` kind that wins the locality slot ahead of plain / locality / sub_locality. Guard rails to avoid stealing from sub_locality:
+- Only promote `plain` segments (sub_locality cues like `Sector 31`, `MG Road`, `Block C` are stronger and never overridden).
+- Among plain segments, only promote the **earliest** plain — never reorder which plain wins the locality slot, only add confidence.
+
+**Public gold_200.** 49.0% exact match held. Per-field F1: locality 0.728 → **0.768** (+0.04), building_name 0.635 → **0.678** (+0.043), sub_locality 0.480 → 0.469 (−0.011), all other fields unchanged. Locality target was 0.80; we landed at 0.768 — below stretch but a real lift from a single deterministic step. All 37 tests pass.
+
+**Private gold_master.** No change vs v0.1.3 — the gold sets only populate city/district/state/pincode, not locality/sub_locality, so the lift isn't visible in private metrics. city 0.588 / district 0.488 / state 0.749 / pincode 0.975 unchanged.
+
 ## v0.1.3 — pincode dataset refresh (post-2014 naming)
 
 **Approach: surgical merge, not replace.** Kept the kishorek base for coverage (23,915 unique pincodes — a fresh-source-only build dropped to 19,100 and regressed both public and private eval). Overlaid post-2014 naming fixes only:

@@ -253,6 +253,37 @@ def parse(raw: str) -> ParsedAddress:
 
     tagged = [t for t in tagged if not _is_dup(t["text"])]
 
+    # Known-locality lookup: if any remaining segment matches a known
+    # post-office / locality name for this pincode, promote it to a
+    # high-priority locality_known kind so it wins the locality slot below.
+    known = _pincode.known_localities(out.pincode) if out.pincode else []
+    if known:
+        def _matches(seg_low: str) -> bool:
+            for name in known:
+                if len(name) < 4:
+                    continue
+                if name == seg_low or name in seg_low or (
+                    len(seg_low) >= 4 and seg_low in name
+                ):
+                    return True
+            return False
+
+        # Only promote a non-plain segment (locality / sub_locality cue) when
+        # NO plain segment is available — i.e. the cue is the only candidate
+        # for locality and a known name match adds confidence. For plain
+        # segments, only promote the EARLIEST plain so we never reorder which
+        # plain wins the locality slot.
+        plain_indices = [i for i, t in enumerate(tagged) if t["kind"] == "plain"]
+        first_plain = plain_indices[0] if plain_indices else None
+        for i, t in enumerate(tagged):
+            if t["kind"] in ("building", "landmark", "building_name"):
+                continue
+            if t["kind"] == "plain" and i != first_plain:
+                continue
+            if not _matches(t["text"].lower()):
+                continue
+            t["kind"] = "locality_known"
+
     # Strong building_name cue (towers / apartments / heights / villas /
     # complex / society) — pull the first such segment regardless of position.
     if not out.building_name:
@@ -287,7 +318,8 @@ def parse(raw: str) -> ParsedAddress:
         return None
 
     out.locality = (
-        _take(lambda t: t["kind"] == "plain")
+        _take(lambda t: t["kind"] == "locality_known")
+        or _take(lambda t: t["kind"] == "plain")
         or _take(lambda t: t["kind"] == "locality")
         or _take(lambda t: t["kind"] == "sub_locality")
         or _take(lambda t: t["kind"] == "building_name")

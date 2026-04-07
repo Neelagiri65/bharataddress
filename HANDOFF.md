@@ -6,6 +6,7 @@ _Last updated: 2026-04-07_
 
 - **v0.1.2 shipped.** Tagged on `main`. v0.1.0 / v0.1.1 still live; v0.1.2 adds building_name detection + the first public head-to-head benchmark vs Shiprocket TinyBERT.
 - **Branch flow this session:** v0.1.1 (parser fixes + gold realignment) shipped first, then v0.1.2 (building_name + competitor eval) shipped as a second commit on `main`.
+- Private eval: ran full private hospital dataset (41,796 entries). Aggregate numbers in `private/reports/`. Top failure categories identified — see `private/reports/analysis.md`.
 
 ## Eval results (v0.1.2 vs gold_200)
 
@@ -72,6 +73,8 @@ _Last updated: 2026-04-07_
 
 ## NEXT (in order)
 
+0. **v0.1.3 priority — refresh `bharataddress/data/pincodes.json`** from the latest data.gov.in India Post source. Target: 80,000+ pincodes with post-2014 naming (Telangana, Kolkata, Odisha, Uttarakhand, Chhattisgarh boundaries correct). Per the private hospital eval, this single fix addresses **92.8% of all failures** (the pincode-only and city/district/state-together signatures together). Rebuild via `scripts/build_pincode_data.py` against the new source.
+0a. After the pincode refresh, **re-run the private eval** (gold file under `private/processed/`) with `--private-report` to measure the actual lift on real-world data. Target: <5% mismatch rate, district/state/pincode F1 all >0.96.
 1. Lift sub_locality F1 above 0.6 (currently 0.472, the weakest field). Both bharataddress and TinyBERT struggle here — the disambiguation between "MG Road" (sub_locality) vs "Indiranagar" (locality) needs more cues. Possible: a curated list of known Indian neighbourhood names so anything not in the list gets demoted to sub_locality.
 2. Handle no-comma inputs (`A-15 Defence Colony New Delhi 110024`, `H No 12 Sarat Bose Road Kolkata 700020`) — currently lost because `_split_segments` only splits on commas. Introduce a secondary split using `\s{2,}` plus known transition keywords (locality keywords, building leads).
 3. Handle the locality-with-sub_locality-cue case: when no plain segment is available, allow the locality slot to take a sub_locality-tagged segment that contains a neighbourhood word (`Layout`, `Nagar`, `Colony`) before the cue word — currently `HSR Layout Sector 3` becomes sub_locality and locality goes empty.

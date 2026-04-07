@@ -2,6 +2,10 @@
 
 _Last updated: 2026-04-07_
 
+## 2026-04-07 private session — gold_master expanded
+
+Private eval: gold_master built from 3 sources (prior internal hospital set + Razorpay IFSC + OSM India), 263,828 total entries after dedup. Aggregate in `private/reports/eval_master.json` + per-source breakdown in `private/reports/eval_master_per_source.json`. Details in `private/reports/data_sources.md`. Worst source by city/district/state F1 is the IFSC bank-branch set (district F1 0.27, state F1 0.64) — driven by RBI's free-form ADDRESS column where the parser can't recover district/state without a usable pincode lookup. Best is OSM (district 0.94, state 0.96, pincode 1.00). NEXT priority unchanged: refresh `pincodes.json` for v0.1.3.
+
 ## Current state
 
 - **v0.1.2 shipped.** Tagged on `main`. v0.1.0 / v0.1.1 still live; v0.1.2 adds building_name detection + the first public head-to-head benchmark vs Shiprocket TinyBERT.

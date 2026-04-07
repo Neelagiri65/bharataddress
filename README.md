@@ -189,18 +189,107 @@ unless you pass a coordinate. The bounding box is hard-coded to India
 
 ---
 
-## What's NOT in v0.1
+## v0.2 modules
+
+v0.2 ships six new modules around the core parser. All offline, all
+zero-dependency, all importable straight from the top-level package.
+
+### `formatter` — reconstruct a clean address
+
+```python
+>>> from bharataddress import parse, format
+>>> p = parse("Flat 302, Raheja Atlantis, Sector 31, Gurgaon 122001")
+>>> print(format(p, style="india_post"))
+302 Raheja Atlantis
+Sector 31
+Gurgaon, Gurgaon
+Haryana, 122001
+>>> format(p, style="single_line")
+'302 Raheja Atlantis, Sector 31, Gurgaon, Gurgaon, Haryana, 122001'
+>>> print(format(p, style="label"))
+Building: 302 Raheja Atlantis
+Locality: Sector 31
+City: Gurgaon
+...
+```
+
+### `validator` — confidence + consistency
+
+```python
+>>> from bharataddress import parse, validate, is_deliverable
+>>> p = parse("Flat 302, Sector 31, Gurgaon 122001")
+>>> is_deliverable(p)
+True
+>>> validate(p)
+{'fields': {'pincode': 1.0, 'state': 1.0, ...}, 'issues': [], 'is_deliverable': True, 'overall': 0.91}
+```
+
+`validate` flags state / district / city mismatches against the embedded India
+Post directory. `is_deliverable` is the minimum-fields check (pincode + city +
+state).
+
+### `geocoder` — pincode centroid + reverse geocoding
+
+```python
+>>> from bharataddress import parse, geocode, reverse_geocode
+>>> geocode(parse("Sector 31, Gurgaon 122001"))  # None until pincodes.json gains centroids
+None
+>>> reverse_geocode(28.6129, 77.2295)
+{'digipin': '39J-438-TJC7', 'pincode': None, 'distance_km': None}
+```
+
+DIGIPIN is always returned (it's pure math). The nearest pincode is returned
+once a future dataset refresh adds latitude / longitude per pincode — the
+hook is wired and dormant today.
+
+### `similarity` — fuzzy address matching
+
+```python
+>>> from bharataddress import address_similarity
+>>> address_similarity("MG Road, Bengaluru 560001",
+...                    "Mahatma Gandhi Road, Bangalore 560001")
+0.9
+```
+
+Pincode is the strongest signal, then city (with Bengaluru/Bangalore,
+Mumbai/Bombay, etc. aliasing), then locality token overlap. Returns a float
+in `[0, 1]`.
+
+### `batch` — list / CSV / DataFrame helpers
+
+```python
+>>> from bharataddress import parse_batch, parse_csv, parse_dataframe
+>>> parse_batch(["Sector 31, Gurgaon 122001", "Anna Salai, Chennai 600002"])
+[ParsedAddress(...), ParsedAddress(...)]
+>>> parse_csv("addresses.csv", column="address")  # writes addresses_parsed.csv
+PosixPath('addresses_parsed.csv')
+>>> parse_dataframe(df, column="address")  # pandas optional, lazy import
+```
+
+### `enrichment` — non-address sources
+
+```python
+>>> from bharataddress import extract_state_from_gstin
+>>> extract_state_from_gstin("29ABCDE1234F1Z5")
+'Karnataka'
+```
+
+The first two digits of a GSTIN are the GST Council state code. Pure lookup,
+no network.
+
+---
+
+## What's NOT in v0.2
 
 By design, kept out so the package stays small, fast, and dependency-free:
 
-- ❌ LLM parsing (Claude API) — **v0.2**
-- ❌ Phonetic fuzzy matching (Gurgaon ↔ Gudgaon) — **v0.2**
-- ❌ Geocoding (lat/lng) — **v0.2**
+- ❌ LLM parsing (Claude API)
+- ❌ Phonetic fuzzy matching (Gurgaon ↔ Gudgaon)
 - ❌ Pincode boundary GeoJSON — **v0.3**
 - ❌ FastAPI server — **v0.3**
-- ❌ Devanagari / Tamil / Bengali script parsing — **v0.2** (English + Romanised Hindi only for v0.1)
+- ❌ Devanagari / Tamil / Bengali script parsing — English + Romanised Hindi only
 
-The architecture already accommodates all of these. v0.1 ships the foundation everything else builds on.
+The architecture already accommodates all of these. v0.2 ships the foundation everything else builds on.
 
 ---
 
@@ -211,7 +300,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-67 tests (37 parser + 30 DIGIPIN encode/decode/validate/round-trip) covering metro, tier 2/3, rural village, S/O format, landmark-heavy, vernacular, missing-pincode, and irregular-punctuation cases. All passing on v0.1.5.
+95 tests covering parser, DIGIPIN, formatter, validator, geocoder, similarity, batch, and enrichment modules. All passing on v0.2.0.
 
 There is also an architectural-constraint test that monkeypatches `socket.socket` and asserts `parse()` opens **zero** network connections. The "offline by default" promise is enforced in CI.
 

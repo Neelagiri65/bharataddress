@@ -2,6 +2,27 @@
 
 _Last updated: 2026-04-07_
 
+## v0.2.0 — feature release (formatter / validator / geocoder / similarity / batch / enrichment)
+
+Six new modules around the core parser, all offline, all zero-dependency, all importable from the top-level `bharataddress` package.
+
+- `bharataddress/formatter.py` — `format(parsed, style="india_post"|"single_line"|"label")`. Reconstructs a clean address string from parsed components in three styles.
+- `bharataddress/validator.py` — `validate(parsed)` returns per-field confidence + a list of consistency issues (pincode ↔ state ↔ district ↔ city mismatches checked against the embedded India Post directory). `is_deliverable(parsed)` is the minimum-fields check (pincode + city + state).
+- `bharataddress/geocoder.py` — `geocode(parsed)` returns `(lat, lng)` from the pincode centroid (returns `None` until pincodes.json gains centroids — same dormant hook as the parser DIGIPIN branch). `reverse_geocode(lat, lng)` always returns a DIGIPIN; nearest pincode is dormant for the same reason.
+- `bharataddress/similarity.py` — `similarity(a, b)` returns a 0–1 score. Pincode is the strongest signal (0.40), then city (0.20, with Bengaluru/Bangalore, Mumbai/Bombay, etc. aliasing), state (0.10), locality token Jaccard (0.20), building tokens (0.10). Multi-word aliases (Mahatma Gandhi → MG, Subhash Chandra → SC, Jawaharlal Nehru → JLN) handled.
+- `bharataddress/batch.py` — `parse_batch(strings)`, `parse_csv(path, column="address")` writes a `<stem>_parsed.csv` with one `parsed_<field>` column per parsed field, `parse_dataframe(df, column="address")` lazily imports pandas (not a runtime dep) and returns a copy with parsed columns added.
+- `bharataddress/enrichment.py` — `extract_state_from_gstin(gstin)` decodes the first two digits of a GSTIN against the official GST Council state code list (37 entries including Telangana=36, post-bifurcation AP=37, Ladakh=38).
+
+`bharataddress/__init__.py` now exports all of the above. `similarity` is exposed as `address_similarity` to avoid a name clash with the submodule. `format` is exported (shadows builtin only when imported by name).
+
+**Tests: 95 pass** (37 parser + 30 DIGIPIN + 5 formatter + 5 validator + 4 geocoder + 5 similarity + 4 batch + 5 enrichment). Each module has its own `tests/test_<module>.py`.
+
+**README** has a new "v0.2 modules" section with usage examples for every module.
+
+**Zero new runtime dependencies.** pandas is optional and lazy-imported only inside `parse_dataframe`. Public eval / parser core unchanged at 49.0% exact match on gold_200.
+
+Tagged `v0.2.0` on `main` after the full test suite passed.
+
 ## v0.1.5 — DIGIPIN module (encode / decode / validate)
 
 New module `bharataddress/digipin.py` — verbatim Python port of the official India Post Apache-2.0 algorithm at github.com/INDIAPOST-gov/digipin (`src/digipin.js`). Pure deterministic math, zero new dependencies.

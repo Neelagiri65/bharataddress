@@ -2,10 +2,49 @@
 
 _Last updated: 2026-04-08_
 
-## v0.3.0 — fuzzy phonetic + Nominatim online geocoding (branch)
+## v0.3.0 — published to PyPI
 
-Branch: `feature/v0.3-fuzzy-phonetic-nominatim`. Tag NOT yet cut on `main`.
-PyPI upload deferred — user runs `twine` manually.
+`bharataddress 0.3.0` is live: https://pypi.org/project/bharataddress/0.3.0/.
+Merged `feature/v0.3-fuzzy-phonetic-nominatim` to `main` (merge commit
+`524539b`), tagged `v0.3.0`, pushed both. Built with `python -m build` in
+`/tmp/bha-build-venv` (system Python 3.14 is PEP-668 managed). Uploaded via
+`twine` using a fresh project-scoped PyPI token in `~/.pypirc`. Clean-venv
+smoke test (`/tmp/bha-verify-0.3.0`) installed `dist/bharataddress-0.3.0-py3-none-any.whl`
+(PyPI index hadn't propagated yet at smoke-test time) and verified:
+
+- `bharataddress.__version__` → `0.3.0`
+- `parse("Sector 31, Gurgaon 122001")` → pincode `122001`, state `Haryana`,
+  `(latitude, longitude) = (28.47254, 77.03617)` (auto-populated from the OSM
+  centroid table shipped in v0.2.2)
+- `phonetic.normalise("Gurugram") == phonetic.normalise("Gudgaon")` → `True`
+- `phonetic.fuzzy_ratio("Bengaluru", "Bangalore")` → `1.0`
+- `phonetic._HAS_RAPIDFUZZ` → `False` — base install has zero deps as
+  designed; rapidfuzz only installs via `pip install bharataddress[fuzzy]`.
+
+**NEXT:** revoke and rotate the PyPI token if you don't plan another release
+soon (or leave it in `~/.pypirc` if you do — it's project-scoped to
+`bharataddress` only). Verify the PyPI index has propagated and the
+`pip install bharataddress` path works for users (`pip install
+bharataddress==0.3.0` was still 404'ing during the smoke test, ~minutes
+after upload). Optional: announce on the README badge / changelog.
+
+### v0.4 candidates (in priority order)
+
+1. **`force_online=True` kwarg on `geocode()`** — already TODO'd in
+   `geocoder.py`. Lets callers override a known-bad pincode centroid.
+2. **Pincode → known-localities dataset** for fuzzy locality match per
+   pincode. The original v0.3 spec called for this but no source dataset
+   exists; would be a v0.4 data-build job (LGD villages was tried in v0.1.4
+   and is not anonymously consumable — see that section below).
+3. **Phonetic-quality boost in `_confidence`** — currently the fuzzy match
+   only affects city dedup, not the confidence score itself.
+4. **Sub_locality F1 > 0.6** — still the weakest field at 0.455 (target is
+   0.6). Tied as the open lift from v0.2.1.
+
+## v0.3.0 — implementation summary
+
+Branch: `feature/v0.3-fuzzy-phonetic-nominatim`, merged to `main` as
+`524539b`, tagged `v0.3.0`.
 
 ### New modules
 

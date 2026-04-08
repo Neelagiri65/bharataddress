@@ -26,20 +26,11 @@ from __future__ import annotations
 import re
 
 from .parser import ParsedAddress, parse
+from . import phonetic as _phonetic
 
 
-_CITY_ALIASES = {
-    "bengaluru": "bangalore",
-    "mumbai": "bombay",
-    "chennai": "madras",
-    "kolkata": "calcutta",
-    "gurugram": "gurgaon",
-    "puducherry": "pondicherry",
-    "thiruvananthapuram": "trivandrum",
-    "kochi": "cochin",
-    "vadodara": "baroda",
-    "poona": "pune",
-}
+# Shared with phonetic.py — single source of truth for canonical aliases.
+_CITY_ALIASES = _phonetic.canonical_aliases()
 
 _TOKEN_ALIASES = {
     "rd": "road",

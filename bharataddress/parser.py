@@ -133,6 +133,8 @@ class ParsedAddress:
     state: str | None = None
     pincode: str | None = None
     digipin: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
     confidence: float = 0.0
     components_found: list[str] = field(default_factory=list)
 
@@ -264,7 +266,12 @@ def _confidence(found: list[str], city_matches_pincode: bool) -> float:
     return round(min(score, 1.0), 3)
 
 
-def parse(raw: str, *, latlng: tuple[float, float] | None = None) -> ParsedAddress:
+def parse(
+    raw: str,
+    *,
+    latlng: tuple[float, float] | None = None,
+    geocode: bool = False,
+) -> ParsedAddress:
     """Parse a messy Indian address string into structured components."""
     if not isinstance(raw, str) or not raw.strip():
         return ParsedAddress(raw=raw or "", cleaned="")
@@ -360,6 +367,10 @@ def parse(raw: str, *, latlng: tuple[float, float] | None = None) -> ParsedAddre
         if out.city and len(t) >= 4:
             ratio = difflib.SequenceMatcher(None, t, out.city.lower()).ratio()
             if ratio >= 0.8:
+                return True
+            # Phonetic alias check (Bengaluru/Bangalore, Gurugram/Gurgaon, ...)
+            from . import phonetic as _phonetic
+            if _phonetic.normalise(t) == _phonetic.normalise(out.city):
                 return True
         return False
 
@@ -468,6 +479,21 @@ def parse(raw: str, *, latlng: tuple[float, float] | None = None) -> ParsedAddre
             out.digipin = _digipin.encode(float(rec["latitude"]), float(rec["longitude"]))
         except (ValueError, TypeError):
             out.digipin = None
+
+    # Populate lat/lng from pincode centroid (free, offline). If geocode=True
+    # and centroid is missing, fall back to online Nominatim.
+    if rec and rec.get("latitude") is not None and rec.get("longitude") is not None:
+        try:
+            out.latitude = float(rec["latitude"])
+            out.longitude = float(rec["longitude"])
+        except (TypeError, ValueError):
+            pass
+    if geocode and out.latitude is None:
+        from . import geocoder as _geocoder
+
+        ll = _geocoder.geocode(out, online=True)
+        if ll is not None:
+            out.latitude, out.longitude = ll
 
     city_matches = bool(rec and out.city and rec["city"] and out.city.lower() == rec["city"].lower())
     out.confidence = _confidence(found, city_matches_pincode=city_matches or bool(rec))

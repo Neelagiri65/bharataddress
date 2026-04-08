@@ -1,5 +1,93 @@
 # HANDOFF — bharataddress
 
+_Last updated: 2026-04-08_
+
+## v0.3.0 — fuzzy phonetic + Nominatim online geocoding (branch)
+
+Branch: `feature/v0.3-fuzzy-phonetic-nominatim`. Tag NOT yet cut on `main`.
+PyPI upload deferred — user runs `twine` manually.
+
+### New modules
+
+- **`bharataddress/phonetic.py`** — hand-tuned alias map for post-independence
+  renames (Bombay/Mumbai, Madras/Chennai, Calcutta/Kolkata, Bangalore/Bengaluru,
+  Gurgaon/Gurugram, Pune/Poona, Trivandrum/Thiruvananthapuram, Cochin/Kochi,
+  Baroda/Vadodara, Mysore/Mysuru, Allahabad/Prayagraj, Pondicherry/Puducherry,
+  Varanasi/Banaras/Benares, Vijayawada/Bezawada, Bhubaneswar variants,
+  Visakhapatnam/Vizag, Mangalore/Mangaluru, Trichy variants, Panaji/Panjim,
+  Delhi/Dilli) plus transliteration rewrites (double-vowel collapses,
+  d↔r for Dravidian, w↔v Gujarati, ph↔f, suffix drops, sh→s, bh→b).
+  Rewrites are guarded — only applied when the result lands on a known
+  canonical form, preventing over-normalisation. `fuzzy_ratio` uses
+  `rapidfuzz.fuzz.token_set_ratio` when available, else stdlib `difflib`.
+  `best_match(query, candidates, cutoff)` for top-1 lookup.
+- **`bharataddress/_geocode_cache.py`** — lazy SQLite cache at
+  `$XDG_CACHE_HOME/bharataddress/geocode.sqlite` (default
+  `~/.cache/bharataddress/`). Schema `(query, lat, lng, source, ts)`. Negative
+  results cached for 30 days. File created only on first online write.
+
+### Modified
+
+- **`geocoder.geocode(parsed, *, online=False, timeout=5.0)`** — default
+  unchanged (offline centroid only, no network). `online=True` falls back to
+  Nominatim via stdlib `urllib.request` when the pincode centroid is missing.
+  Custom `User-Agent: bharataddress/0.3.0 (+github)`, 1 req/s rate limit
+  enforced via module-level `_last_call_ts`, all errors swallowed → `None`,
+  cache check before any network call. Centroid hits never trigger network
+  regardless of the flag (saves rate-limit budget). `# TODO: force_online=True`
+  comment left in for v0.4.
+- **`parser.parse(raw, *, latlng=None, geocode=False)`** — new `geocode` kwarg.
+  When True, after parsing, calls `geocoder.geocode(out, online=True)` and
+  populates new `ParsedAddress.latitude` / `longitude` fields. Centroid lat/lng
+  is also auto-populated for any pincode whose record carries coords (the
+  v0.2.2 OSM-derived 61.6%). The `_is_dup` city dedup keeps difflib for the
+  primary check and adds a phonetic-canonical equality check on top — so
+  "Bengaluru" trailing a Bangalore-pincode address is now dropped via the
+  alias map even when difflib's char-ratio misses it.
+- **`similarity.py`** — `_CITY_ALIASES` now sourced from
+  `phonetic.canonical_aliases()` so the two modules share one source of truth
+  for city canonicalisation. Pure refactor.
+- **`pyproject.toml`** — `version = "0.3.0"`, new
+  `[project.optional-dependencies] fuzzy = ["rapidfuzz>=3.0"]`. Base install
+  remains zero-deps. `requests` NOT added (using stdlib `urllib`).
+- **`__init__.py`** — exports `phonetic` module, `__version__ = "0.3.0"`.
+
+### Tests: 113 pass (100 prior + 8 phonetic + 5 geocoder online)
+
+- `tests/test_phonetic.py` — 12 post-independence rename pairs canonicalise
+  to the same form, common misspellings (Gudgaon, Bangalroe, Chenai, Kolkatta)
+  resolve, Varanasi/Banaras/Benares group, unknown input passes through,
+  fuzzy_ratio pairs (Gurgaon↔Gurugram=1.0, Bengaluru↔Bangalore=1.0),
+  difflib fallback via monkeypatch (`_HAS_RAPIDFUZZ=False`), best_match
+  cutoff behaviour.
+- `tests/test_geocoder_online.py` — `online=False` never hits network (asserts
+  via raising `urlopen` stub), `online=True` calls Nominatim once with the
+  custom User-Agent and writes the cache, second call is a cache hit (no
+  extra network), empty Nominatim result writes a negative cache entry,
+  network errors return None, `parse(addr, geocode=True)` populates lat/lng
+  via the stubbed Nominatim path. SQLite cache redirected to `tmp_path` for
+  every test — never touches the user's real cache.
+
+### Public eval: 125/200 = 62.5% exact match — identical to v0.2.2
+
+`reports/eval_v0.3.0.json`. Zero regression on every field. (Initial pass
+hit 124/200 because the phonetic-only city dedup was slightly different
+from difflib; resolved by keeping difflib as the primary check and using
+phonetic canonical equality as an additive layer.)
+
+### NEXT
+
+1. Review the branch diff. Cut tag `v0.3.0` on `main` after merge.
+2. Build wheel: `python -m build`. Smoke test in a clean venv: import
+   `phonetic`, run `parse("...", geocode=True)` against a stubbed network,
+   verify `bharataddress[fuzzy]` extra installs rapidfuzz.
+3. Mint a fresh PyPI token (the v0.2.2 token was revoked) and `twine upload`.
+4. (v0.4 candidates) `force_online=True` kwarg — already TODO'd in
+   geocoder.py. Pincode → known-localities dataset for fuzzy locality match
+   per pincode. Phonetic-quality boost in `_confidence` weights.
+
+## v0.2.2 — published to PyPI
+
 _Last updated: 2026-04-07_
 
 ## v0.2.2 — published to PyPI

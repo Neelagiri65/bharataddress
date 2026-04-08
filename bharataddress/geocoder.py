@@ -15,11 +15,21 @@ No network calls. No external services. All deterministic.
 """
 from __future__ import annotations
 
+import json
+import time
+import urllib.parse
+import urllib.request
 from math import asin, cos, radians, sin, sqrt
 
+from . import _geocode_cache
 from . import digipin as _digipin
 from . import pincode as _pincode
 from .parser import ParsedAddress
+
+_NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
+_USER_AGENT = "bharataddress/0.3.0 (+https://github.com/Neelagiri65/bharataddress)"
+_MIN_INTERVAL_S = 1.0  # Nominatim ToS: <= 1 req/sec
+_last_call_ts: float = 0.0
 
 
 def _record_latlng(rec: dict | None) -> tuple[float, float] | None:
@@ -35,15 +45,82 @@ def _record_latlng(rec: dict | None) -> tuple[float, float] | None:
         return None
 
 
-def geocode(parsed: ParsedAddress) -> tuple[float, float] | None:
-    """Return ``(lat, lng)`` from the pincode centroid, or ``None``.
+def _build_query(parsed: ParsedAddress) -> str:
+    parts = [
+        parsed.locality,
+        parsed.sub_locality,
+        parsed.city,
+        parsed.district,
+        parsed.state,
+        parsed.pincode,
+        "India",
+    ]
+    return ", ".join(p for p in parts if p)
 
-    Resolution is the centre of the pincode's service area — typically several
-    km, occasionally tens of km. This is *not* a building-level geocode.
-    """
-    if not parsed.pincode:
+
+def _nominatim_lookup(query: str, timeout: float) -> tuple[float, float] | None:
+    """Hit Nominatim once. Returns ``(lat, lng)`` or ``None``. Never raises."""
+    global _last_call_ts
+    elapsed = time.monotonic() - _last_call_ts
+    if elapsed < _MIN_INTERVAL_S:
+        time.sleep(_MIN_INTERVAL_S - elapsed)
+    _last_call_ts = time.monotonic()
+
+    params = urllib.parse.urlencode({"q": query, "format": "json", "limit": "1"})
+    url = f"{_NOMINATIM_URL}?{params}"
+    req = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            if resp.status != 200:
+                return None
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception:
         return None
-    return _record_latlng(_pincode.lookup(parsed.pincode))
+    if not data:
+        return None
+    try:
+        return float(data[0]["lat"]), float(data[0]["lon"])
+    except (KeyError, ValueError, TypeError):
+        return None
+
+
+def geocode(
+    parsed: ParsedAddress,
+    *,
+    online: bool = False,
+    timeout: float = 5.0,
+) -> tuple[float, float] | None:
+    """Return ``(lat, lng)``, or ``None``.
+
+    Default (``online=False``) uses the embedded pincode centroid only — no
+    network. ``online=True`` falls back to Nominatim with SQLite caching for
+    pincodes whose centroid is unknown. Centroid hits never trigger a network
+    call regardless of the flag (saves rate-limit budget).
+
+    TODO: ``force_online=True`` kwarg for v0.4 — override centroid when caller
+    knows it's wrong.
+    """
+    if parsed.pincode:
+        ll = _record_latlng(_pincode.lookup(parsed.pincode))
+        if ll is not None:
+            return ll
+    if not online:
+        return None
+
+    query = _build_query(parsed)
+    if not query.strip(", "):
+        return None
+
+    cached = _geocode_cache.get(query)
+    if cached != "miss":
+        return cached  # tuple, or None for negative cache
+
+    result = _nominatim_lookup(query, timeout)
+    if result is None:
+        _geocode_cache.put(query, None, None, "nominatim")
+    else:
+        _geocode_cache.put(query, result[0], result[1], "nominatim")
+    return result
 
 
 def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:

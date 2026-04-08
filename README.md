@@ -230,19 +230,49 @@ True
 Post directory. `is_deliverable` is the minimum-fields check (pincode + city +
 state).
 
-### `geocoder` — pincode centroid + reverse geocoding
+### `phonetic` (v0.3) — Indian-name canonicalisation + fuzzy match
 
 ```python
->>> from bharataddress import parse, geocode, reverse_geocode
->>> geocode(parse("Sector 31, Gurgaon 122001"))  # None until pincodes.json gains centroids
-None
->>> reverse_geocode(28.6129, 77.2295)
-{'digipin': '39J-438-TJC7', 'pincode': None, 'distance_km': None}
+>>> from bharataddress import phonetic
+>>> phonetic.normalise("Gurugram") == phonetic.normalise("Gudgaon")
+True
+>>> phonetic.fuzzy_ratio("Bengaluru", "Bangalore")
+1.0
+>>> phonetic.best_match("Kolkatta", ["Kolkata", "Delhi", "Mumbai"])
+('Kolkata', 1.0)
 ```
 
-DIGIPIN is always returned (it's pure math). The nearest pincode is returned
-once a future dataset refresh adds latitude / longitude per pincode — the
-hook is wired and dormant today.
+Hand-tuned alias map for post-independence renames (Bombay/Mumbai,
+Madras/Chennai, Calcutta/Kolkata, Bangalore/Bengaluru, Gurgaon/Gurugram,
+Pune/Poona, Trivandrum/Thiruvananthapuram, Cochin/Kochi, Baroda/Vadodara,
+Mysore/Mysuru, Allahabad/Prayagraj, Pondicherry/Puducherry,
+Varanasi/Banaras/Benares, ...) plus common transliteration drift
+(Gudgaon, Bangalroe, Kolkatta). Uses `rapidfuzz` when installed
+(`pip install bharataddress[fuzzy]`), otherwise stdlib `difflib`. Zero
+required dependencies.
+
+### `geocoder` — pincode centroid + reverse geocoding (online opt-in)
+
+```python
+>>> from bharataddress import parse, geocode
+>>> geocode(parse("Sector 31, Gurgaon 122001"))      # offline pincode centroid
+(28.47, 77.04)
+>>> # Online opt-in fallback for pincodes missing centroids:
+>>> geocode(parse("Some Locality, Town 999999"), online=True)  # hits Nominatim
+(..., ...)
+>>> # Or in one call:
+>>> p = parse("Connaught Place, New Delhi 110001", geocode=True)
+>>> (p.latitude, p.longitude)
+(28.6, 77.2)
+```
+
+`parse()` always populates `latitude`/`longitude` from the embedded pincode
+centroid (16,459 pincodes / 61.6% coverage in v0.2.2+). Pass `geocode=True`
+to fall back to OpenStreetMap Nominatim for pincodes without centroids — opt-in
+only, never called by default. Results are cached in
+`~/.cache/bharataddress/geocode.sqlite` so repeat lookups stay free. The HTTP
+client is stdlib `urllib`; no `requests` dependency. Rate-limited to 1 req/s
+to honour Nominatim's terms.
 
 ### `similarity` — fuzzy address matching
 

@@ -13,6 +13,7 @@ DIGIPIN encode / decode:
     >>> digipin.encode(28.6129, 77.2295)
     '39J-429-L4TK'
 """
+from . import phonetic
 from . import batch, digipin, enrichment, formatter, geocoder, similarity, validator
 from .batch import parse_batch, parse_csv, parse_dataframe
 from .enrichment import extract_state_from_gstin
@@ -44,4 +45,4 @@ __all__ = [
     "extract_state_from_gstin",
     "__version__",
 ]
-__version__ = "0.2.2"
+__version__ = "0.3.0"

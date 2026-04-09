@@ -1,8 +1,66 @@
 {
-  "_comment": "Tamil-specific Romanised vernacular terms. Loaded only for addresses in Tamil Nadu / Pondicherry. Issue #3 expands this to >=40 entries (Salai, Theru, Pettai, Mandapam, Kovil, Kulam, ...).",
+  "_comment": "Tamil-specific Romanised vernacular terms. Loaded only for addresses in Tamil Nadu / Pondicherry. Pan-Indian terms live in common.json. v0.4 minimum: 40 entries.",
+
   "salai": "salai",
   "saalai": "salai",
   "theru": "theru",
   "teru": "theru",
-  "pettai": "pettai"
+  "pettai": "pettai",
+
+  "kovil": "kovil",
+  "kovill": "kovil",
+  "koil": "kovil",
+
+  "mandapam": "mandapam",
+  "mandapamm": "mandapam",
+
+  "kulam": "kulam",
+  "kullam": "kulam",
+
+  "thoppu": "thoppu",
+  "thoppuu": "thoppu",
+
+  "thottam": "thottam",
+  "thotam": "thottam",
+
+  "medu": "medu",
+  "medo": "medu",
+
+  "kadu": "kadu",
+  "kaadu": "kadu",
+
+  "ur": "ur",
+  "oor": "ur",
+  "ooru": "ur",
+
+  "karai": "karai",
+
+  "alayam": "alayam",
+  "aalayam": "alayam",
+
+  "vattam": "vattam",
+
+  "thidal": "thidal",
+
+  "chathiram": "chathiram",
+
+  "maaligai": "maaligai",
+
+  "vazhi": "vazhi",
+  "vaazhi": "vazhi",
+
+  "veedu": "veedu",
+
+  "arangam": "arangam",
+
+  "kuppam": "kuppam",
+  "kuppaam": "kuppam",
+
+  "sandai": "sandai",
+
+  "mottai": "mottai",
+
+  "mettu": "mettu",
+  "mettuu": "mettu",
+  "methu": "mettu"
 }

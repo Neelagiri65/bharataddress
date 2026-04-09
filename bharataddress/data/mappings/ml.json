@@ -1,8 +1,76 @@
 {
-  "_comment": "Malayalam-specific Romanised vernacular terms. Loaded only for addresses in Kerala / Lakshadweep. Issue #3 expands this to >=40 entries (Mukku, Kavala, Theruvu, Para, Kara, Junction variants, ...).",
+  "_comment": "Malayalam-specific Romanised vernacular terms. Loaded only for addresses in Kerala / Lakshadweep. Pan-Indian terms live in common.json. v0.4 minimum: 40 entries.",
+
   "mukku": "mukku",
   "kavala": "kavala",
   "theruvu": "theruvu",
   "kara": "kara",
-  "kayal": "kayal"
+  "kayal": "kayal",
+
+  "kavu": "kavu",
+  "kavuu": "kavu",
+
+  "kshethram": "kshethram",
+  "kshetram": "kshethram",
+
+  "pallikoodam": "pallikoodam",
+
+  "koodam": "koodam",
+  "koodamm": "koodam",
+
+  "kazhakam": "kazhakam",
+
+  "thara": "thara",
+  "tharaa": "thara",
+
+  "purayidam": "purayidam",
+
+  "veetu": "veetu",
+
+  "vazhiyoram": "vazhiyoram",
+
+  "thuruthu": "thuruthu",
+
+  "moola": "moola",
+  "moolaa": "moola",
+
+  "aramana": "aramana",
+
+  "amaram": "amaram",
+
+  "kotta": "kotta",
+  "kottaa": "kotta",
+
+  "purakkad": "purakkad",
+
+  "chira": "chira",
+  "chiraa": "chira",
+
+  "chirakkal": "chirakkal",
+
+  "pallikkal": "pallikkal",
+
+  "kandam": "kandam",
+  "kandamm": "kandam",
+
+  "chal": "chal",
+
+  "thazham": "thazham",
+
+  "mala": "mala",
+  "malaa": "mala",
+
+  "thazhe": "thazhe",
+
+  "mele": "mele",
+
+  "valavu": "valavu",
+
+  "illam": "illam",
+  "illamm": "illam",
+
+  "matom": "matom",
+
+  "kunnu": "kunnu",
+  "kunnuu": "kunnu"
 }

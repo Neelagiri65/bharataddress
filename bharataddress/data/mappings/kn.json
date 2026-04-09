@@ -1,8 +1,73 @@
 {
-  "_comment": "Kannada-specific Romanised vernacular terms. Loaded only for addresses in Karnataka. Issue #3 expands this to >=40 entries (Halli, Hosa, Pura, Beedi, Mane, Cross, Layout context, ...).",
+  "_comment": "Kannada-specific Romanised vernacular terms. Loaded only for addresses in Karnataka. Pan-Indian terms live in common.json. v0.4 minimum: 40 entries.",
+
   "halli": "halli",
   "hosahalli": "hosahalli",
   "hosa": "hosa",
   "beedi": "beedi",
-  "mane": "mane"
+  "mane": "mane",
+
+  "koppa": "koppa",
+  "koppaa": "koppa",
+
+  "doddi": "doddi",
+
+  "doddagrama": "doddagrama",
+
+  "kere": "kere",
+  "keree": "kere",
+
+  "betta": "betta",
+  "bettaa": "betta",
+
+  "gudda": "gudda",
+
+  "katte": "katte",
+  "katteh": "katte",
+
+  "sankra": "sankra",
+
+  "angala": "angala",
+
+  "santhe": "santhe",
+  "santhee": "santhe",
+
+  "agrahara": "agrahara",
+
+  "beedhi": "beedhi",
+
+  "hadi": "hadi",
+
+  "madduru": "madduru",
+
+  "mandala": "mandala",
+
+  "mantapa": "mantapa",
+
+  "nadu": "nadu",
+
+  "hosakere": "hosakere",
+
+  "chowltry": "chowltry",
+
+  "bhavi": "bhavi",
+  "bhaavi": "bhavi",
+
+  "mola": "mola",
+
+  "kallu": "kallu",
+
+  "kaval": "kaval",
+
+  "gadde": "gadde",
+
+  "hittalu": "hittalu",
+
+  "kunte": "kunte",
+
+  "halla": "halla",
+
+  "ooty": "ooty",
+
+  "tota": "tota"
 }

@@ -1,56 +1,221 @@
 {
-  "_comment": "Pan-Indian / shared vernacular term normalisations. Always loaded by language.load_mappings(), regardless of detected language. Keys are lowercased input tokens; values are the normalised surface form. Issue #3 will expand this to >=80 entries; this stub preserves the v0.3 vernacular_mappings.json content (minus terms that are unambiguously language-specific, which moved to mappings/<lang>.json).",
+  "_comment": "Pan-Indian / shared vernacular term normalisations. Always loaded by language.load_mappings(), regardless of detected language. Keys are lowercased input tokens; values are the normalised surface form. v0.4 minimum: 80 entries. Anything genuinely region-specific should live in the per-language files instead.",
+
   "ngr": "nagar",
   "nagr": "nagar",
   "naagar": "nagar",
+  "nagara": "nagar",
+
   "marg": "marg",
   "maarg": "marg",
+
   "vihar": "vihar",
   "vihaar": "vihar",
+
   "puram": "puram",
   "puri": "puri",
   "pura": "pura",
+  "puraa": "pura",
+
   "ganj": "ganj",
   "gunj": "ganj",
+  "gunge": "ganj",
+
   "bagh": "bagh",
   "baug": "bagh",
   "baagh": "bagh",
+  "bageecha": "bagicha",
+  "bagicha": "bagicha",
+
   "bazar": "bazaar",
   "bazaar": "bazaar",
+  "baazar": "bazaar",
+  "bzr": "bazaar",
+
   "basti": "basti",
   "bastee": "basti",
+  "bustee": "basti",
+
   "pet": "pet",
   "peta": "peta",
   "pettah": "pet",
+
   "kheri": "kheri",
   "khera": "khera",
+
   "wadi": "wadi",
   "wada": "wada",
   "vadi": "wadi",
+  "waadi": "wadi",
+
   "padi": "padi",
   "patti": "patti",
+
   "tola": "tola",
   "toli": "toli",
+
   "khurd": "khurd",
   "kalan": "kalan",
   "buzurg": "buzurg",
+
   "saheb": "sahib",
   "sahib": "sahib",
+
   "mandir": "mandir",
+  "mndr": "mandir",
   "masjid": "masjid",
+  "msjd": "masjid",
   "gurudwara": "gurudwara",
   "gurdwara": "gurudwara",
+  "gurudwaara": "gurudwara",
   "ashram": "ashram",
   "asram": "ashram",
+  "aashram": "ashram",
+  "math": "math",
+  "mutt": "math",
+  "matha": "math",
+  "dargah": "dargah",
+  "darga": "dargah",
+  "dera": "dera",
+
   "kunj": "kunj",
+  "kunjj": "kunj",
+
   "enclv": "enclave",
   "encl": "enclave",
   "enclave": "enclave",
+
   "extn": "extension",
   "ext": "extension",
+
   "lyt": "layout",
   "layt": "layout",
+
   "twp": "township",
+  "twnshp": "township",
+
   "phse": "phase",
-  "blck": "block"
+  "phze": "phase",
+
+  "blck": "block",
+
+  "haveli": "haveli",
+  "havelii": "haveli",
+  "kothi": "kothi",
+  "kothii": "kothi",
+  "mahal": "mahal",
+  "mahall": "mahal",
+  "qila": "qila",
+  "kila": "qila",
+  "kilaa": "qila",
+  "garhi": "garhi",
+  "gadhi": "garhi",
+
+  "ghat": "ghat",
+  "ghaat": "ghat",
+  "maidan": "maidan",
+  "maydan": "maidan",
+  "chowki": "chowki",
+
+  "sarai": "sarai",
+  "sarae": "sarai",
+  "saraai": "sarai",
+  "katra": "katra",
+  "katraa": "katra",
+  "naka": "naka",
+  "nakka": "naka",
+
+  "darwaza": "darwaza",
+  "darwajaa": "darwaza",
+  "dwar": "dwar",
+  "dwaar": "dwar",
+  "phatak": "phatak",
+  "fatak": "phatak",
+
+  "pul": "pul",
+  "pool": "pul",
+  "nala": "nala",
+  "naala": "nala",
+
+  "bhavan": "bhavan",
+  "bhawan": "bhavan",
+  "bhavn": "bhavan",
+  "bhavaan": "bhavan",
+
+  "niwas": "niwas",
+  "nivas": "niwas",
+  "nivaas": "niwas",
+  "niwaas": "niwas",
+
+  "sadan": "sadan",
+  "sadn": "sadan",
+
+  "nilayam": "nilayam",
+  "neelayam": "nilayam",
+
+  "griham": "griham",
+  "gruham": "griham",
+  "grihaa": "griham",
+
+  "sthal": "sthal",
+  "sthala": "sthal",
+
+  "bhumi": "bhumi",
+  "bhoomi": "bhumi",
+
+  "prangan": "prangan",
+  "prangana": "prangan",
+
+  "darbar": "darbar",
+  "durbar": "darbar",
+
+  "pathshala": "pathshala",
+  "paathshala": "pathshala",
+
+  "vidyalaya": "vidyalaya",
+  "vidhyalaya": "vidyalaya",
+
+  "mahavidyalaya": "mahavidyalaya",
+
+  "vishwavidyalaya": "vishwavidyalaya",
+
+  "chikitsalaya": "chikitsalaya",
+
+  "karyalaya": "karyalaya",
+  "karyalay": "karyalaya",
+
+  "nyayalaya": "nyayalaya",
+
+  "pustakalaya": "pustakalaya",
+  "pustakalay": "pustakalaya",
+
+  "sangrahalaya": "sangrahalaya",
+
+  "guruji": "guruji",
+
+  "swami": "swami",
+  "swamiji": "swami",
+
+  "baba": "baba",
+
+  "chowkidar": "chowkidar",
+
+  "bhandar": "bhandar",
+
+  "vatika": "vatika",
+  "vaatika": "vatika",
+
+  "udyan": "udyan",
+  "udyaan": "udyan",
+
+  "vana": "vana",
+
+  "jheel": "jheel",
+  "jheela": "jheel",
+
+  "talab": "talab",
+  "talaab": "talab",
+
+  "sarovar": "sarovar",
+  "sarowar": "sarovar"
 }

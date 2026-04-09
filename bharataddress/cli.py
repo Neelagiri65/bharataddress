@@ -24,6 +24,15 @@ def main(argv: list[str] | None = None) -> int:
     sp = sub.add_parser("parse", help="Parse an address string")
     sp.add_argument("address", help="Address string in quotes")
     sp.add_argument("--pretty", action="store_true", help="Pretty-print JSON output")
+    sp.add_argument(
+        "--transliterate",
+        action="store_true",
+        help=(
+            "Auto-detect Indic script (Devanagari, Bengali, Tamil, Telugu, "
+            "Kannada, Malayalam) and transliterate to Latin before parsing. "
+            "Requires the optional extras: pip install bharataddress[indic]."
+        ),
+    )
 
     sl = sub.add_parser("lookup", help="Look up a pincode")
     sl.add_argument("pincode", help="6-digit pincode")
@@ -31,7 +40,11 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
 
     if args.cmd == "parse":
-        result = parse(args.address)
+        try:
+            result = parse(args.address, transliterate=args.transliterate)
+        except ImportError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 2
         indent = 2 if args.pretty else None
         print(json.dumps(result.to_dict(), indent=indent, ensure_ascii=False))
         return 0

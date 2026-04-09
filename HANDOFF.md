@@ -1,6 +1,90 @@
 # HANDOFF — bharataddress
 
-_Last updated: 2026-04-08_
+_Last updated: 2026-04-09_
+
+## v0.4.0 — published to PyPI
+
+`bharataddress 0.4.0` is live: https://pypi.org/project/bharataddress/0.4.0/.
+The multilingual + vernacular release. Merged `feature/v04-multilingual` to
+`main` (merge commit `9625749`), tagged `v0.4.0`. Built with
+`/tmp/bha-build-venv/bin/python -m build`, uploaded via twine using the
+existing project-scoped PyPI token in `~/.pypirc`. 162 tests passing.
+
+### What shipped (issues #1–#9)
+
+1. **#1 — failing constraint tests**: `test_no_indic_dep.py` (core import works
+   without the optional extras), `test_no_network_v04.py` (zero-network gate
+   extends to `parse(transliterate=True)`), `test_en_regression_gate.py`
+   (every per-field F1 on `gold_200.jsonl` stays within ±0.02 of the v0.3
+   baseline pinned in `tests/data/v03_baseline.json`).
+2. **#2 — per-language vernacular mapping restructure**: new
+   `bharataddress/data/mappings/{common,hi,ta,te,kn,bn,ml}.json`,
+   `bharataddress/language.py` resolves pincode → state → language code,
+   `preprocess()` extracts pincode early so the language-aware matcher can
+   pick the right overlay.
+3. **#3 — vernacular term expansion**: 409 entries across 7 files
+   (common 161, hi 42, ta 41, te 41, kn 40, bn 40, ml 44). No cross-language
+   duplicates, no common-vs-language redundancy. Locked by
+   `test_vernacular_coverage.py`.
+4. **#4 — opt-in transliteration shim**: 6 Indic scripts auto-detected via
+   Unicode block ranges, transliterated to ITRANS Latin via the
+   `indic-transliteration` library installed under
+   `pip install bharataddress[indic]`. New `parse(addr, transliterate=True)`
+   kwarg. Lazy import — core install stays zero-dep. End-to-end tests in
+   `test_transliteration.py` for all 6 scripts.
+5. **#5 — per-language F1 in evaluator**: `scripts/evaluate.py` grows an
+   additive `per_language` block keyed by language code. Auto-routes
+   native-script gold rows through `parse(transliterate=True)` based on
+   Unicode detection. Single-language eval is byte-identical to v0.3.
+   Locked by `test_evaluate_per_language.py`.
+6. **#6 — Tier B candidate scraper**: `scripts/build_gold_tier_b.py` pulls
+   from OSMNames (CC-BY, Latin regional rows) and the Overpass API
+   (native-script rows for the 6 scripts). Exponential backoff on HTTP
+   429/504, `--langs` filter and `--append` flag for partial retries.
+   Pivoted away from BSTD (17 GB photo dataset, overkill for ~250 text
+   rows). First fetch produced 236 candidate rows in
+   `tests/data/gold_500_candidates.jsonl` (gitignored): hi 50, ta 50,
+   te 50, kn 50, bn 17, ml 19. Bn/ml are lighter because Kolkata/Kochi
+   have fewer OSM objects with both `name:<lang>` and `addr:postcode`
+   tags than the bigger metros — that's a real ceiling, not a fetch
+   problem.
+7. **#7 — CLI `--transliterate` flag**: `bharataddress parse --transliterate
+   "<native>"` matches the Python API. Missing extras surface as a clean
+   stderr error pointing at `bharataddress[indic]`. Locked by
+   `test_cli_transliterate.py`.
+8. **#8 — pincode dataset sanity check**: `scripts/crosscheck_pincodes.py`.
+   Pivoted from external diff against `captn3m0/india-pincode-regex` (regex-
+   only repo, no machine-readable map) to a fully offline internal-
+   consistency check. Buckets pincodes by 3-digit prefix and flags any
+   prefix that maps to 3+ states. Sanity log, not a gate. First run:
+   26,711 pincodes / 415 prefixes / 39 states / **4 anomalous prefixes** /
+   40 border prefixes — within expected India Post variance. Output:
+   `reports/pincode_crosscheck.md`.
+9. **#9 — release**: version bumped in `__init__.py` and `pyproject.toml`,
+   `CHANGELOG.md` created with the full release notes, merged to `main`,
+   tagged `v0.4.0`, built, uploaded to PyPI.
+
+### Architectural constraints (still binding)
+- `parse()` makes zero network calls. Locked by an extended socket
+  monkeypatch test that now also covers `parse(transliterate=True)`.
+- Core install has zero runtime dependencies. The `indic-transliteration`
+  package only loads when `transliterate=True` is passed and only if
+  installed via the optional extras.
+- v0.3 English regression gate: every per-field F1 on `gold_200.jsonl`
+  must stay within ±0.02 of the v0.3.0 baseline.
+
+### NEXT
+- **Promote Tier A rows + selected Tier B candidates into gold_500.jsonl**.
+  236 Overpass candidates are sitting in `tests/data/gold_500_candidates.jsonl`
+  (gitignored). Review and hand-promote into a new `tests/data/gold_500.jsonl`
+  in a follow-up commit. The 4 anomalous pincode prefixes flagged by #8 are
+  worth eyeballing while you're in there — see `reports/pincode_crosscheck.md`.
+- Optionally fetch the OSMNames India dump from osmnames.org and run
+  `scripts/build_gold_tier_b.py --osmnames in.tsv.gz --limit 200 --append`
+  to add Latin-script regional rows for non-Hindi-belt states.
+- Verify the PyPI index has propagated and `pip install bharataddress==0.4.0`
+  resolves cleanly from a fresh venv.
+- Optionally announce the release on the README badge / dev.to draft.
 
 ## v0.3.0 — published to PyPI
 

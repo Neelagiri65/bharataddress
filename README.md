@@ -57,7 +57,21 @@ cd bharataddress
 pip install -e .
 ```
 
-Requires Python ≥3.10. Zero runtime dependencies.
+Requires Python ≥3.10. Zero runtime dependencies for the core install.
+
+### Optional: native-script support (v0.4+)
+
+```bash
+pip install bharataddress[indic]
+```
+
+Adds the [`indic-transliteration`](https://pypi.org/project/indic-transliteration/) extra (~163 kB, pure Python, zero deps of its own) so you can parse addresses written in Devanagari, Bengali, Tamil, Telugu, Kannada, or Malayalam by passing `transliterate=True`. The core install stays zero-dep — the extra is only loaded when an Indic script is actually detected.
+
+```python
+from bharataddress import parse
+parse("मुंबई, महाराष्ट्र 400001", transliterate=True)
+# pincode='400001', state='Maharashtra', city='Mumbai', ...
+```
 
 ---
 

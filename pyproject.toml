@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bharataddress"
-version = "0.3.0"
+version = "0.4.0"
 description = "Deterministic, offline parser for messy Indian addresses. Zero config, zero API keys."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,6 +27,7 @@ dependencies = []
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 fuzzy = ["rapidfuzz>=3.0"]
+indic = ["indic-transliteration>=2.3"]
 
 [project.scripts]
 bharataddress = "bharataddress.cli:main"
@@ -39,4 +40,4 @@ Issues = "https://github.com/Neelagiri65/bharataddress/issues"
 packages = ["bharataddress", "bharataddress.data"]
 
 [tool.setuptools.package-data]
-"bharataddress.data" = ["*.json"]
+"bharataddress.data" = ["*.json", "mappings/*.json"]

@@ -30,8 +30,15 @@ def _abbreviations() -> dict[str, str]:
     return {k.lower(): v for k, v in json.loads(raw).items()}
 
 
+from . import language as _language
+
+
 @lru_cache(maxsize=1)
-def _vernacular() -> dict[str, str]:
+def _vernacular_legacy() -> dict[str, str]:
+    """Deprecated v0.3 flat mapping. Kept only as a safety net for callers that
+    invoke ``normalise_vernacular`` without a pincode hint and want the full v0.3
+    behaviour. v0.4 routes through ``language.load_mappings`` instead.
+    """
     raw = (files("bharataddress.data") / "vernacular_mappings.json").read_text(encoding="utf-8")
     table = json.loads(raw)
     return {k.lower(): v for k, v in table.items() if not k.startswith("_")}
@@ -67,8 +74,16 @@ def expand_abbreviations(text: str) -> str:
     return text
 
 
-def normalise_vernacular(text: str) -> str:
-    vern = _vernacular()
+def normalise_vernacular(text: str, pincode: str | None = None) -> str:
+    """Normalise vernacular tokens, language-aware via pincode -> state.
+
+    When ``pincode`` is provided and resolves to a v0.4-supported state, the
+    matching language file(s) are layered on top of ``common.json``. When the
+    pincode is missing or resolves to no supported language, only ``common.json``
+    is applied — preserving the v0.3 default for unknown / English addresses.
+    """
+    lang_codes = _language.from_pincode(pincode) if pincode else []
+    vern = _language.load_mappings(lang_codes)
 
     def repl(match: re.Match[str]) -> str:
         tok = match.group(0)
@@ -94,14 +109,82 @@ _PHONE_RE = re.compile(
 _PIN_LABEL_RE = re.compile(r"\bpin\s*code\b\s*[:#-]*\s*", re.IGNORECASE)
 
 
+# --- v0.4: opt-in script transliteration --------------------------------------
+
+# Unicode block ranges for the six v0.4 scripts. The first non-ASCII char in the
+# input picks the script. ITRANS is the chosen Latin target scheme — ASCII-only,
+# no diacritics, readable to Indian developers reviewing gold rows.
+_SCRIPT_BLOCKS: tuple[tuple[int, int, str, str], ...] = (
+    (0x0900, 0x097F, "DEVANAGARI", "hi"),
+    (0x0980, 0x09FF, "BENGALI", "bn"),
+    (0x0B80, 0x0BFF, "TAMIL", "ta"),
+    (0x0C00, 0x0C7F, "TELUGU", "te"),
+    (0x0C80, 0x0CFF, "KANNADA", "kn"),
+    (0x0D00, 0x0D7F, "MALAYALAM", "ml"),
+)
+
+_INDIC_INSTALL_HINT = (
+    "indic-transliteration is required for transliterate=True. "
+    "Install with: pip install bharataddress[indic]"
+)
+
+
+def _detect_script(text: str) -> tuple[str, str] | None:
+    """Return (sanscript_scheme_name, language_code) for the first non-ASCII
+    char that lands in a supported Indic block, or None if the text is ASCII /
+    unsupported.
+    """
+    for ch in text:
+        cp = ord(ch)
+        if cp < 0x80:
+            continue
+        for lo, hi, scheme, lang in _SCRIPT_BLOCKS:
+            if lo <= cp <= hi:
+                return scheme, lang
+        # First non-ASCII char isn't in a supported block — give up rather than
+        # scanning further. Mixed-script handling is out of scope for v0.4.
+        return None
+    return None
+
+
+def transliterate_to_latin(text: str) -> tuple[str, str | None]:
+    """Transliterate native-script Indic text to Latin (ITRANS scheme).
+
+    Returns ``(latin_text, detected_lang_code)``. If the input is already ASCII
+    or its first non-ASCII char isn't in one of the six v0.4 supported blocks,
+    returns ``(text, None)`` *without* importing ``indic_transliteration`` — the
+    extras dependency is only loaded when actually needed.
+
+    Raises ``ImportError`` with the install hint if the extras package is not
+    installed and the input requires transliteration.
+    """
+    detected = _detect_script(text)
+    if detected is None:
+        return text, None
+    scheme_name, lang = detected
+    try:
+        from indic_transliteration import sanscript  # type: ignore[import-not-found]
+    except ImportError as exc:
+        raise ImportError(_INDIC_INSTALL_HINT) from exc
+    source_scheme = getattr(sanscript, scheme_name)
+    latin = sanscript.transliterate(text, source_scheme, sanscript.ITRANS)
+    return latin, lang
+
+
 def preprocess(text: str) -> tuple[str, str | None]:
-    """Return (cleaned_text, pincode_or_None)."""
+    """Return (cleaned_text, pincode_or_None).
+
+    v0.4: pincode is extracted *before* vernacular normalisation so that
+    ``normalise_vernacular`` can pick the right per-language mapping file via
+    pincode -> state -> language. The pincode regex is robust enough to fire on
+    raw input — it does not need abbreviations or vernacular normalisation first.
+    """
     text = normalise_unicode(text)
     text = _PHONE_RE.sub(" ", text)
     text = _PIN_LABEL_RE.sub(" ", text)
     text = tidy_whitespace(text)
-    text = expand_abbreviations(text)
-    text = normalise_vernacular(text)
-    text = tidy_whitespace(text)
     pin = extract_pincode(text)
+    text = expand_abbreviations(text)
+    text = normalise_vernacular(text, pincode=pin)
+    text = tidy_whitespace(text)
     return text, pin

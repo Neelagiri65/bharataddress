@@ -1,0 +1,72 @@
+{
+  "_comment": "Bengali-specific Romanised vernacular terms. Loaded only for addresses in West Bengal / Tripura. Pan-Indian terms live in common.json. v0.4 minimum: 40 entries.",
+
+  "para": "para",
+  "pally": "pally",
+  "bagan": "bagan",
+  "sarani": "sarani",
+  "tala": "tala",
+
+  "ghuri": "ghuri",
+
+  "baari": "baari",
+  "bari": "baari",
+
+  "bati": "bati",
+
+  "paka": "paka",
+
+  "dighi": "dighi",
+  "dighii": "dighi",
+
+  "pukur": "pukur",
+  "pukuur": "pukur",
+
+  "haat": "haat",
+  "hat": "haat",
+
+  "mela": "mela",
+  "melaa": "mela",
+
+  "moholla": "moholla",
+
+  "kuthi": "kuthi",
+
+  "maath": "maath",
+
+  "gachhi": "gachhi",
+
+  "thana": "thana",
+  "thaana": "thana",
+
+  "baajaar": "baajaar",
+
+  "pukurpaar": "pukurpaar",
+
+  "raasta": "raasta",
+  "rasta": "raasta",
+
+  "goli": "goli",
+
+  "pora": "pora",
+
+  "chala": "chala",
+
+  "digha": "digha",
+
+  "sarobar": "sarobar",
+
+  "khanak": "khanak",
+
+  "choto": "choto",
+
+  "boro": "boro",
+
+  "purono": "purono",
+
+  "notun": "notun",
+
+  "moidan": "moidan",
+
+  "ashtami": "ashtami"
+}

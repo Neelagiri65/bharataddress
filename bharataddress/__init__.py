@@ -45,4 +45,4 @@ __all__ = [
     "extract_state_from_gstin",
     "__version__",
 ]
-__version__ = "0.3.0"
+__version__ = "0.4.0"

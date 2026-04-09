@@ -271,12 +271,26 @@ def parse(
     *,
     latlng: tuple[float, float] | None = None,
     geocode: bool = False,
+    transliterate: bool = False,
 ) -> ParsedAddress:
-    """Parse a messy Indian address string into structured components."""
+    """Parse a messy Indian address string into structured components.
+
+    v0.4: pass ``transliterate=True`` to accept native-script input
+    (Devanagari, Bengali, Tamil, Telugu, Kannada, Malayalam). Requires the
+    optional extra: ``pip install bharataddress[indic]``. ASCII input is a
+    no-op even when ``transliterate=True`` — the extras package is not loaded
+    unless an Indic script is actually detected.
+    """
     if not isinstance(raw, str) or not raw.strip():
         return ParsedAddress(raw=raw or "", cleaned="")
 
-    cleaned, pin = preprocess(raw)
+    if transliterate:
+        from .preprocessor import transliterate_to_latin
+        raw_for_parse, _detected_lang = transliterate_to_latin(raw)
+    else:
+        raw_for_parse = raw
+
+    cleaned, pin = preprocess(raw_for_parse)
     out = ParsedAddress(raw=raw, cleaned=cleaned, pincode=pin)
     found: list[str] = []
 

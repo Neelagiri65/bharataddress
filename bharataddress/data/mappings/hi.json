@@ -1,0 +1,67 @@
+{
+  "_comment": "Hindi-belt specific Romanised vernacular terms. Loaded only for addresses in Hindi-speaking states (see state_languages.json). Pan-Indian terms live in common.json. v0.4 minimum: 40 entries.",
+
+  "chowk": "chowk",
+  "chawk": "chowk",
+  "chouk": "chowk",
+  "chk": "chowk",
+
+  "gali": "gali",
+  "gully": "gali",
+  "galli": "gali",
+
+  "mohalla": "mohalla",
+  "mohla": "mohalla",
+  "muhalla": "mohalla",
+
+  "chauraha": "chauraha",
+  "chouraha": "chauraha",
+  "chaurahaa": "chauraha",
+
+  "mandi": "mandi",
+  "mandee": "mandi",
+
+  "chakkar": "chakkar",
+  "chakker": "chakkar",
+
+  "kucha": "kucha",
+  "koocha": "kucha",
+
+  "charbagh": "charbagh",
+
+  "naya": "naya",
+  "nayee": "naya",
+
+  "purana": "purana",
+  "puraana": "purana",
+
+  "kasba": "kasba",
+  "qasba": "kasba",
+
+  "pind": "pind",
+
+  "dhani": "dhani",
+  "dhaani": "dhani",
+
+  "thok": "thok",
+
+  "mauza": "mauza",
+  "mauja": "mauza",
+
+  "ahata": "ahata",
+  "ahataa": "ahata",
+
+  "chakla": "chakla",
+
+  "akhara": "akhara",
+  "akhaada": "akhara",
+
+  "nagla": "nagla",
+
+  "chungi": "chungi",
+
+  "adda": "adda",
+  "addaa": "adda",
+
+  "katla": "katla"
+}

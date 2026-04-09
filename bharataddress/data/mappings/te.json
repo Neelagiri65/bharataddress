@@ -1,0 +1,67 @@
+{
+  "_comment": "Telugu-specific Romanised vernacular terms. Loaded only for addresses in Andhra Pradesh / Telangana. Pan-Indian terms live in common.json. v0.4 minimum: 40 entries.",
+
+  "veedhi": "veedhi",
+  "vidhi": "veedhi",
+  "basthi": "basthi",
+  "palem": "palem",
+  "gudem": "gudem",
+
+  "gudi": "gudi",
+  "guddi": "gudi",
+
+  "konda": "konda",
+  "kondaa": "konda",
+
+  "cheruvu": "cheruvu",
+  "cheruvuu": "cheruvu",
+
+  "kunta": "kunta",
+  "kuntaa": "kunta",
+
+  "baavi": "baavi",
+  "bavi": "baavi",
+
+  "thota": "thota",
+  "thotaa": "thota",
+
+  "vagu": "vagu",
+
+  "palli": "palli",
+  "pallii": "palli",
+
+  "pallem": "pallem",
+
+  "kothapeta": "kothapeta",
+
+  "kotha": "kotha",
+  "kothaa": "kotha",
+
+  "vooru": "vooru",
+
+  "agraharam": "agraharam",
+  "agraharamm": "agraharam",
+
+  "patnam": "patnam",
+  "pattanam": "patnam",
+
+  "revu": "revu",
+  "revuu": "revu",
+
+  "mandalam": "mandalam",
+
+  "gattu": "gattu",
+  "gattuu": "gattu",
+
+  "chenu": "chenu",
+  "chenuu": "chenu",
+
+  "banda": "banda",
+  "bandaa": "banda",
+
+  "gadda": "gadda",
+
+  "chettu": "chettu",
+
+  "peetha": "peetha"
+}

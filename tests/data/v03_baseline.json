@@ -1,0 +1,18 @@
+{
+  "_comment": "Frozen v0.3.0 per-component F1 baseline. The English/Latin regression gate (test_en_regression_gate.py) requires every component to stay within ±0.02 of these numbers. Source: reports/eval_v0.3.0.json. Do not edit without a deliberate baseline reset.",
+  "version": "0.3.0",
+  "gold_file": "tests/data/gold_200_v03.jsonl",
+  "tolerance": 0.02,
+  "exact_match_rate": 0.625,
+  "per_field_f1": {
+    "building_number": 0.962,
+    "building_name": 0.679,
+    "landmark": 0.918,
+    "locality": 0.796,
+    "sub_locality": 0.455,
+    "city": 0.959,
+    "district": 0.965,
+    "state": 0.971,
+    "pincode": 0.995
+  }
+}

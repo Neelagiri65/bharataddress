@@ -109,6 +109,68 @@ _PHONE_RE = re.compile(
 _PIN_LABEL_RE = re.compile(r"\bpin\s*code\b\s*[:#-]*\s*", re.IGNORECASE)
 
 
+# --- v0.4: opt-in script transliteration --------------------------------------
+
+# Unicode block ranges for the six v0.4 scripts. The first non-ASCII char in the
+# input picks the script. ITRANS is the chosen Latin target scheme — ASCII-only,
+# no diacritics, readable to Indian developers reviewing gold rows.
+_SCRIPT_BLOCKS: tuple[tuple[int, int, str, str], ...] = (
+    (0x0900, 0x097F, "DEVANAGARI", "hi"),
+    (0x0980, 0x09FF, "BENGALI", "bn"),
+    (0x0B80, 0x0BFF, "TAMIL", "ta"),
+    (0x0C00, 0x0C7F, "TELUGU", "te"),
+    (0x0C80, 0x0CFF, "KANNADA", "kn"),
+    (0x0D00, 0x0D7F, "MALAYALAM", "ml"),
+)
+
+_INDIC_INSTALL_HINT = (
+    "indic-transliteration is required for transliterate=True. "
+    "Install with: pip install bharataddress[indic]"
+)
+
+
+def _detect_script(text: str) -> tuple[str, str] | None:
+    """Return (sanscript_scheme_name, language_code) for the first non-ASCII
+    char that lands in a supported Indic block, or None if the text is ASCII /
+    unsupported.
+    """
+    for ch in text:
+        cp = ord(ch)
+        if cp < 0x80:
+            continue
+        for lo, hi, scheme, lang in _SCRIPT_BLOCKS:
+            if lo <= cp <= hi:
+                return scheme, lang
+        # First non-ASCII char isn't in a supported block — give up rather than
+        # scanning further. Mixed-script handling is out of scope for v0.4.
+        return None
+    return None
+
+
+def transliterate_to_latin(text: str) -> tuple[str, str | None]:
+    """Transliterate native-script Indic text to Latin (ITRANS scheme).
+
+    Returns ``(latin_text, detected_lang_code)``. If the input is already ASCII
+    or its first non-ASCII char isn't in one of the six v0.4 supported blocks,
+    returns ``(text, None)`` *without* importing ``indic_transliteration`` — the
+    extras dependency is only loaded when actually needed.
+
+    Raises ``ImportError`` with the install hint if the extras package is not
+    installed and the input requires transliteration.
+    """
+    detected = _detect_script(text)
+    if detected is None:
+        return text, None
+    scheme_name, lang = detected
+    try:
+        from indic_transliteration import sanscript  # type: ignore[import-not-found]
+    except ImportError as exc:
+        raise ImportError(_INDIC_INSTALL_HINT) from exc
+    source_scheme = getattr(sanscript, scheme_name)
+    latin = sanscript.transliterate(text, source_scheme, sanscript.ITRANS)
+    return latin, lang
+
+
 def preprocess(text: str) -> tuple[str, str | None]:
     """Return (cleaned_text, pincode_or_None).
 

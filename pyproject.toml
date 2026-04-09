@@ -27,6 +27,7 @@ dependencies = []
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 fuzzy = ["rapidfuzz>=3.0"]
+indic = ["indic-transliteration>=2.3"]
 
 [project.scripts]
 bharataddress = "bharataddress.cli:main"

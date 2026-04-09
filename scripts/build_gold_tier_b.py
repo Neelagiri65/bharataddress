@@ -44,6 +44,7 @@ import gzip
 import json
 import sys
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Iterable, Iterator
@@ -148,19 +149,50 @@ out tags 200;
 """.strip()
 
 
-def _overpass_fetch(query: str) -> dict:
+def _overpass_fetch(query: str, max_attempts: int = 5) -> dict:
+    """POST to Overpass with exponential backoff on HTTP 429/504.
+
+    The public instance returns 429 when its slot pool is empty. Wait
+    longer each retry (8s, 16s, 32s, 64s) before giving up.
+    """
     data = ("data=" + query).encode("utf-8")
-    req = urllib.request.Request(
-        OVERPASS_URL,
-        data=data,
-        headers={"User-Agent": "bharataddress-gold-builder/0.4 (open source)"},
-    )
-    with urllib.request.urlopen(req, timeout=90) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    delay = 8.0
+    last_exc: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        req = urllib.request.Request(
+            OVERPASS_URL,
+            data=data,
+            headers={"User-Agent": "bharataddress-gold-builder/0.4 (open source)"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            last_exc = e
+            if e.code in (429, 504) and attempt < max_attempts:
+                print(
+                    f"    HTTP {e.code}, backing off {delay:.0f}s "
+                    f"(attempt {attempt}/{max_attempts})",
+                    file=sys.stderr,
+                )
+                time.sleep(delay)
+                delay *= 2
+                continue
+            raise
+        except Exception as e:
+            last_exc = e
+            raise
+    assert last_exc is not None
+    raise last_exc
 
 
-def iter_overpass(limit_per_city: int | None) -> Iterator[dict]:
+def iter_overpass(
+    limit_per_city: int | None,
+    langs: tuple[str, ...] | None = None,
+) -> Iterator[dict]:
     for city, state, lang, area, lang_tag in OVERPASS_CITIES:
+        if langs and lang not in langs:
+            continue
         print(f"  overpass: {city} ({lang})...", file=sys.stderr)
         try:
             payload = _overpass_fetch(_overpass_query(area, lang_tag))
@@ -216,10 +248,11 @@ def iter_overpass(limit_per_city: int | None) -> Iterator[dict]:
 
 # --- driver -------------------------------------------------------------------
 
-def write_jsonl(rows: Iterable[dict], out_path: Path) -> int:
+def write_jsonl(rows: Iterable[dict], out_path: Path, append: bool = False) -> int:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     n = 0
-    with out_path.open("w", encoding="utf-8") as fh:
+    mode = "a" if append else "w"
+    with out_path.open(mode, encoding="utf-8") as fh:
         for row in rows:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
             n += 1
@@ -254,6 +287,19 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Cap rows per source (per-city for Overpass).",
     )
+    p.add_argument(
+        "--langs",
+        type=str,
+        default=None,
+        help="Comma-separated language codes to restrict Overpass to "
+             "(e.g. 'bn,ml'). Defaults to all 6 supported scripts.",
+    )
+    p.add_argument(
+        "--append",
+        action="store_true",
+        help="Append to --out instead of overwriting. Use this when "
+             "topping up after a partial 429 failure.",
+    )
     args = p.parse_args(argv)
 
     if not args.osmnames and not args.overpass:
@@ -267,7 +313,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.overpass:
         print("Fetching Overpass native-script rows...", file=sys.stderr)
-        rows.extend(iter_overpass(limit_per_city=args.limit))
+        langs = tuple(s.strip() for s in args.langs.split(",")) if args.langs else None
+        rows.extend(iter_overpass(limit_per_city=args.limit, langs=langs))
 
     if args.osmnames:
         if not args.osmnames.exists():
@@ -276,7 +323,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Reading OSMNames dump: {args.osmnames}", file=sys.stderr)
         rows.extend(iter_osmnames(args.osmnames, limit=args.limit))
 
-    n = write_jsonl(rows, args.out)
+    n = write_jsonl(rows, args.out, append=args.append)
     print(
         f"\nWrote {n} candidate rows to {args.out}\n"
         f"  (gitignored — review and hand-promote into gold_500.jsonl)",

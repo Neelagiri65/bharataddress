@@ -1,0 +1,8 @@
+{
+  "_comment": "Tamil-specific Romanised vernacular terms. Loaded only for addresses in Tamil Nadu / Pondicherry. Issue #3 expands this to >=40 entries (Salai, Theru, Pettai, Mandapam, Kovil, Kulam, ...).",
+  "salai": "salai",
+  "saalai": "salai",
+  "theru": "theru",
+  "teru": "theru",
+  "pettai": "pettai"
+}

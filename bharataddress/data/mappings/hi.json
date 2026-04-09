@@ -1,0 +1,13 @@
+{
+  "_comment": "Hindi-specific vernacular terms (Romanised). Loaded only for addresses in Hindi-belt states (see state_languages.json). Issue #3 expands this to >=40 entries.",
+  "chowk": "chowk",
+  "chawk": "chowk",
+  "chouk": "chowk",
+  "chk": "chowk",
+  "gali": "gali",
+  "gully": "gali",
+  "galli": "gali",
+  "mohalla": "mohalla",
+  "mohla": "mohalla",
+  "muhalla": "mohalla"
+}

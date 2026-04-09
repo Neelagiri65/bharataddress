@@ -1,0 +1,8 @@
+{
+  "_comment": "Bengali-specific Romanised vernacular terms. Loaded only for addresses in West Bengal / Tripura. Issue #3 expands this to >=40 entries (Para, Pally, Bagan, Math, Tala, Sarani, ...).",
+  "para": "para",
+  "pally": "pally",
+  "bagan": "bagan",
+  "sarani": "sarani",
+  "tala": "tala"
+}

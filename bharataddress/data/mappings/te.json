@@ -1,0 +1,8 @@
+{
+  "_comment": "Telugu-specific Romanised vernacular terms. Loaded only for addresses in Andhra Pradesh / Telangana. Issue #3 expands this to >=40 entries (Veedhi, Basthi, Palem, Gudem, Cheruvu, ...).",
+  "veedhi": "veedhi",
+  "vidhi": "veedhi",
+  "basthi": "basthi",
+  "palem": "palem",
+  "gudem": "gudem"
+}

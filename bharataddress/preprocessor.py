@@ -30,8 +30,15 @@ def _abbreviations() -> dict[str, str]:
     return {k.lower(): v for k, v in json.loads(raw).items()}
 
 
+from . import language as _language
+
+
 @lru_cache(maxsize=1)
-def _vernacular() -> dict[str, str]:
+def _vernacular_legacy() -> dict[str, str]:
+    """Deprecated v0.3 flat mapping. Kept only as a safety net for callers that
+    invoke ``normalise_vernacular`` without a pincode hint and want the full v0.3
+    behaviour. v0.4 routes through ``language.load_mappings`` instead.
+    """
     raw = (files("bharataddress.data") / "vernacular_mappings.json").read_text(encoding="utf-8")
     table = json.loads(raw)
     return {k.lower(): v for k, v in table.items() if not k.startswith("_")}
@@ -67,8 +74,16 @@ def expand_abbreviations(text: str) -> str:
     return text
 
 
-def normalise_vernacular(text: str) -> str:
-    vern = _vernacular()
+def normalise_vernacular(text: str, pincode: str | None = None) -> str:
+    """Normalise vernacular tokens, language-aware via pincode -> state.
+
+    When ``pincode`` is provided and resolves to a v0.4-supported state, the
+    matching language file(s) are layered on top of ``common.json``. When the
+    pincode is missing or resolves to no supported language, only ``common.json``
+    is applied — preserving the v0.3 default for unknown / English addresses.
+    """
+    lang_codes = _language.from_pincode(pincode) if pincode else []
+    vern = _language.load_mappings(lang_codes)
 
     def repl(match: re.Match[str]) -> str:
         tok = match.group(0)
@@ -95,13 +110,19 @@ _PIN_LABEL_RE = re.compile(r"\bpin\s*code\b\s*[:#-]*\s*", re.IGNORECASE)
 
 
 def preprocess(text: str) -> tuple[str, str | None]:
-    """Return (cleaned_text, pincode_or_None)."""
+    """Return (cleaned_text, pincode_or_None).
+
+    v0.4: pincode is extracted *before* vernacular normalisation so that
+    ``normalise_vernacular`` can pick the right per-language mapping file via
+    pincode -> state -> language. The pincode regex is robust enough to fire on
+    raw input — it does not need abbreviations or vernacular normalisation first.
+    """
     text = normalise_unicode(text)
     text = _PHONE_RE.sub(" ", text)
     text = _PIN_LABEL_RE.sub(" ", text)
     text = tidy_whitespace(text)
-    text = expand_abbreviations(text)
-    text = normalise_vernacular(text)
-    text = tidy_whitespace(text)
     pin = extract_pincode(text)
+    text = expand_abbreviations(text)
+    text = normalise_vernacular(text, pincode=pin)
+    text = tidy_whitespace(text)
     return text, pin

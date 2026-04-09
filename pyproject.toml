@@ -39,4 +39,4 @@ Issues = "https://github.com/Neelagiri65/bharataddress/issues"
 packages = ["bharataddress", "bharataddress.data"]
 
 [tool.setuptools.package-data]
-"bharataddress.data" = ["*.json"]
+"bharataddress.data" = ["*.json", "mappings/*.json"]

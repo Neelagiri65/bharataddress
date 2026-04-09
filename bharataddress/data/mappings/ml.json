@@ -1,0 +1,8 @@
+{
+  "_comment": "Malayalam-specific Romanised vernacular terms. Loaded only for addresses in Kerala / Lakshadweep. Issue #3 expands this to >=40 entries (Mukku, Kavala, Theruvu, Para, Kara, Junction variants, ...).",
+  "mukku": "mukku",
+  "kavala": "kavala",
+  "theruvu": "theruvu",
+  "kara": "kara",
+  "kayal": "kayal"
+}

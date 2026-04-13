@@ -1,6 +1,43 @@
 # HANDOFF — bharataddress
 
-_Last updated: 2026-04-09_
+_Last updated: 2026-04-13_
+
+## GitHub outreach research — scan complete, drafts ready
+
+Scanned GitHub code search for repos struggling with Indian address parsing.
+6 query families run before hitting API rate limits. 50+ repos analysed.
+
+### What was produced
+
+- `docs/research-github-outreach.md` — full scan report with target list,
+  competitor landscape, content angles, issue templates, and future query set
+- `docs/outreach/issue-django-ecommerce.md` — draft issue for sa1if3/django_ecommerce
+  (28 stars, Django marketplace, 3-field checkout with regex-only pincode validation)
+- `docs/outreach/issue-leadpoet.md` — draft issue for leadpoet/leadpoet
+  (8 stars, global geo normalisation with 5 incomplete India city aliases)
+- `docs/outreach/post-reddit-pincode-regex.md` — draft r/developersIndia post:
+  "Your pincode regex validates nothing" (content angle #4)
+
+### Key finding
+
+No competitor does free-text Indian address parsing + embedded pincode→city/state
+resolution + phonetic city matching + Indic script support. bharataddress is
+alone in this niche. Closest: shriekdj/indian_address_parser (5 stars, Jupyter,
+stale) and captn3m0/india-pincode-regex (8 stars, regex-only).
+
+### NEXT
+
+1. **Review and open the two draft issues** (django_ecommerce first — stronger
+   fit). Files are in `docs/outreach/`.
+2. **Review and post the Reddit draft** to r/developersIndia. Best posted
+   after the issues are open so you can reference real contributions.
+3. **Content angle #3 ("The Gurgaon problem")** is the HN post — save for
+   when HN karma is warmer. 12 repos with hand-rolled alias dicts as evidence.
+4. **Re-run remaining queries** when GitHub API rate limit resets (was rate
+   limited on: "indian address parse", "pincode state city address",
+   "india-pincode" package search).
+5. Previous NEXT items still open: promote Tier B candidates into gold_500.jsonl,
+   verify PyPI propagation of v0.4.0.
 
 ## v0.4.0 — published to PyPI
 

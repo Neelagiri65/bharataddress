@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bharataddress — Open-source Indian address parser with native script support</title>
+    <meta name="description" content="Parse Indian addresses in 6 Indic scripts. 26,711 embedded pincodes, phonetic city matching, zero runtime dependencies. Free, offline, MIT licensed.">
+    <meta name="author" content="Nativerse Ventures">
+    <link rel="canonical" href="https://bharataddress.nativerse-ventures.com/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bharataddress.nativerse-ventures.com/">
+    <meta property="og:title" content="bharataddress — Open-source Indian address parser">
+    <meta property="og:description" content="Parse Indian addresses in 6 Indic scripts. 26,711 embedded pincodes, phonetic city matching, zero dependencies. Free, offline, MIT licensed.">
+    <meta property="og:site_name" content="bharataddress">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="bharataddress — Open-source Indian address parser">
+    <meta name="twitter:description" content="Parse Indian addresses in 6 Indic scripts. 26,711 embedded pincodes, phonetic city matching, zero dependencies.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23E9C46A'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='%233B1C32' font-family='sans-serif' font-weight='bold'>B</text></svg>">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "bharataddress",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "description": "Open-source Indian address parser with native Indic script support. 26,711 embedded pincodes, phonetic city matching, zero runtime dependencies.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "sameAs": [
+        "https://pypi.org/project/bharataddress/",
+        "https://github.com/Neelagiri65/bharataddress"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "name": "Nativerse Ventures",
+        "url": "https://nativerse-ventures.com"
+      }
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== DESIGN SYSTEM — Plum & Gold (matching nativerse-ventures.com) ===== */
+        :root {
+            --bg: #1a0e17;
+            --bg-deep: #120a10;
+            --bg-raised: #241a22;
+            --bg-card: rgba(36, 26, 34, 0.7);
+            --bg-card-hover: rgba(46, 32, 43, 0.8);
+
+            --text: #FFFDED;
+            --text-secondary: #b8a4b2;
+            --text-muted: #6e5868;
+
+            --plum: #3B1C32;
+            --plum-light: #5a3250;
+            --berry: #A64D79;
+            --berry-glow: rgba(166, 77, 121, 0.3);
+            --gold: #E9C46A;
+            --gold-dim: rgba(233, 196, 106, 0.1);
+            --gold-glow: rgba(233, 196, 106, 0.25);
+            --cream: #FFFDED;
+
+            --green: #4ade80;
+            --border: rgba(233, 196, 106, 0.08);
+            --border-hover: rgba(233, 196, 106, 0.18);
+            --radius: 16px;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Grain texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.35;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        ::selection { background: var(--gold); color: var(--plum); }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(26, 14, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .nav-logo-mark {
+            width: 32px; height: 32px;
+            background: var(--gold);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: var(--plum);
+            font-size: 16px;
+        }
+        .nav-logo-text { font-weight: 600; font-size: 17px; }
+        .nav-links { display: flex; align-items: center; gap: 24px; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--gold);
+            color: var(--plum);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: var(--gold-dim);
+            border: 1px solid var(--border-hover);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gold);
+            margin-bottom: 28px;
+        }
+        .hero-badge-dot {
+            width: 8px; height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 .gold { color: var(--gold); }
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        /* Install box */
+        .install-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--bg-deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 28px;
+            font-family: var(--mono);
+            font-size: 15px;
+        }
+        .install-box .prompt { color: var(--gold); }
+        .install-box code { color: var(--text); }
+        .install-box button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        .install-box button:hover { color: var(--gold); }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: var(--gold);
+            color: var(--plum);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border-hover);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+        /* ===== STATS BAR ===== */
+        .stats {
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-deep);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ===== SECTIONS ===== */
+        section { padding: 80px 0; }
+        .section-dark { background: var(--bg-deep); }
+        .section-heading {
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+        .section-sub {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ===== BENCHMARK TABLE ===== */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .benchmark-table th {
+            text-align: left;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+        .benchmark-table th:not(:first-child) { text-align: center; }
+        .benchmark-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .benchmark-table td:not(:first-child) { text-align: center; }
+        .benchmark-table tr.highlight {
+            background: var(--gold-dim);
+        }
+        .benchmark-table tr.highlight td {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .benchmark-table tr.highlight td .val { color: var(--gold); }
+        .benchmark-note {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 20px;
+        }
+        .benchmark-note a { color: var(--gold); text-decoration: none; }
+        .benchmark-note a:hover { text-decoration: underline; }
+
+        /* ===== FIELD ACCURACY ===== */
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+        .field-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+        .field-name {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 8px;
+        }
+        .field-f1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+        .field-bar {
+            height: 4px;
+            background: var(--bg-raised);
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .field-bar-fill {
+            height: 100%;
+            background: var(--gold);
+            border-radius: 2px;
+            transition: width 0.6s ease;
+        }
+
+        /* ===== FEATURES ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+        .feature-list { display: flex; flex-direction: column; gap: 24px; }
+        .feature-item { display: flex; gap: 16px; }
+        .feature-icon {
+            width: 44px; height: 44px;
+            background: var(--gold-dim);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+        .feature-icon .num {
+            font-weight: 800;
+            color: var(--gold);
+            font-size: 16px;
+        }
+        .feature-title { font-weight: 600; margin-bottom: 4px; }
+        .feature-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Language cards */
+        .lang-grid { display: flex; flex-direction: column; gap: 12px; }
+        .lang-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .lang-name { font-weight: 600; font-size: 15px; }
+        .lang-script { color: var(--gold); font-size: 18px; }
+        .lang-sample {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== CODE EXAMPLES ===== */
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .code-block-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .code-block-title .icon { color: var(--gold); }
+        pre.code {
+            background: var(--bg-deep);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        pre.code .kw { color: var(--berry); }
+        pre.code .fn { color: var(--gold); }
+        pre.code .str { color: var(--green); }
+        pre.code .cmt { color: var(--text-muted); }
+
+        /* ===== USE CASES ===== */
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .use-case-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: border-color 0.2s;
+        }
+        .use-case-card:hover { border-color: var(--border-hover); }
+        .use-case-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+        .use-case-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .use-case-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ===== ENTERPRISE ===== */
+        .enterprise-box {
+            background: linear-gradient(135deg, var(--gold-dim) 0%, transparent 60%);
+            border: 1px solid var(--border-hover);
+            border-radius: 24px;
+            padding: 60px;
+            text-align: center;
+        }
+        .enterprise-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin: 40px 0;
+        }
+        .enterprise-feature { text-align: center; }
+        .enterprise-feature .icon { font-size: 28px; margin-bottom: 12px; }
+        .enterprise-feature .title { font-weight: 600; margin-bottom: 4px; }
+        .enterprise-feature .desc { font-size: 13px; color: var(--text-secondary); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+        }
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text); }
+        .footer-credit {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .footer-credit a { color: var(--gold); text-decoration: none; }
+        .footer-credit a:hover { text-decoration: underline; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: 1fr; gap: 40px; }
+            .code-grid { grid-template-columns: 1fr; }
+            .use-cases-grid { grid-template-columns: 1fr 1fr; }
+            .enterprise-features { grid-template-columns: 1fr; }
+            .enterprise-box { padding: 32px 20px; }
+            .nav-links { display: none; }
+            .footer-inner { flex-direction: column; gap: 24px; }
+        }
+        @media (max-width: 480px) {
+            .use-cases-grid { grid-template-columns: 1fr; }
+            .install-box { font-size: 13px; padding: 12px 14px; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+    <div class="container nav-inner">
+        <a href="/" class="nav-logo">
+            <div class="nav-logo-mark">B</div>
+            <span class="nav-logo-text">bharataddress</span>
+        </a>
+        <div class="nav-links">
+            <a href="#accuracy">Accuracy</a>
+            <a href="#features">Features</a>
+            <a href="#use-cases">Use Cases</a>
+            <a href="#enterprise">Enterprise</a>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+            <a href="https://github.com/Neelagiri65/bharataddress" target="_blank" rel="noopener" style="color:var(--text-secondary);transition:color 0.2s;" aria-label="GitHub">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+            <a href="https://pypi.org/project/bharataddress/" target="_blank" rel="noopener" class="nav-btn">
+                PyPI
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            v0.4.0 — Multilingual Release
+        </div>
+        <h1>The open-source<br><span class="gold">Indian address parser</span></h1>
+        <p class="hero-sub">
+            Parse addresses in Hindi, Tamil, Telugu, Kannada, Bengali, and Malayalam.
+            No API keys. No rate limits. 26,711 embedded pincodes. Zero dependencies.
+        </p>
+
+        <div class="install-box">
+            <span class="prompt">$</span>
+            <code>pip install bharataddress</code>
+            <button onclick="navigator.clipboard.writeText('pip install bharataddress');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)" title="Copy">Copy</button>
+        </div>
+
+        <div class="hero-ctas">
+            <a href="https://github.com/Neelagiri65/bharataddress" target="_blank" rel="noopener" class="btn-primary">
+                View on GitHub
+            </a>
+            <a href="https://pypi.org/project/bharataddress/" target="_blank" rel="noopener" class="btn-secondary">
+                PyPI Package
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Bar -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div>
+                <div class="stat-value">26,711</div>
+                <div class="stat-label">Embedded Pincodes</div>
+            </div>
+            <div>
+                <div class="stat-value">6</div>
+                <div class="stat-label">Indic Scripts</div>
+            </div>
+            <div>
+                <div class="stat-value">19K+</div>
+                <div class="stat-label">Addresses / Second</div>
+            </div>
+            <div>
+                <div class="stat-value">162</div>
+                <div class="stat-label">Tests Passing</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Accuracy / Benchmarks -->
+<section id="accuracy">
+    <div class="container">
+        <div style="text-align:center;">
+            <h2 class="section-heading">Real numbers, not marketing</h2>
+            <p class="section-sub">
+                Evaluated on 200 real Indian addresses from the public gold set.
+                Every number here is reproducible — run <code style="color:var(--gold);font-family:var(--mono);">evaluate.py</code> yourself.
+            </p>
+        </div>
+
+        <div style="overflow-x:auto;">
+            <table class="benchmark-table">
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Pincode F1</th>
+                        <th>State F1</th>
+                        <th>City F1</th>
+                        <th>District F1</th>
+                        <th>Speed</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="highlight">
+                        <td><strong>bharataddress</strong></td>
+                        <td><span class="val">0.995</span></td>
+                        <td><span class="val">0.971</span></td>
+                        <td><span class="val">0.959</span></td>
+                        <td><span class="val">0.965</span></td>
+                        <td><span class="val">19K addr/s</span></td>
+                        <td>Free</td>
+                    </tr>
+                    <tr>
+                        <td>6-digit regex</td>
+                        <td>Format only</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>Fast</td>
+                        <td>Free</td>
+                    </tr>
+                    <tr>
+                        <td>India Post API</td>
+                        <td>Lookup only</td>
+                        <td>Lookup only</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>API latency</td>
+                        <td>Free</td>
+                    </tr>
+                    <tr>
+                        <td>Google Maps Geocoding</td>
+                        <td>High</td>
+                        <td>High</td>
+                        <td>High</td>
+                        <td>High</td>
+                        <td>API latency</td>
+                        <td>~$5/1K req</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="benchmark-note">
+            bharataddress numbers from <a href="https://github.com/Neelagiri65/bharataddress/blob/main/tests/data/gold_200.jsonl">gold_200.jsonl</a>.
+            Competitor rows show capability class, not head-to-head scores — they solve different problems.
+        </p>
+
+        <!-- Per-field F1 cards -->
+        <div class="field-grid">
+            <div class="field-card">
+                <div class="field-name">Pincode</div>
+                <div class="field-f1">0.995</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:99.5%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">State</div>
+                <div class="field-f1">0.971</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:97.1%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">District</div>
+                <div class="field-f1">0.965</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:96.5%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">City</div>
+                <div class="field-f1">0.959</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:95.9%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">Building Number</div>
+                <div class="field-f1">0.962</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:96.2%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">Landmark</div>
+                <div class="field-f1">0.918</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:91.8%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">Locality</div>
+                <div class="field-f1">0.796</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:79.6%"></div></div>
+            </div>
+            <div class="field-card">
+                <div class="field-name">Building Name</div>
+                <div class="field-f1">0.679</div>
+                <div class="field-bar"><div class="field-bar-fill" style="width:67.9%"></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Indian Addresses Are Hard + Languages -->
+<section id="features" class="section-dark">
+    <div class="container">
+        <div class="features-grid">
+            <div>
+                <h2 class="section-heading">Why Indian addresses break every parser</h2>
+                <div class="feature-list" style="margin-top:28px;">
+                    <div class="feature-item">
+                        <div class="feature-icon"><span class="num">28</span></div>
+                        <div>
+                            <div class="feature-title">States & Union Territories</div>
+                            <div class="feature-desc">Each with different address conventions, administrative structures, and local naming patterns.</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><span class="num">22</span></div>
+                        <div>
+                            <div class="feature-title">Official Languages</div>
+                            <div class="feature-desc">Addresses written in scripts that most parsers can't read. bharataddress handles 6 of them natively.</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><span class="num" style="font-size:14px;">409</span></div>
+                        <div>
+                            <div class="feature-title">Vernacular Terms</div>
+                            <div class="feature-desc">Marg, Salai, Rasta, Veedhi — 409 regional terms for street, area, and building mapped to structured fields.</div>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><span style="font-size:18px;">&#x1F504;</span></div>
+                        <div>
+                            <div class="feature-title">City Renames & Misspellings</div>
+                            <div class="feature-desc">Gurgaon/Gurugram, Bombay/Mumbai, Madras/Chennai — phonetic matching handles official renames and common typos.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-weight:600;margin-bottom:16px;">Supported Scripts</h3>
+                <div class="lang-grid">
+                    <div class="lang-card">
+                        <div>
+                            <div class="lang-name">Hindi</div>
+                            <div class="lang-sample">&#x0917;&#x093E;&#x0902;&#x0927;&#x0940; &#x092E;&#x093E;&#x0930;&#x094D;&#x0917;, &#x0928;&#x0908; &#x0926;&#x093F;&#x0932;&#x094D;&#x0932;&#x0940;</div>
+                        </div>
+                        <span class="lang-script">&#x0939;&#x093F;&#x0928;&#x094D;&#x0926;&#x0940;</span>
+                    </div>
+                    <div class="lang-card">
+                        <div>
+                            <div class="lang-name">Tamil</div>
+                            <div class="lang-sample">&#x0B85;&#x0BA3;&#x0BCD;&#x0BA3;&#x0BBE; &#x0B9A;&#x0BBE;&#x0BB2;&#x0BC8;, &#x0B9A;&#x0BC6;&#x0BA9;&#x0BCD;&#x0BA9;&#x0BC8;</div>
+                        </div>
+                        <span class="lang-script">&#x0BA4;&#x0BAE;&#x0BBF;&#x0BB4;&#x0BCD;</span>
+                    </div>
+                    <div class="lang-card">
+                        <div>
+                            <div class="lang-name">Telugu</div>
+                            <div class="lang-sample">&#x0C17;&#x0C3E;&#x0C02;&#x0C27;&#x0C40; &#x0C30;&#x0C4B;&#x0C21;&#x0C4D;, &#x0C39;&#x0C48;&#x0C26;&#x0C30;&#x0C3E;&#x0C2C;&#x0C3E;&#x0C26;&#x0C4D;</div>
+                        </div>
+                        <span class="lang-script">&#x0C24;&#x0C46;&#x0C32;&#x0C41;&#x0C17;&#x0C41;</span>
+                    </div>
+                    <div class="lang-card">
+                        <div>
+                            <div class="lang-name">Kannada</div>
+                            <div class="lang-sample">&#x0C8E;&#x0C82;.&#x0C9C;&#x0CBF;. &#x0CB0;&#x0CB8;&#x0CCD;&#x0CA4;&#x0CC6;, &#x0CAC;&#x0CC6;&#x0C82;&#x0C97;&#x0CB3;&#x0CC2;&#x0CB0;&#x0CC1;</div>
+                        </div>
+                        <span class="lang-script">&#x0C95;&#x0CA8;&#x0CCD;&#x0CA8;&#x0CA1;</span>
+                    </div>
+                    <div class="lang-card">
+                        <div>
+                            <div class="lang-name">Bengali</div>
+                            <div class="lang-sample">&#x09AA;&#x09BE;&#x09B0;&#x09CD;&#x0995; &#x09B8;&#x09CD;&#x099F;&#x09CD;&#x09B0;&#x09BF;&#x099F;, &#x0995;&#x09B2;&#x0995;&#x09BE;&#x09A4;&#x09BE;</div>
+                        </div>
+                        <span class="lang-script">&#x09AC;&#x09BE;&#x0982;&#x09B2;&#x09BE;</span>
+                    </div>
+                    <div class="lang-card">
+                        <div>
+                            <div class="lang-name">Malayalam</div>
+                            <div class="lang-sample">&#x0D0E;&#x0D02;.&#x0D1C;&#x0D3F;. &#x0D31;&#x0D4B;&#x0D21;&#x0D4D;, &#x0D15;&#x0D4A;&#x0D1A;&#x0D4D;&#x0D1A;&#x0D3F;</div>
+                        </div>
+                        <span class="lang-script">&#x0D2E;&#x0D32;&#x0D2F;&#x0D3E;&#x0D33;&#x0D02;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Code Examples -->
+<section>
+    <div class="container">
+        <div style="text-align:center;">
+            <h2 class="section-heading">Three lines to structured data</h2>
+            <p class="section-sub">
+                Parse a single address or process thousands. Get structured fields with confidence scores and coordinates.
+            </p>
+        </div>
+
+        <div class="code-grid">
+            <div>
+                <div class="code-block-title">
+                    <span class="icon">&#9654;</span> Parse an address
+                </div>
+                <pre class="code"><span class="kw">from</span> bharataddress <span class="kw">import</span> <span class="fn">parse</span>
+
+result = <span class="fn">parse</span>(<span class="str">"42 MG Road, Bangalore 560001"</span>)
+
+<span class="cmt"># result.pincode     &rarr; '560001'</span>
+<span class="cmt"># result.state       &rarr; 'Karnataka'</span>
+<span class="cmt"># result.district    &rarr; 'Bangalore'</span>
+<span class="cmt"># result.city        &rarr; 'Bangalore'</span>
+<span class="cmt"># result.locality    &rarr; 'MG Road'</span>
+<span class="cmt"># result.building_number &rarr; '42'</span>
+<span class="cmt"># result.latitude    &rarr; 12.9766</span>
+<span class="cmt"># result.longitude   &rarr; 77.60195</span>
+<span class="cmt"># result.confidence  &rarr; 0.9</span>
+
+<span class="cmt"># As a dictionary:</span>
+print(result.<span class="fn">to_dict</span>())</pre>
+            </div>
+            <div>
+                <div class="code-block-title">
+                    <span class="icon">&#9654;</span> Phonetic city matching
+                </div>
+                <pre class="code"><span class="kw">from</span> bharataddress.phonetic <span class="kw">import</span> <span class="fn">normalise</span>, <span class="fn">fuzzy_ratio</span>
+
+<span class="cmt"># Official city renames</span>
+<span class="fn">normalise</span>(<span class="str">"Gurgaon"</span>) == <span class="fn">normalise</span>(<span class="str">"Gurugram"</span>)
+<span class="cmt"># &rarr; True</span>
+
+<span class="fn">normalise</span>(<span class="str">"Bombay"</span>) == <span class="fn">normalise</span>(<span class="str">"Mumbai"</span>)
+<span class="cmt"># &rarr; True</span>
+
+<span class="cmt"># Fuzzy matching for misspellings</span>
+<span class="fn">fuzzy_ratio</span>(<span class="str">"Bengaluru"</span>, <span class="str">"Bangalore"</span>)
+<span class="cmt"># &rarr; 1.0</span>
+
+<span class="cmt"># Native script (requires bharataddress[indic])</span>
+result = <span class="fn">parse</span>(
+    <span class="str">"&#x0917;&#x093E;&#x0902;&#x0927;&#x0940; &#x092E;&#x093E;&#x0930;&#x094D;&#x0917;, &#x0926;&#x093F;&#x0932;&#x094D;&#x0932;&#x0940; 110005"</span>,
+    transliterate=<span class="kw">True</span>
+)</pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section id="use-cases" class="section-dark">
+    <div class="container">
+        <div style="text-align:center;">
+            <h2 class="section-heading">Built for real-world use cases</h2>
+            <p class="section-sub">
+                From logistics to fintech, teams use bharataddress to handle the messy reality of Indian addresses.
+            </p>
+        </div>
+
+        <div class="use-cases-grid">
+            <div class="use-case-card">
+                <div class="use-case-icon">&#128666;</div>
+                <div class="use-case-title">Logistics</div>
+                <div class="use-case-desc">Normalise delivery addresses for route optimisation. Handle vernacular street names, missing pincodes, and non-standard formats.</div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">&#127974;</div>
+                <div class="use-case-title">Fintech KYC</div>
+                <div class="use-case-desc">Verify customer addresses during onboarding. Extract structured components for regulatory compliance and fraud detection.</div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">&#128722;</div>
+                <div class="use-case-title">E-commerce</div>
+                <div class="use-case-desc">Auto-fill city and state from pincode. Reduce checkout friction and eliminate address typos. One field replaces three.</div>
+            </div>
+            <div class="use-case-card">
+                <div class="use-case-icon">&#127963;</div>
+                <div class="use-case-title">Government</div>
+                <div class="use-case-desc">Parse citizen addresses for welfare schemes, tax records, and identity verification across 28 states and 8 union territories.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enterprise -->
+<section id="enterprise">
+    <div class="container">
+        <div class="enterprise-box">
+            <div class="hero-badge" style="margin-bottom:20px;">Commercial Support</div>
+            <h2 class="section-heading">Enterprise-grade support</h2>
+            <p style="color:var(--text-secondary);max-width:500px;margin:0 auto;">
+                Need SLA guarantees, custom language support, or on-premise deployment?
+                We offer commercial support for mission-critical address parsing.
+            </p>
+
+            <div class="enterprise-features">
+                <div class="enterprise-feature">
+                    <div class="icon">&#128737;</div>
+                    <div class="title">SLA Support</div>
+                    <div class="desc">24-hour response, 4-hour critical</div>
+                </div>
+                <div class="enterprise-feature">
+                    <div class="icon">&#127760;</div>
+                    <div class="title">Custom Languages</div>
+                    <div class="desc">Add support for new Indic scripts</div>
+                </div>
+                <div class="enterprise-feature">
+                    <div class="icon">&#9889;</div>
+                    <div class="title">On-Premise</div>
+                    <div class="desc">Deploy within your infrastructure</div>
+                </div>
+            </div>
+
+            <div class="hero-ctas">
+                <a href="mailto:hello@nativerse-ventures.com" class="btn-primary">Contact Sales</a>
+                <a href="mailto:hello@nativerse-ventures.com" class="btn-secondary">Request Demo</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="section-dark" style="padding:60px 0;">
+    <div class="container" style="text-align:center;">
+        <h2 class="section-heading">Ready to parse Indian addresses?</h2>
+        <p style="color:var(--text-secondary);margin-bottom:28px;">
+            Install in seconds. No API keys. No rate limits. MIT licensed.
+        </p>
+        <div class="install-box" style="margin-bottom:28px;">
+            <span class="prompt">$</span>
+            <code>pip install bharataddress</code>
+            <button onclick="navigator.clipboard.writeText('pip install bharataddress');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)" title="Copy">Copy</button>
+        </div>
+        <div class="hero-ctas">
+            <a href="https://github.com/Neelagiri65/bharataddress" target="_blank" rel="noopener" class="btn-secondary">
+                Star on GitHub
+            </a>
+            <a href="https://pypi.org/project/bharataddress/" target="_blank" rel="noopener" class="btn-secondary">
+                View on PyPI
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <a href="/" class="nav-logo" style="text-decoration:none;">
+                <div class="nav-logo-mark">B</div>
+                <span class="nav-logo-text">bharataddress</span>
+            </a>
+            <div class="footer-links">
+                <a href="https://github.com/Neelagiri65/bharataddress" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://pypi.org/project/bharataddress/" target="_blank" rel="noopener">PyPI</a>
+                <a href="https://nativerse-ventures.com" target="_blank" rel="noopener">Nativerse Ventures</a>
+            </div>
+        </div>
+        <div class="footer-credit">
+            Built by <a href="https://nativerse-ventures.com">Nativerse Ventures</a>. Open source under MIT Licence.
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,6 +1,30 @@
 # HANDOFF — bharataddress
 
-_Last updated: 2026-04-13_
+_Last updated: 2026-04-14_
+
+## bharataddress product site — generator-canonical
+
+`bharataddress-site/index.html` was regenerated from the private local
+site-building tooling (lives outside this repo on the author's machine) and
+re-deployed to Vercel prod. Content is identical to the previous version; the
+file is ~3.9KB smaller (CSS whitespace compaction).
+
+- Deployment ID: `dpl_FgQ6rbTCveD4i4t6xZKmpZhX2gWW`
+- `https://bharataddress-site.vercel.app/` → 200, serving the new HTML.
+- `https://bharataddress.nativerse-ventures.com/` → 200, DNS propagated,
+  serving the new HTML. Custom subdomain live.
+
+To update this page: edit the content locally, regenerate, replace
+`bharataddress-site/index.html`, redeploy with `vercel --prod --yes` from
+`bharataddress-site/`.
+
+### NEXT
+
+1. Carry-forwards from 2026-04-13: open the two drafted GitHub issues
+   (`docs/outreach/issue-django-ecommerce.md`,
+   `docs/outreach/issue-leadpoet.md`), post the Reddit draft, re-run remaining
+   outreach queries when the rate limit resets, promote Tier B candidates
+   into `gold_500.jsonl`.
 
 ## GitHub outreach research — scan complete, drafts ready
 

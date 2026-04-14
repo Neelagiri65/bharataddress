@@ -1,6 +1,6 @@
 # bharataddress
 
-[![PyPI](https://img.shields.io/pypi/v/bharataddress)](https://pypi.org/project/bharataddress/)
+[![PyPI](https://img.shields.io/pypi/v/bharataddress)](https://pypi.org/project/bharataddress/) · [Benchmarks & docs → bharataddress.nativerse-ventures.com](https://bharataddress.nativerse-ventures.com)
 
 **The deterministic Indian address parser. Zero config. Zero API keys. Zero network calls.**
 
@@ -355,6 +355,17 @@ There is also an architectural-constraint test that monkeypatches `socket.socket
 ## Benchmarks
 
 `bharataddress` ships with a 200-row hand-labelled gold set (`tests/data/gold_200.jsonl`) covering metro / tier-2 / rural / landmark-heavy / vernacular / no-pincode / irregular-punctuation / S-O-format inputs. `scripts/evaluate.py` reports per-field precision / recall / F1 plus exact-match. The matcher is two-way substring (`a in b or b in a`), case-insensitive.
+
+### Current accuracy (v0.4, `gold_200.jsonl`)
+
+| Field           |     F1 | Field           |     F1 |
+| --------------- | -----: | --------------- | -----: |
+| `pincode`       |  0.995 | `building_number` | 0.962 |
+| `state`         |  0.971 | `landmark`      |  0.918 |
+| `district`      |  0.965 | `locality`      |  0.796 |
+| `city`          |  0.959 | `building_name` |  0.679 |
+
+Reproduce with `PYTHONPATH=. python3 scripts/evaluate.py`. Full methodology and the v0.4 run write-up live at [bharataddress.nativerse-ventures.com](https://bharataddress.nativerse-ventures.com).
 
 ### bharataddress v0.1.2 vs Shiprocket TinyBERT NER
 

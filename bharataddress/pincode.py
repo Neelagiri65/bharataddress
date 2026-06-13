@@ -32,6 +32,48 @@ def _localities_table() -> dict[str, list[str]]:
     return json.loads(raw)
 
 
+@lru_cache(maxsize=1)
+def _city_index() -> dict[str, tuple[str, str]]:
+    """city name (lowercased) -> (district, state).
+
+    Derived by inverting the shipped India Post directory. When a city name
+    spans several (district, state) pairs (e.g. duplicated town names across
+    states), the modal pair wins — the one backing the most pincodes. Built
+    once, lazily, from the already-cached pincode table: no new data file, no
+    network, no extra dependency.
+    """
+    from collections import Counter
+
+    counts: dict[str, Counter] = {}
+    for rec in _table().values():
+        city = (rec.get("city") or "").strip().lower()
+        if not city:
+            continue
+        pair = (rec.get("district") or "", rec.get("state") or "")
+        if not pair[1]:
+            continue
+        counts.setdefault(city, Counter())[pair] += 1
+    return {city: c.most_common(1)[0][0] for city, c in counts.items()}
+
+
+def city_to_admin(name: str | None) -> tuple[str, str] | None:
+    """Resolve a city/town name to its modal ``(district, state)``.
+
+    Returns ``None`` if the name is not a known city in the shipped directory.
+    Used to recover district/state on addresses that carry no pincode.
+    """
+    if not name:
+        return None
+    return _city_index().get(name.strip().lower())
+
+
+def is_known_city(name: str | None) -> bool:
+    """True if ``name`` (case-insensitive) is a city in the shipped directory."""
+    if not name:
+        return False
+    return name.strip().lower() in _city_index()
+
+
 def lookup(pincode: str | None) -> PincodeRecord | None:
     if not pincode:
         return None

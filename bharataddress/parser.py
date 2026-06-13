@@ -367,7 +367,17 @@ def parse(
     def _is_dup(text: str) -> bool:
         t = text.lower().strip()
         for ref in (out.city, out.district, out.state):
-            if ref and (t == ref.lower() or t in ref.lower() or ref.lower() in t):
+            if not ref:
+                continue
+            r = ref.lower()
+            # Exact match, or the segment is a substring of the reference
+            # (e.g. "kolkata" within "kolkata district"). The reverse
+            # direction (reference-as-substring-of-segment) is deliberately
+            # NOT treated as a duplicate: it wrongly dropped legitimate
+            # localities that merely contain the city name as a word
+            # ("Navi Mumbai" when city is "Mumbai", "Thane West" when city
+            # is "Thane").
+            if t == r or t in r:
                 return True
         # Catch trailing well-known city names that the pincode lookup
         # disagreed with (e.g. user wrote "Kochi" but pincode resolves to
@@ -474,6 +484,20 @@ def parse(
     )
     if out.sub_locality:
         found.append("sub_locality")
+
+    # State recovery for pincode-less addresses. When the pincode lookup
+    # yielded nothing, fall back to the city -> (district, state) index
+    # inverted from the shipped directory. We recover STATE only: a city name
+    # maps to its state unambiguously, but a city can span several districts,
+    # so filling district from a bare city name guesses wrong too often.
+    # Purely additive: only fills when state is empty and the resolved city is
+    # an actual known town (so a stray trailing token like "UP" can't seed a
+    # wrong fill).
+    if out.city and out.state is None:
+        admin = _pincode.city_to_admin(out.city)
+        if admin and admin[1]:
+            out.state = admin[1]
+            found.append("state")
 
     # DIGIPIN: populated only when a lat/lng is supplied by the caller, or
     # when the pincode record carries a centroid (pincodes.json may grow a

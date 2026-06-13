@@ -1,8 +1,99 @@
 # HANDOFF — bharataddress
 
-_Last updated: 2026-04-14_
+_Last updated: 2026-06-14_
 
-## bharataddress product site — generator-canonical
+## Session 2026-06-14 — reverse-index gazetteer + gold_500 curation + parser fixes
+
+Ran research-first + an adversarial review of the parser, then implemented the
+single highest-leverage fix and curated the multilingual gold set.
+
+### Parser improvements (committed)
+
+All deterministic, zero-network, zero-new-dep. Measured on the public
+`gold_200.jsonl`; **every field held or improved, nothing regressed**:
+
+| metric | before | after |
+|---|---|---|
+| exact match | 125/200 | **129/200** |
+| building_name F1 | 0.679 | **0.727** (+0.048) |
+| locality F1 | 0.796 | **0.813** (+0.017) |
+| state F1 | 0.971 | **0.982** (+0.011) |
+| sub_locality F1 | 0.455 | 0.458 |
+
+Two changes landed (a third was tested and reverted):
+
+1. **`city → (district, state)` reverse-index** (`pincode.py`:
+   `_city_index`, `city_to_admin`, `is_known_city`). Inverts the shipped
+   directory at import (lru_cache) — 2,580 real cities vs the parser's 95
+   hardcoded metros. No new data file/dep/network.
+2. **State recovery on pincode-less rows** (`parser.py`): when no pincode is
+   present, fill `state` from the city name. State-only — district from a bare
+   city name guessed wrong too often (district recovery was tested: −0.005, so
+   dropped).
+3. **`_is_dup` reverse-substring removed**: the old bidirectional match dropped
+   any locality merely containing the city name (`Thane West`, `Navi Mumbai`).
+   This was the adversarial review's top finding — and the biggest single win
+   (building_name +0.048). Locked by `tests/test_reverse_index.py` (9 tests).
+   NB: expanding the `_is_dup` known-city check to all 2,580 cities was tested
+   and **hurt** sub_locality (−0.013) — the 95-metro list is calibrated to
+   avoid over-dropping. Reverted; empirically refutes that part of the review.
+
+Tests: **153 passed, 4 skipped**. Regression gate intact (one-sided, improvements OK).
+
+### gold_500 curation (LOCAL — gitignored, see note)
+
+Curated the 236 Tier-B candidates → `tests/data/gold_500.jsonl` (429 rows =
+200 public en + 229 native, balanced hi 48 / ta 49 / te 48 / kn 50 / bn 17 /
+ml 17). Filters: dedup, valid-pincode, state-consistent, district+city
+completed from the authoritative pincode lookup. Multilingual resolution path
+validated — **all 6 native languages hit district/city/state/pincode F1 ≥ 0.98**.
+`locality`/`sub_locality` on native rows are unlabeled (=0): the OSM native
+name needs human field-classification + romanisation; auto-deriving it from
+the parser's own transliterator would be circular leakage. That's the next
+curation pass.
+
+**Privacy note:** `gold_5*.jsonl` is "assumed private" by `.gitignore`
+convention, so `gold_500.jsonl` is NOT committed (stays local). Its aggregate
+report is under `private/reports/` (gitignored). A generic landmark word in a
+few rows tripped a conservative content scan, but those are public OSM/place
+names, not private-source rows — the convention is honoured regardless.
+**Decision pending from user:** keep gold_500 local, or rename to an
+explicitly-public file and track it.
+
+### Government data — fetch status
+
+User wants a fresh gov pull for a larger pool. Confirmed blockers:
+- **My tool sandbox cannot reach any `.gov.in` host** (github=200,
+  data.gov.in=timeout, dev.napix.gov.in=unreachable). A `!`-prefixed command
+  runs in the user's shell and CAN reach them.
+- **data.gov.in** All India Pincode Directory: already held at
+  `private/raw/indiapost.csv` (154,798 offices / 19,100 pincodes). Embedded
+  `pincodes.json` already has 26,711 pincodes (kishorek base + gov overlay),
+  so a fresh pull adds names/granularity, not pincode count.
+- **NAPIX/LGD** (`dev.napix.gov.in/nic/lgd`): authoritative state→district→
+  subdistrict→village hierarchy. In-hand `private/raw/lgd_rural.csv` is
+  **Haryana only** (7,464 rows) — national pull needs the user's NAPIX app +
+  key, run via `!`.
+- **MapmyIndia: rejected** — closed-source, paid, network-API, ToS forbids
+  redistribution. Violates MIT + zero-network + zero-dep. Not pursued.
+- **GODL-India attribution** owed when fresh gov data is ingested (commercial
+  + derivatives OK, but requires provider/source/DOI attribution). README
+  pincode count (says 23,915) is also stale vs actual 26,711 — fix together.
+
+### NEXT
+
+1. **Decide gold_500 visibility** (local vs public tracked file).
+2. **NAPIX national LGD pull** (blocked on user key): register app → subscribe
+   LGD/DISTRICT/SUBDISTRICT → run sample curl via `!` to `private/raw/` →
+   I script the paginated national pull + layer subdistrict/village gazetteer.
+3. **Hand-label locality/landmark** on native gold rows (the real multilingual
+   locality eval).
+4. Carry-forwards from 2026-04-14 still open: open the two drafted GitHub
+   issues, post the Reddit draft, re-run outreach queries.
+
+---
+
+## (previous) bharataddress product site — generator-canonical
 
 `bharataddress-site/index.html` was regenerated from the private local
 site-building tooling (lives outside this repo on the author's machine) and

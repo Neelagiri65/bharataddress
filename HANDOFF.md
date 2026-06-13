@@ -80,15 +80,68 @@ User wants a fresh gov pull for a larger pool. Confirmed blockers:
   + derivatives OK, but requires provider/source/DOI attribution). README
   pincode count (says 23,915) is also stale vs actual 26,711 — fix together.
 
-### NEXT
+### README / PyPI repositioning (committed `52eefd8`, live on GitHub)
 
-1. **Decide gold_500 visibility** (local vs public tracked file).
-2. **NAPIX national LGD pull** (blocked on user key): register app → subscribe
+Repositioned the project from "the deterministic Indian address parser" to an
+honest "offline Indian address resolver: bulletproof admin fields, best-effort
+free-text". Changes in `README.md` + `pyproject.toml`:
+- Hero + PyPI short description rewritten to lead with the strong core
+  (pincode→city/district/state + deliverability, F1 0.96–0.99).
+- New "What it nails, and what's best-effort" tier block (rock-solid ≥0.95 /
+  good 0.81–0.92 / best-effort 0.46–0.73).
+- TinyBERT head-to-head pulled into the lede (760MB/state 0.27/no district vs
+  5MB/state 0.98/district 0.97).
+- Accuracy table refreshed to v0.5, grouped by reliability tier; stale pincode
+  count fixed (23,915 → 26,711); roadmap rewritten (v0.2–0.4 marked shipped,
+  dropped the Claude-API/distilled-model items that broke the zero-net promise).
+
+**PyPI caveat:** the pypi.org page (short description + long README) only
+updates on the next release. GitHub is live now; **publish v0.5 to push the
+repositioning to PyPI** (`python -m build && twine upload`, token in `~/.pypirc`).
+
+### Strategic verdict — the parser-viability debate (READ THIS FIRST next session)
+
+Ran an honest critique + an independent steelman (both grounded in repo
+numbers). They converged:
+- The parser **is viable as-is for a narrow, real job**: offline bulk
+  admin-field normalisation + deliverability validation. It is **mispositioned**,
+  not weak — now fixed (above).
+- **Stop chasing F1.** building_name/sub_locality are at the deterministic
+  domain ceiling (the SOTA open model is also ~0.47 on sub_locality). More
+  rules/keywords = diminishing returns. Lifting them needs a licensed corpus or
+  a small local model — which trades away zero-dep. Deliberate fork, not default.
+- **The real bottleneck is a missing user, not accuracy.** Both the critique
+  and the steelman agreed: no confirmed external user, no third-party corpus,
+  PMF is inference. Get ONE real user with a real address corpus before any
+  more parser/gold work.
+
+### Repro / env notes
+
+- Public eval: `PYTHONPATH=. python3 scripts/evaluate.py` (gold_200).
+- Native-script eval needs the indic extra, which is blocked by PEP 668 on the
+  system Python. Use the venv: `/tmp/bha-eval-venv/bin/python` (has
+  `indic-transliteration`). gold_500 run:
+  `PYTHONPATH=. /tmp/bha-eval-venv/bin/python scripts/evaluate.py --gold tests/data/gold_500.jsonl --private-report --json private/reports/gold_500_v0.5.0.json`
+- Commits this session: `ba0586d` (parser reverse-index + _is_dup fix),
+  `52eefd8` (README/PyPI repositioning). Both on `main`, pushed.
+
+### NEXT (priority order)
+
+1. **Get one real user / corpus** — the only thing that resolves viability.
+   Draft a sharp honest outreach to a specific user type (fintech/logistics/
+   healthcare back-office cleaning a stored-address DB): "5 MB, offline, no PII
+   leaves your box, 98% on the fields you actually use." (This was the offered
+   "option 2".)
+2. **Publish v0.5 to PyPI** so the repositioning + parser gains go live there.
+3. **Decide gold_500 visibility** (local vs public tracked file). Currently
+   gitignored as assumed-private.
+4. **NAPIX national LGD pull** (blocked on user key): register app → subscribe
    LGD/DISTRICT/SUBDISTRICT → run sample curl via `!` to `private/raw/` →
-   I script the paginated national pull + layer subdistrict/village gazetteer.
-3. **Hand-label locality/landmark** on native gold rows (the real multilingual
-   locality eval).
-4. Carry-forwards from 2026-04-14 still open: open the two drafted GitHub
+   script the paginated national pull + layer subdistrict/village gazetteer.
+   NB: a fresh gov pull adds names/granularity, NOT pincode count.
+5. **Hand-label locality/landmark** on native gold rows (real multilingual
+   locality eval) — only if pursuing the multilingual angle.
+6. Carry-forwards from 2026-04-14 still open: open the two drafted GitHub
    issues, post the Reddit draft, re-run outreach queries.
 
 ---

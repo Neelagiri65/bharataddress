@@ -2,9 +2,9 @@
 
 [![PyPI](https://img.shields.io/pypi/v/bharataddress)](https://pypi.org/project/bharataddress/) · [Benchmarks & docs → bharataddress.nativerse-ventures.com](https://bharataddress.nativerse-ventures.com)
 
-**The deterministic Indian address parser. Zero config. Zero API keys. Zero network calls.**
+**Offline Indian address resolution — bulletproof on the fields that matter, honest about the rest. Zero config. Zero API keys. Zero network calls.**
 
-`pip install bharataddress` → parse messy Indian addresses into structured JSON in one line. No model downloads, no Claude API key, no Nominatim instance, nothing to set up. The pincode directory ships embedded in the package.
+`pip install bharataddress` → turn a messy Indian address into structured JSON in one line, fully offline. Rock-solid on `pincode → city / district / state` and deliverability checks (F1 **0.96–0.99**); best-effort on the free-text fields like locality and building name. No model downloads, no Claude API key, no Nominatim instance — the ~5 MB India Post pincode directory ships embedded in the package.
 
 ```python
 >>> from bharataddress import parse
@@ -22,7 +22,19 @@
 }
 ```
 
-That's the whole pitch. Sixty seconds from `pip install` to a parsed address.
+Sixty seconds from `pip install` to a parsed address.
+
+---
+
+## What it nails, and what's best-effort
+
+Be calibrated about what a deterministic parser can and can't do — the example above is the happy path, not a guarantee on every field:
+
+- **Rock-solid (F1 ≥ 0.95)** — `pincode`, `state`, `district`, `city`, `building_number`. The first four are resolved against the embedded India Post directory, so they're a *lookup, not a guess*: a valid, internally-consistent administrative hierarchy every time.
+- **Good (F1 0.81–0.92)** — `landmark`, `locality`. Driven by cue lists (`Near/Opp/Behind`, `Nagar/Colony/Layout`).
+- **Best-effort (F1 0.46–0.73)** — `building_name`, `sub_locality`. Decomposing free text into these is hard for *every* tool in this space — the strongest open model scores ~0.47 on `sub_locality` too. Treat them as hints, not ground truth.
+
+If your job is address **validation, deliverability, deduplication, or geographic / tax-jurisdiction bucketing**, you live entirely in the top tier — that's the sweet spot. If you need a perfectly decomposed building name out of free text, no deterministic parser (and no open model) is there yet, and bharataddress doesn't pretend otherwise.
 
 ---
 
@@ -39,7 +51,9 @@ Indian addresses are different:
 - **Mixed Hindi + English** in the same string
 - **Abbreviation soup** — H.No., S/O, D/O, W/O, B.O., S.O., Opp., Nr., Ngr., Clny, Mohalla, Marg
 
-`bharataddress` handles all of these in v0.1 with pure rules + the embedded India Post directory. No ML model. No API. No network.
+`bharataddress` handles these with pure rules + the embedded India Post directory. No ML model. No API. No network.
+
+And the realistic alternative makes the case: the only comparable open model, Shiprocket's TinyBERT NER, is **~760 MB** (plus ~2 GB of torch/transformers), scores **state F1 0.27**, and has **no `district` field at all**. bharataddress is **~5 MB**, zero-dependency, scores **state 0.98 / district 0.97**, and runs offline in ~5 ms/call. Full head-to-head in [Benchmarks](#benchmarks) below.
 
 ---
 
@@ -157,7 +171,7 @@ Layer 4 — Confidence scoring   weighted component presence
 ParsedAddress
 ```
 
-The embedded `pincodes.json` contains 23,915 Indian pincodes derived from the India Post directory mirror at [`kishorek/India-Codes`](https://github.com/kishorek/India-Codes). Refresh it any time with `python scripts/build_pincode_data.py`.
+The embedded `pincodes.json` contains 26,711 Indian pincodes derived from the India Post directory (base from [`kishorek/India-Codes`](https://github.com/kishorek/India-Codes), with post-2014 naming + Telangana-split overlays applied). Refresh it any time with `python scripts/build_pincode_data.py`.
 
 ---
 
@@ -356,16 +370,19 @@ There is also an architectural-constraint test that monkeypatches `socket.socket
 
 `bharataddress` ships with a 200-row hand-labelled gold set (`tests/data/gold_200.jsonl`) covering metro / tier-2 / rural / landmark-heavy / vernacular / no-pincode / irregular-punctuation / S-O-format inputs. `scripts/evaluate.py` reports per-field precision / recall / F1 plus exact-match. The matcher is two-way substring (`a in b or b in a`), case-insensitive.
 
-### Current accuracy (v0.4, `gold_200.jsonl`)
+### Current accuracy (v0.5, `gold_200.jsonl`)
 
-| Field           |     F1 | Field           |     F1 |
-| --------------- | -----: | --------------- | -----: |
-| `pincode`       |  0.995 | `building_number` | 0.962 |
-| `state`         |  0.971 | `landmark`      |  0.918 |
-| `district`      |  0.965 | `locality`      |  0.796 |
-| `city`          |  0.959 | `building_name` |  0.679 |
+Grouped by how much you can trust each field, not just alphabetically:
 
-Reproduce with `PYTHONPATH=. python3 scripts/evaluate.py`. Full methodology and the v0.4 run write-up live at [bharataddress.nativerse-ventures.com](https://bharataddress.nativerse-ventures.com).
+| Tier | Fields (F1) |
+| --- | --- |
+| **Rock-solid** (lookup-backed) | `pincode` 0.995 · `state` 0.982 · `district` 0.965 · `city` 0.959 · `building_number` 0.962 |
+| **Good** (cue-driven) | `landmark` 0.918 · `locality` 0.813 |
+| **Best-effort** (free-text) | `building_name` 0.727 · `sub_locality` 0.458 |
+
+Exact match (all 9 fields simultaneously): **129/200 (64.5%)** — but that all-or-nothing number is dominated by the best-effort fields. For the validation / deliverability / bucketing jobs this tool is built for, the relevant accuracy is the rock-solid tier (0.96–0.99).
+
+Reproduce with `PYTHONPATH=. python3 scripts/evaluate.py`. Full methodology and run write-ups live at [bharataddress.nativerse-ventures.com](https://bharataddress.nativerse-ventures.com).
 
 ### bharataddress v0.1.2 vs Shiprocket TinyBERT NER
 
@@ -409,11 +426,18 @@ For high-throughput pipelines, batch geocoding, or any environment where droppin
 
 ## Roadmap
 
-- **v0.2** — Opt-in Claude API parser for the messy 20% • phonetic fuzzy matching • Nominatim geocoding • Devanagari preprocessing
-- **v0.3** — Pincode boundary GeoJSON • spatial validation • FastAPI server • Docker
-- **v0.4** — Distilled local model trained on Claude-generated parses (eliminates LLM cost at scale)
+Shipped:
 
-**The moat is the data, not the parser.** Every paid-tier user who corrects an address makes the dataset better. Free core (this package, MIT) + paid layer for continuously updated, validated locality and boundary data.
+- **v0.2** — formatter, validator, phonetic matching, similarity, batch helpers, GSTIN enrichment
+- **v0.3** — phonetic name canonicalisation, pincode-centroid geocoding (online opt-in)
+- **v0.4** — native-script support for 6 Indic scripts (opt-in transliteration), DIGIPIN, per-language eval
+
+Direction (deliberately kept within the zero-network, zero-dep, deterministic contract):
+
+- Wider, self-maintaining gazetteers from open government data (India Post directory, LGD administrative hierarchy) to lift `locality` / `sub_locality` without hardcoded lists
+- Larger multilingual gold set with human-labelled free-text fields
+
+The `building_name` / `sub_locality` free-text decomposition is at the domain's deterministic ceiling — improving it likely needs a licensed corpus or a small local model, which would trade away the zero-dependency property. That's a deliberate fork, not a default. The core stays a fast, offline, auditable resolver.
 
 ---
 

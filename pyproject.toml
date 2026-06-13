@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bharataddress"
 version = "0.4.0"
-description = "Deterministic, offline parser for messy Indian addresses. Zero config, zero API keys."
+description = "Offline Indian address resolver: bulletproof pincode -> city/district/state + deliverability, best-effort field extraction. Zero deps, zero network."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
